@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="authStyles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <title>QuizMaster - Авторизация</title>
+</head>
+<body class="background-color">
+  <!-- Шапка -->
+  <header>
+    <a href="index.html" class="logo">
+      <img src="Group 1 (1).svg">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#">Создать квиз</a></li>
+        <li><a href="#">Пройти квиз</a></li>
+        <li><a href="#">Результаты</a></li>
+      </ul>
+    </nav>
+    <a href="auth.html" class="login">
+      <button >Войти</button>
+    </a>
+  </header>
+
+  <!-- Форма авторизации -->
+  <main>
+    <div class="form-card">
+      <h2>ВХОД</h2>
+      <form action="#" method="post">
+        <div class="form-group">
+          <label for="login-username">ЛОГИН</label>
+          <input type="text" id="login-username" name="username"  required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">ПАРОЛЬ</label>
+          <input type="password" id="login-password" name="password" required>
+        </div>
+        <button type="submit" class="form-button">ВОЙТИ</button>
+      </form>
+      <div class="link-text">
+        <a href="register.html">У меня нет аккаунта</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
