@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: quiz_db
+    volumes:
+      - ./docker_info/postgresql_data:/var/lib/postgresql/data
+    environment:
+       POSTGRES_DB: QuizDB
+       POSTGRES_USER: quiz
+       POSTGRES_PASSWORD: quiz
+    ports:
+      - 5432:5432
+    restart: always
