@@ -27,4 +27,4 @@ async  def send_email(mail_user, mail_password, to_email, header, body):
         server.sendmail(mail_user, to_email, msg.as_string())  # Отправляем письмо
 
 
-    # print(f"Письмо отправлено на {to_email}")
+    print(f"Письмо отправлено на {to_email}")
