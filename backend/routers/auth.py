@@ -43,17 +43,7 @@ async def create_register_form():
         </body>
     </html>
     """
-    # return f"""
-    # <html>
-    #     <body>
-    #         <form action="/v1/auth/confirm_register" method="post">
-    #             <input type="hidden" name="email" value="aaaa" />
-    #             <input type="number" name="entered_code" placeholder="Введите код" required/>
-    #             <button type="submit">Подтвердить</button>
-    #         </form>
-    #     </body>
-    # </html>
-    # """
+
 
 @router.post("/register",
              summary="Регистрация нового пользователя",
@@ -63,7 +53,6 @@ async def create_user(postgres_session: Annotated[AsyncSession, Depends(get_post
                       username: Annotated[str, Form(...)],
                       email: Annotated[str, Form(...)],
                       password: Annotated[str, Form(...)]):
-    print(username, email, password)
     user = await get_user_by_username(postgres_session, username)
     if user is not None:
         raise HTTPException(
@@ -131,16 +120,21 @@ async def confirm_register_form(email: str):
     </html>
     """
 
+
 @router.post("/confirm_register",
             summary="Подтверждение одноразового кода")
 async def confirm_add_user(postgres_session: Annotated[AsyncSession, Depends(get_postgres)],
                            redis_session: Annotated[Redis, Depends(get_redis)],
                            entered_code: Annotated[int, Form(...)],
                            email: Annotated[str, Form(...)]):
+    # Корректный код из redis
     correct_code = await redis_session.get(email)
+
     if entered_code == int(correct_code):
+        # Меняем статус confirmed
         await change_status_confirmed(postgres_session,
                                              email)
+        # Удаляем из redis-хранилища данные 
         await redis_session.delete(email)
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
