@@ -5,3 +5,6 @@ class CreateUser(BaseModel):
     username: str
     email: str
     password: str
+
+class AuthCode(BaseModel):
+    code: int

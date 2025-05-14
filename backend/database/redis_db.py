@@ -1,7 +1,7 @@
+from backend.config import load_config
 from redis.asyncio import Redis
 
-from backend.main import config
-
+config = load_config()
 redis_client = Redis.from_url(config.site.redis)
 
 

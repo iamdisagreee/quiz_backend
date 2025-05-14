@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database.models.email_confirmation import EmailConfirmation
@@ -42,3 +42,12 @@ async def add_email_confirmation(session: AsyncSession,
             confirmation_code=confirmation_code
         )
     )
+
+async def change_status_confirmed(session: AsyncSession,
+                                  email: str):
+    await session.execute(
+        update(User)
+        .where(User.email == email)
+        .values(confirmed=True)
+    )
+    await session.commit()
