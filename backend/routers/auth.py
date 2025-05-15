@@ -22,44 +22,30 @@ from backend.database.auth_requests import get_user_by_username, add_user, get_u
     change_status_confirmed
 from backend.dependecies.postgres_depends import get_postgres
 from backend.dependecies.redis_depends import get_redis
+from backend.dependecies.user_depends import get_current_user
 from backend.services.broker import scheduler_storage
 from backend.services.mail import send_email
+from backend.services.ouath import authenticate_user, create_access_token
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
-
-async def authenticate_user(postgres_session: Annotated[AsyncSession, Depends(get_postgres)],
-                            username: str,
-                            password: str):
-    user = await get_user_by_username(postgres_session,
-                                      username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='User is not registered',
-            headers={'WWW-Authenticate': "Bearer"}
-        )
-    elif not bcrypt_context.verify(password, user.password_hash):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Invalid authentication credentials',
-            headers={'WWW-Authenticate': "Bearer"}
-        )
-    return user
-
-async def create_access_token(username: str,
-                              expires_delta: timedelta):
-    payload = {
-        'username': username,
-        'expire': datetime.now(timezone.utc) + expires_delta
-    }
-
-    payload['expire'] = int(payload['expire'].timestamp())
-    config = load_config()
-    return jwt.encode(payload, config.jwt_auth.secret_key, algorithm=config.jwt_auth.algorithm)
-
+@router.get("/authenticate_form",
+            response_class=HTMLResponse,
+            summary="Форма для авторизации пользователя")
+async def create_authenticate_form():
+    return f"""
+    <html>
+        <body>
+            <h3>Введите данные для авторизации</h3>
+            <form action="/v1/auth/token" method="post">
+                <input type="text" name="username" placeholder="Введите никнейм" required/>
+                <input type="text" name="password" placeholder="Введите пароль" required/>
+                <button type="submit">Подтвердить</button>
+            </form>
+        </body>
+    </html>
+    """
 
 @router.post("/token",
              summary="Получение токена с полезной нагрузкой")
@@ -71,53 +57,17 @@ async def login(postgres_session: Annotated[AsyncSession, Depends(get_postgres)]
 
     token = await create_access_token(user.username,
                                       expires_delta=timedelta(hours=1))
-
-    return {
-        'access_token': token,
-        'token_type': 'Bearer'
-    }
-
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    config = load_config()
-    try:
-        payload = jwt.decode(token, config.jwt_auth.secret_key, algorithms=[config.jwt_auth.algorithm])
-        username = payload.get('username')
-        expire = payload.get('expires')
-
-        if username is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Could not validate user'
-            )
-
-        elif expire is None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No access token supplied"
-            )
-
-        elif expire < datetime.now(timezone.utc).timestamp():
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Token expired'
-            )
-
-        return {
-            'username': username
-        }
-
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token expired!"
-        )
+    return RedirectResponse(f"/v1/auth/main#access_token={token}&token_type=Bearer",
+                            status_code=status.HTTP_302_FOUND)
+    # return {
+    #     'access_token': token,
+    #     'token_type': 'Bearer'
+    # }
 
 @router.get("/read_current_user",
             summary='Информация об авторизованном пользователе')
 async def read_current_user(user: dict = Depends(get_current_user)):
     return {'User': user}
-
-
 
 
 @router.get("/register_form",
@@ -235,9 +185,22 @@ async def confirm_add_user(postgres_session: Annotated[AsyncSession, Depends(get
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='Incorrect code entered')
 
-    return {
-        'status_code': status.HTTP_200_OK,
-        'detail': 'Registration completed successfully',
-    }
+    return RedirectResponse(f"/v1/auth/main",
+                            status_code=status.HTTP_302_FOUND)
 
+    # return {
+    #     'status_code': status.HTTP_200_OK,
+    #     'detail': 'Registration completed successfully',
+    # }
+
+@router.get("/main",
+            response_class=HTMLResponse)
+async def main():
+    return f"""
+    <html>
+        <body>
+            <h3 align=center>Добро пожаловать епрст</h3>
+        </body>
+    </html>
+    """
 

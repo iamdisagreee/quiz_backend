@@ -48,6 +48,6 @@ async def change_status_confirmed(session: AsyncSession,
     await session.execute(
         update(User)
         .where(User.email == email)
-        .values(confirmed=True)
+        .values(is_confirmed=True)
     )
     await session.commit()
