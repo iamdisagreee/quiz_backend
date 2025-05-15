@@ -1,13 +1,17 @@
-from datetime import datetime, timedelta
+import jwt
+
+from datetime import datetime, timedelta, timezone
 from http.client import HTTPException
 from random import randint
 from typing import Annotated
+from urllib.parse import uses_relative
 from zoneinfo import ZoneInfo
 
 from backend.config import load_config
 from fastapi import APIRouter, Depends,HTTPException, Request, Form
 from fastapi.responses import RedirectResponse, HTMLResponse
 from passlib.context import CryptContext
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 from redis.asyncio import Redis
@@ -18,12 +22,103 @@ from backend.database.auth_requests import get_user_by_username, add_user, get_u
     change_status_confirmed
 from backend.dependecies.postgres_depends import get_postgres
 from backend.dependecies.redis_depends import get_redis
-from backend.schemas import CreateUser, AuthCode
 from backend.services.broker import scheduler_storage
 from backend.services.mail import send_email
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+
+
+async def authenticate_user(postgres_session: Annotated[AsyncSession, Depends(get_postgres)],
+                            username: str,
+                            password: str):
+    user = await get_user_by_username(postgres_session,
+                                      username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='User is not registered',
+            headers={'WWW-Authenticate': "Bearer"}
+        )
+    elif not bcrypt_context.verify(password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Invalid authentication credentials',
+            headers={'WWW-Authenticate': "Bearer"}
+        )
+    return user
+
+async def create_access_token(username: str,
+                              expires_delta: timedelta):
+    payload = {
+        'username': username,
+        'expire': datetime.now(timezone.utc) + expires_delta
+    }
+
+    payload['expire'] = int(payload['expire'].timestamp())
+    config = load_config()
+    return jwt.encode(payload, config.jwt_auth.secret_key, algorithm=config.jwt_auth.algorithm)
+
+
+@router.post("/token",
+             summary="Получение токена с полезной нагрузкой")
+async def login(postgres_session: Annotated[AsyncSession, Depends(get_postgres)],
+                form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    user = await authenticate_user(postgres_session,
+                                   form_data.username,
+                                   form_data.password)
+
+    token = await create_access_token(user.username,
+                                      expires_delta=timedelta(hours=1))
+
+    return {
+        'access_token': token,
+        'token_type': 'Bearer'
+    }
+
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    config = load_config()
+    try:
+        payload = jwt.decode(token, config.jwt_auth.secret_key, algorithms=[config.jwt_auth.algorithm])
+        username = payload.get('username')
+        expire = payload.get('expires')
+
+        if username is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Could not validate user'
+            )
+
+        elif expire is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No access token supplied"
+            )
+
+        elif expire < datetime.now(timezone.utc).timestamp():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Token expired'
+            )
+
+        return {
+            'username': username
+        }
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired!"
+        )
+
+@router.get("/read_current_user",
+            summary='Информация об авторизованном пользователе')
+async def read_current_user(user: dict = Depends(get_current_user)):
+    return {'User': user}
+
+
+
 
 @router.get("/register_form",
             response_class=HTMLResponse,
