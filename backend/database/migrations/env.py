@@ -25,6 +25,9 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from backend.database.models.user import User
 from backend.database.models.email_confirmation import EmailConfirmation
+from backend.database.models.answer import Answer
+from backend.database.models.question import Question
+from backend.database.models.quiz import Quiz
 target_metadata = Base.metadata
 
 config_site = load_config()
