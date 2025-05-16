@@ -1,81 +1,94 @@
-    /* Сброс отступов и базовые настройки */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    .background-color{
-      background-image: url('3.jpg');
-  background-size: cover; /* Масштабирует изображение, чтобы покрыть весь блок */
-  background-position: center; /* Выравнивает по центру */
-  background-repeat: no-repeat; /* Отключает повторение */
-  -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-    }
-    body {
-      font-family: "Montserrat", sans-serif;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: #faf9f9;
-    }
-    /* Шапка (navbar) фиксированной высоты */
-    header {
-      width: 100%;
-      height: 80px;
-      padding: 0 40px;
-      background-color: #faf9f9;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #6b8bdd;
-      text-decoration: none;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 50px;
-    }
-    nav ul li a {
-      text-decoration: none;
-      font-size: 16px;
-      color: #3a3d3a;
-      transition: color 0.3s;
-    }
-    nav ul li a:hover {
-      color: #0056b3;
-    }
-    .login button {
-      background-color: #3a3d3a;
-      color: #fff;
-      border: none;
-      border-radius: 15px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .login button:hover {
-      background-color: rgb(103, 105, 103);
-    }
-    /* Основное содержимое */
-    main {
-      flex: 1;
-      padding: 100px 20px 20px;
-      display: flex;
-      align-items: flex-start; /* Изменено с center на flex-start */
-      justify-content: center;
-      overflow: auto;
-    }
-    /* Карточка формы с рамкой и скругленными углами */
+/* Базовые стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+  background-color: #faf9f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Запрет горизонтальной прокрутки */
+}
+
+/* Шапка (header) */
+header {
+  padding: 15px 20px;
+  background-color: #faf9f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  height: 70px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #6b8bdd;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 40px; /* Фиксированная высота логотипа */
+  width: auto;
+}
+
+/* Навигация (скрывается на мобильных) */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 70px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #3a3d3a;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #0056b3;
+}
+
+/* Кнопка "Войти" */
+.login button {
+  background-color: #3a3d3a;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login button:hover {
+  background-color: rgb(103, 105, 103);
+}
+
+/* Бургер-меню (скрыто по умолчанию) */
+.burger-menu {
+  display: none; /* По умолчанию скрыто */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 100;
+  position: relative;
+}
+
+.burger-menu span {
+  width: 25px;
+  height: 3px;
+  background-color: #3a3d3a;
+}
+
+ /* Карточка формы с рамкой и скругленными углами */
     .form-card {
       width: 100%;
       max-width: 350px;
@@ -85,9 +98,9 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
       background: rgba(255,255,255,0.3);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.697);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.697);
     }
     .form-card h2 {
       text-align: center;
@@ -239,126 +252,208 @@
 
 
 
-    .content {
-      width: 100%;
-      margin-left: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    /* Левая сторона – информационный блок */
-    .left {
-      flex: 1;
-      padding-right: 20px;
-    }
-    .left h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      color: #007BFF;
-    }
-    .left p {
-      font-size: 18px;
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-    /* Правая сторона – слайдер с примером формы */
-    .right {
-      flex: 1;
-      padding-left: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* Стили слайдера */
-    .slider {
-      width: 100%;
-      max-width: 500px;
-      height: 300px;
-      overflow: hidden;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      position: relative;
-    }
-    .slides {
-      display: flex;
-      width: 300%;
-      height: 100%;
-      animation: slideAnimation 12s infinite ease-in-out;
-    }
-    .slide {
-      width: 33.33%;
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 20px;
-      color: #333;
-      background-color: #f8f8f8;
-    }
-    /* Ключевые кадры анимации */
-    @keyframes slideAnimation {
-      0%, 30% { transform: translateX(0%); }
-      33.33%, 63.33% { transform: translateX(-33.33%); }
-      66.66%, 96.66% { transform: translateX(-66.66%); }
-      100% { transform: translateX(0%); }
-    }
-    /* Адаптивность для мобильных устройств */
-    @media (max-width: 768px) {
-      header {
-        padding: 15px 20px;
-        flex-wrap: wrap;
-      }
-      nav ul {
-        gap: 15px;
-      }
-      .content {
-        flex-direction: column;
-      }
-      .left, .right {
-        padding: 20px 0;
-        width: 100%;
-      }
-      .slider {
-        max-width: 100%;
-        height: 250px;
-      }
-    }
-    @media (max-width: 480px) {
-      header {
-        padding: 10px;
-      }
-      nav ul {
-        gap: 10px;
-        font-size: 14px;
-      }
-      .login button {
-        padding: 8px 15px;
-        font-size: 14px;
-      }
-      main {
-        padding-top: 80px;
-      }
-    }
+/* Основное содержимое */
+main {
+  flex: 1;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center; /* Выравнивание по горизонтали */
+  align-items: center; /* Выравнивание по вертикали */
+  min-height: calc(100vh - 70px); /* Высота минус шапка */
+}
 
-    /* Адаптация для мобильных устройств */
-    @media (max-width: 768px) {
-      header {
-        padding: 0 20px;
-        height: 60px;
-      }
-      .logo {
-        font-size: 20px;
-      }
-      main {
-        padding-top: 80px;
-      }
-    }
+.content {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+}
 
-    @media (max-width: 480px) {
-      header {
-        padding: 0 15px;
-      }
-      .form-card {
-        padding: 15px;
-      }
-    }
+/* Левая часть (текст) */
+.left {
+  flex: 1;
+  min-width: 300px;
+}
+
+.left h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #007BFF;
+}
+
+.left p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+/* Правая часть (слайдер) */
+.right {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.slider {
+  width: 100%;
+  max-width: 500px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+}
+
+.slides {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  animation: slideAnimation 12s infinite;
+}
+
+.slide {
+  width: 33.33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+/* Анимация слайдера */
+@keyframes slideAnimation {
+  0%, 30% { transform: translateX(0%); }
+  33%, 63% { transform: translateX(-33.33%); }
+  66%, 96% { transform: translateX(-66.66%); }
+  100% { transform: translateX(0%); }
+}
+
+/* Кнопка "Создать квиз" в контенте */
+.left .login button {
+  background-color: #6b8bdd;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+
+/* Стили для мобильного меню */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: #faf9f9;
+  z-index: 99;
+  padding: 80px 20px 20px;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+.mobile-menu nav {
+  display: block;
+}
+.mobile-menu nav ul {
+  flex-direction: column;
+  gap: 30px;
+}
+
+.mobile-menu nav ul li a {
+  font-size: 18px;
+  color: #3a3d3a;
+  padding: 10px 0;
+  text-decoration: none;
+  color: #3a3d3a;
+  transition: color 0.3s;
+}
+.mobile-menu nav ul li a:hover{
+   color: #0056b3;
+}
+
+.mobile-menu .login {
+  margin-top: 30px;
+  display: block;
+}
+
+.mobile-menu .login button {
+  width: 100%;
+}
+
+/* Класс для показа меню */
+.menu-open .mobile-menu {
+  right: 0;
+}
+
+.menu-open .mobile-menu-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* Адаптация для планшетов */
+@media (max-width: 768px) {
+  header {
+    padding: 10px 15px;
+  }
+
+  .logo img {
+    height: 30px; /* Уменьшаем логотип */
+  }
+
+  /* Скрываем навигацию и кнопку "Войти" */
+  nav, .login {
+    display: none;
+  }
+
+  /* Показываем бургер-меню */
+  .burger-menu {
+    display: flex;
+  }
+  .main{
+    margin: 0 auto;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .left, .right {
+    width: 100%;
+    padding: 0;
+  }
+
+  .left h1 {
+    font-size: 28px;
+  }
+}
+
+/* Адаптация для смартфонов */
+@media (max-width: 480px) {
+  .left h1 {
+    font-size: 24px;
+  }
+
+  .left p {
+    font-size: 16px;
+  }
+  
+
+  .slider {
+    height: 200px;
+  }
+}
