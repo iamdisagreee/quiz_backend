@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert, update
+from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database.models.email_confirmation import EmailConfirmation
@@ -31,6 +31,7 @@ async def add_user(session: AsyncSession,
             password_hash=password_hash
         )
     )
+    await session.commit()
 
 async def add_email_confirmation(session: AsyncSession,
                                  user_id: str,
@@ -42,6 +43,7 @@ async def add_email_confirmation(session: AsyncSession,
             confirmation_code=confirmation_code
         )
     )
+    await session.commit()
 
 async def change_status_confirmed(session: AsyncSession,
                                   email: str):
@@ -50,4 +52,13 @@ async def change_status_confirmed(session: AsyncSession,
         .where(User.email == email)
         .values(is_confirmed=True)
     )
+    await session.commit()
+
+async def delete_user(session: AsyncSession,
+                      email: str):
+    await session.execute(
+        delete(User)
+        .where(User.email == email)
+    )
+
     await session.commit()

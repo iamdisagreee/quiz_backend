@@ -1,29 +1,13 @@
 import jwt
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from http.client import HTTPException
-from random import randint
 from typing import Annotated
-from urllib.parse import uses_relative
-from zoneinfo import ZoneInfo
 
 from backend.config import load_config
-from fastapi import APIRouter, Depends,HTTPException, Request, Form
-from fastapi.responses import RedirectResponse, HTMLResponse
-from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Depends,HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from starlette import status
-from redis.asyncio import Redis
-from taskiq import ScheduledTask
-
-
-from backend.database.auth_requests import get_user_by_username, add_user, get_user_by_email, add_email_confirmation, \
-    change_status_confirmed
-from backend.dependecies.postgres_depends import get_postgres
-from backend.dependecies.redis_depends import get_redis
-from backend.services.broker import scheduler_storage
-from backend.services.mail import send_email
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 

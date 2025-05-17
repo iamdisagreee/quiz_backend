@@ -1,5 +1,5 @@
 from backend.dependecies.redis_depends import get_redis
-from backend.services.broker import worker
+from backend.broker import worker
 
 
 @worker.task(task_name='schedule_remove_auth_code')
