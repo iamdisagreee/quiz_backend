@@ -260,6 +260,7 @@ main {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   justify-content: center; /* Выравнивание по горизонтали */
   align-items: center; /* Выравнивание по вертикали */
   min-height: calc(100vh - 70px); /* Высота минус шапка */
@@ -331,7 +332,7 @@ main {
   100% { transform: translateX(0%); }
 }
 
-/* Кнопка "Создать квиз" в контенте */
+/* Кнопка "Создать квиз" в index */
 .left .login button {
   background-color: #6b8bdd;
   color: white;
@@ -405,6 +406,185 @@ main {
 }
 
 
+/* СОЗДАНИЕ КВИЗА */
+/* Блок для табов */
+    .tabs {
+      display: flex;
+      justify-content: left;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+      width: 70%;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: #007BFF;
+      border: 1px solid transparent;
+      transition: background-color 0.3s, border 0.3s;
+    }
+    .tab.active {
+      border: 1px solid #e0e0e0;
+      border-bottom: none;
+      background-color: #f8f8f8;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      font-weight: bold;
+    }
+    /* Контент табов */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      width: 70%;
+    }
+
+    /* Стили для блока создания квиза */
+    #questions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .question-block {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #f8f8f8;
+      position: relative;
+    }
+    .question-block textarea.question-text {
+      width: 100%;
+      height: 80px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    /* Поле корректного ответа всегда отображается */
+    .question-block input.correct-answer {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .options-toggle {
+      margin-bottom: 10px;
+    }
+    .options-toggle label {
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+    .options-toggle input {
+      margin-right: 5px;
+    }
+    .options-container {
+      margin-top: 10px;
+      border: 1px dashed #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      background: #fff;
+      display: none;
+    }
+    .options-container .option {
+      margin-bottom: 10px;
+    }
+    .options-container .option input {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .add-option-button, .delete-question {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #007BFF;
+      background: #fff;
+      border: 1px solid #007BFF;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .add-option-button:hover {
+      background: #007BFF;
+      color: #fff;
+    }
+    .delete-question{
+      margin: 10px 0;
+      border: 1px solid rgb(235, 25, 25);
+      color: rgb(235, 25, 25);
+      border: 1px dashed;
+    }
+    .delete-question:hover{
+      border: 1px solid;
+      color:#fff;
+      background-color: rgb(235, 25, 25);
+    }
+    .tab.active, .tab {
+      color: #6b8bdd;
+    }
+    /* Кнопки внизу страницы */
+    .add-question-button, .create-quiz-button {
+      background-color: #6b8bdd;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 20px;
+      width: 100%;
+      font-size: 16px;
+     
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      color: white;
+    }
+    .create-quiz-button{
+      background: #62d6a0;
+    }
+    .create-quiz-button:hover{
+      background: #4ca77d;
+    }
+
+    .add-question-button:hover {
+      background:  #5974b8;
+    }
+    /* Стили для раздела "Настройка" */
+    #settings-tab-content {
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f8f8f8;
+      font-size: 16px;
+      color: #333;
+    }
+    .timer-toggle {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .timer-toggle label {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .timer-toggle input {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    .timer-input {
+      width: 80px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+
 /* Адаптация для планшетов */
 @media (max-width: 768px) {
   header {
@@ -413,6 +593,10 @@ main {
 
   .logo img {
     height: 30px; /* Уменьшаем логотип */
+  }
+
+  .tabs, .tab-content.active{
+    width: 100%;
   }
 
   /* Скрываем навигацию и кнопку "Войти" */
