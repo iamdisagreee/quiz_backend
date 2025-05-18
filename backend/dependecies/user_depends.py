@@ -17,6 +17,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, config.jwt_auth.secret_key, algorithms=[config.jwt_auth.algorithm])
         username = payload.get('username')
+        user_id = payload.get('id')
         expire = payload.get('expire')
 
         if username is None:
@@ -38,7 +39,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
             )
 
         return {
-            'username': username
+            'username': username,
+            'id': user_id
         }
 
     except jwt.ExpiredSignatureError:

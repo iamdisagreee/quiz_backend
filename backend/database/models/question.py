@@ -16,9 +16,10 @@ class Question(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     quiz_id: Mapped[int] = mapped_column(Integer, ForeignKey("quizzes.id", ondelete='cascade'),
                                          nullable=False)
-    question: Mapped[str] = mapped_column(String(256), nullable=False)
-    is_answer_text: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    is_answer_choice: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    text: Mapped[str] = mapped_column(String(256), nullable=False)
+    # is_answer_text: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # is_answer_choice: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    type: Mapped[str] = mapped_column(String(30), nullable=False)
 
     quiz: Mapped["quiz.Quiz"] = relationship(back_populates="questions", cascade="delete")
     answers: Mapped[List["answer.Answer"]] = relationship(back_populates="question", cascade='delete')

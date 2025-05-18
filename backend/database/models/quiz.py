@@ -13,8 +13,12 @@ class Quiz(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete='cascade'), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    slug: Mapped[str] = mapped_column(String(128), nullable=False)
     connection_code: Mapped[int] = mapped_column(Integer, default=randint(100000, 999999))
-    response_time: Mapped[int] = mapped_column(Integer, nullable=False)
+    timer_enabled: Mapped[int] = mapped_column(Integer, nullable=False, default=False)
+    timer_value: Mapped[int] = mapped_column(Integer, nullable=False)
+    # timer_to_one_question: Mapped[int] = mapped_column(Integer, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
 

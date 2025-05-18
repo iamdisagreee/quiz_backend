@@ -1,8 +1,8 @@
-"""Add answer, question, quiz models
+"""Change quiz, question, answer models
 
-Revision ID: b91f1ed3b41e
-Revises: 4d277142c39c
-Create Date: 2025-05-15 15:50:00.670985
+Revision ID: 803709742f05
+Revises: 
+Create Date: 2025-05-18 20:26:19.123176
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b91f1ed3b41e'
-down_revision: Union[str, None] = '4d277142c39c'
+revision: str = '803709742f05'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -24,6 +24,7 @@ def upgrade() -> None:
     op.create_table('users',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('username', sa.String(length=50), nullable=False),
+    sa.Column('slug', sa.String(length=128), nullable=False),
     sa.Column('email', sa.String(length=150), nullable=False),
     sa.Column('password_hash', sa.String(length=255), nullable=False),
     sa.Column('is_confirmed', sa.Boolean(), nullable=False),
@@ -31,6 +32,7 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('slug'),
     sa.UniqueConstraint('username')
     )
     op.create_table('email_confirmations',
@@ -47,8 +49,11 @@ def upgrade() -> None:
     op.create_table('quizzes',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('slug', sa.String(length=128), nullable=False),
     sa.Column('connection_code', sa.Integer(), nullable=False),
-    sa.Column('response_time', sa.Integer(), nullable=False),
+    sa.Column('timer_enabled', sa.Integer(), nullable=False),
+    sa.Column('timer_value', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='cascade'),
@@ -57,16 +62,15 @@ def upgrade() -> None:
     op.create_table('questions',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('quiz_id', sa.Integer(), nullable=False),
-    sa.Column('question', sa.String(length=256), nullable=False),
-    sa.Column('is_answer_text', sa.Boolean(), nullable=False),
-    sa.Column('is_answer_choice', sa.Boolean(), nullable=False),
+    sa.Column('text', sa.String(length=256), nullable=False),
+    sa.Column('type', sa.String(length=30), nullable=False),
     sa.ForeignKeyConstraint(['quiz_id'], ['quizzes.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('answers',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('question_id', sa.Integer(), nullable=False),
-    sa.Column('answer', sa.String(length=256), nullable=False),
+    sa.Column('text', sa.String(length=256), nullable=False),
     sa.Column('is_correct', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['question_id'], ['questions.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')

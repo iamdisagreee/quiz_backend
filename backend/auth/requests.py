@@ -9,7 +9,8 @@ async def get_user_by_username(session: AsyncSession,
                                username: str):
     return await session.scalar(
         select(User)
-        .where(User.username == username)
+        .where(User.username == username,
+               User.is_confirmed == True)
     )
 
 async def get_user_by_email(session: AsyncSession,
@@ -21,12 +22,14 @@ async def get_user_by_email(session: AsyncSession,
 
 async def add_user(session: AsyncSession,
                    username: str,
+                   slug: str,
                    email: str,
                    password_hash: str):
     await session.execute(
         insert(User)
         .values(
             username=username,
+            slug=slug,
             email=email,
             password_hash=password_hash
         )

@@ -14,7 +14,7 @@ class Answer(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     question_id: Mapped[int] = mapped_column(Integer, ForeignKey("questions.id", ondelete='cascade'),
                                          nullable=False)
-    answer: Mapped[str] = mapped_column(String(256), nullable=False)
+    text: Mapped[str] = mapped_column(String(256), nullable=False)
     is_correct: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     question: Mapped["question.Question"] = relationship(back_populates='answers', cascade='delete')

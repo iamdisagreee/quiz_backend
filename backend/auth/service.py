@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 import jwt
 
+from slugify import slugify
 from datetime import timedelta, datetime, timezone
 from typing import Annotated, Optional
 from taskiq_nats import NATSKeyValueScheduleSource
@@ -68,7 +69,7 @@ class AuthService:
     async def _authenticate_user(self,
                                 username: str,
                                 password: str):
-        """ Проверяем регистрацию и пароль"""
+        """ Проверяем регистрацию, пароль"""
         user = await get_user_by_username(self._postgres,
                                           username)
 
@@ -91,10 +92,12 @@ class AuthService:
 
     @staticmethod
     async def _create_access_token(username: str,
+                                   user_id: int,
                                    expires_delta: timedelta):
         """ Создаем токен с полезной нагрузкой """
         payload = {
             'username': username,
+            'id': user_id,
             'expire': datetime.now(timezone.utc) + expires_delta
         }
 
@@ -110,6 +113,7 @@ class AuthService:
                                        password)
 
         token = await self._create_access_token(user.username,
+                                                user.id,
                                                 expires_delta=timedelta(hours=1))
         return {
             'access_token': token,
@@ -154,6 +158,7 @@ class AuthService:
         # Добавляем в таблицу users
         await add_user(self._postgres,
                        username,
+                       slugify(username),
                        email,
                        self._bcrypt_context.hash(password))
 
@@ -196,7 +201,7 @@ class AuthService:
             # await self._redis.delete(email)
         else:
             # Удалить пользователя, если неправильный код
-            await delete_user(self._postgres)
+            await delete_user(self._postgres, email)
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail='Incorrect code entered')
 
