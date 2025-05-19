@@ -45,8 +45,15 @@ async def get_quiz_by_code(postgres: Annotated[AsyncSession, Depends(get_postgre
 
 @router.put("/{quiz_slug}",
             summary="Обновление квиза пользователем")
-async def update_quiz_by_slug(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                            get_user: Annotated[dict, Depends(get_current_user)],
                            quiz_slug: str,
                            quiz: CreateQuiz):
     return await QuizService(postgres).update_quiz_by_slug(get_user.get('id'), quiz_slug, quiz)
+
+@router.delete("/{quiz_slug}",
+               summary="Удаление квиза")
+async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                      get_user: Annotated[dict, Depends(get_current_user)],
+                      quiz_slug: str):
+    return await QuizService(postgres).delete_quiz(get_user.get('id'), quiz_slug)

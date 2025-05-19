@@ -19,6 +19,7 @@ class Setting(CamelCaseModel):
 
 class CreateQuiz(CamelCaseModel):
     name: str
+    connection_code: int
     questions: List[CreateQuestion]
     settings: Setting
 

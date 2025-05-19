@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select, update, delete
 from starlette import status
@@ -22,6 +24,7 @@ class QuizService:
             .values(
                 name=quiz.name,
                 slug=slugify(quiz.name),
+                connection_code=quiz.connection_code,
                 user_id=user_id,
                 timer_enabled=quiz.settings.timer_enabled,
                 timer_value=quiz.settings.timer_value
@@ -75,22 +78,23 @@ class QuizService:
     async def get_all_quizzes(self,
                               user_id: int):
         """ Получение всех квизов пользователя """
+        print(user_id)
         all_quizzes = (
             await self._postgres.scalars(
                 select(Quiz)
                 .where(
                     Quiz.user_id == user_id,
                 )
-                .order_by()
+                .order_by(Quiz.created_at)
             )
         ).all()
-
-
-        if all_quizzes is None:
+        if not all_quizzes:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail='Not found quizzes'
             )
+
+        return all_quizzes
 
     async def get_quiz_by_slug(self,
                                user_id: int,
@@ -137,33 +141,30 @@ class QuizService:
                                   ):
         """ Обновление квиза """
 
-        check_quiz = await self._postgres.scalar(
-            select(Quiz)
-            .where(
-                Quiz.user_id == user_id,
-                Quiz.slug == quiz_slug
-            )
-        )
-        if check_quiz is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail='Not found quiz'
-            )
-
-
+        # Обновляем Quiz
         quiz_id = await self._postgres.scalar(
             update(Quiz)
             .where(
+                Quiz.user_id == user_id,
                 Quiz.slug == quiz_slug
             )
             .values(
                 name=quiz.name,
                 slug=slugify(quiz.name),
-                user_id=user_id,
-                timer_enabled=quiz.settings.timer_enabled,
-                timer_value=quiz.settings.timer_value
+                connection_code=quiz.connection_code,
+                timer_enabled=quiz.timer_enabled,
+                timer_value=quiz.timer_value,
+                updated_at=datetime.now()
             )
             .returning(Quiz.id)
+        )
+
+        # Удаляем все вопросы и ответы
+        await self._postgres.execute(
+            delete(Question)
+            .where(
+                Question.quiz_id == quiz_id
+            )
         )
 
         for question in quiz.questions:
@@ -173,8 +174,29 @@ class QuizService:
         await self._postgres.commit()
 
         return {
-            'status_code': status.HTTP_201_CREATED,
+            'status_code': status.HTTP_200_OK,
             'detail': 'Quiz updated successfully'
         }
+
+
+
+    async def delete_quiz(self,
+                          user_id: int,
+                          quiz_slug: str):
+
+        await self._postgres.execute(
+            delete(Quiz)
+            .where(
+                Quiz.user_id == user_id,
+                Quiz.slug == quiz_slug
+            )
+        )
+        await self._postgres.commit()
+
+        return {
+            'status_code': status.HTTP_200_OK,
+            'detail': 'Quiz deleted successfully'
+        }
+
 
 
