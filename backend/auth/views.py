@@ -16,7 +16,7 @@ from taskiq_nats import NATSKeyValueScheduleSource
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 
-@router.post("/token",
+@router.post("/login",
              summary="Авторизация - Получение токена с полезной нагрузкой")
 async def login(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                 form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
@@ -41,12 +41,27 @@ async def create_user(postgres: Annotated[AsyncSession, Depends(get_postgres)],
 
     return await AuthService(postgres, redis, scheduler_storage).register_user(username, email, password)
 
-@router.post("/confirm_register",
-            summary="Подтверждение одноразового кода")
+@router.post("/sending_code",
+             summary="Отправка кода подтверждения")
+async def sending_code(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                      redis: Annotated[Redis, Depends(get_redis)],
+                      email: str):
+    return await AuthService(postgres, redis).create_send_email(email)
+
+@router.patch("/confirm-register",
+            summary="Подтверждение отправленного кода")
 async def confirm_add_user(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                            redis: Annotated[Redis, Depends(get_redis)],
                            entered_code: Annotated[int, Form(...)],
                            email: Annotated[str, Form(...)]):
     return await AuthService(postgres, redis).confirm_register(entered_code, email)
+
+@router.delete("/close_code_confirm_box",
+               summary="Закрытие окна с подтверждением кода")
+async def close_code_confirmation_box(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                                    redis: Annotated[Redis, Depends(get_redis)],
+                                    email: str):
+    return await AuthService(postgres, redis).close_code_confirmation_box(email)
+
 
 

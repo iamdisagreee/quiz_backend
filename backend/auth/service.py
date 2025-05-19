@@ -9,6 +9,7 @@ from datetime import timedelta, datetime, timezone
 from typing import Annotated, Optional
 from taskiq_nats import NATSKeyValueScheduleSource
 from redis.asyncio import Redis
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -21,6 +22,7 @@ from taskiq import ScheduledTask
 from backend.auth.requests import change_status_confirmed, delete_user, add_user, get_user_by_email, \
     get_user_by_username
 from backend.config import load_config
+from backend.database.models import User
 
 
 class AuthService:
@@ -32,35 +34,6 @@ class AuthService:
         self._postgres = postgres
         self._redis = redis
         self._scheduler_storage = scheduler_storage
-
-
-    @staticmethod
-    async def _send_email(mail_user, mail_password, to_email, header, body):
-        """
-        Отправка письма по электронной почте с использованием SMTP-сервера Яндекса
-        :param mail_user: почта адресанта
-        :param mail_password: специальный пароль адресанта
-        :param to_email: почта адресата
-        :param header: заголовок письма
-        :param body: текст письма
-        :return:
-        """
-        SMTP_SERVER = "smtp.yandex.com"
-        SMTP_PORT = 587
-
-        msg = MIMEMultipart()
-        msg["From"] = mail_user
-        msg["To"] = to_email
-        msg["Subject"] = header
-        msg.attach(MIMEText(body, "plain"))
-
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(mail_user, mail_password)  # Авторизация
-            server.sendmail(mail_user, to_email, msg.as_string())  # Отправляем письмо
-
-
-        print(f"Письмо отправлено на {to_email}")
 
     async def _create_bcrypt_context(self):
         """ Создаем атрибут с методом шифрования """
@@ -135,6 +108,60 @@ class AuthService:
             )
         )
 
+    @staticmethod
+    async def _send_email(mail_user, mail_password, to_email, header, body):
+        """
+        Отправка письма по электронной почте с использованием SMTP-сервера Яндекса
+        :param mail_user: почта адресанта
+        :param mail_password: специальный пароль адресанта
+        :param to_email: почта адресата
+        :param header: заголовок письма
+        :param body: текст письма
+        :return:
+        """
+        # header = 'Код подтверждения'
+        # auth_code = randint(100000, 999999)
+        # body = f'Ваш код: {auth_code}'
+        # config = load_config()
+        # mail_user=config.mail.mail_user
+        # mail_password=config.mail.mail_password
+
+        SMTP_SERVER = "smtp.yandex.com"
+        SMTP_PORT = 587
+
+        msg = MIMEMultipart()
+        msg["From"] = mail_user
+        msg["To"] = to_email
+        msg["Subject"] = header
+        msg.attach(MIMEText(body, "plain"))
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(mail_user, mail_password)  # Авторизация
+            server.sendmail(mail_user, to_email, msg.as_string())  # Отправляем письмо
+
+
+        print(f"Письмо отправлено на {to_email}")
+
+    async def create_send_email(self,
+                                email: str):
+        # Отправляем письмо
+        text_header = 'Код подтверждения'
+        auth_code = randint(100000, 999999)
+        text_body = f'Ваш код: {auth_code}'
+        config = load_config()
+        await self._send_email(config.mail.mail_user,
+                               config.mail.mail_password,
+                               email,
+                               text_header,
+                               text_body)
+
+        # Добавляем в redis-хранилище email:code_send
+        await self._redis.set(email, auth_code)
+
+        return {"message": "Confirmation code sent",
+                'status_code': status.HTTP_200_OK}
+
     async def register_user(self,
                        username: str,
                        email: str,
@@ -162,27 +189,34 @@ class AuthService:
                        email,
                        self._bcrypt_context.hash(password))
 
-        # Отправляем письмо
-        text_header = 'Код подтверждения'
-        auth_code = randint(100000, 999999)
-        text_body = f'Ваш код: {auth_code}'
-        config = load_config()
-        await self._send_email(config.mail.mail_user,
-                         config.mail.mail_password,
-                         email,
-                         text_header,
-                         text_body)
+        return {
+            'status_code': status.HTTP_201_CREATED,
+            'detail': 'Not confirmed user created'
+        }
 
-        # Добавляем в redis-хранилище email:code_send
-        await self._redis.set(email, auth_code)
+        # Отправляем письмо и добавляем ключ в редис
+        # await self.create_send_email(email)
+        # # Отправляем письмо
+        # text_header = 'Код подтверждения'
+        # auth_code = randint(100000, 999999)
+        # text_body = f'Ваш код: {auth_code}'
+        # config = load_config()
+        # await self._send_email(config.mail.mail_user,
+        #                        config.mail.mail_password,
+        #                        email,
+        #                        text_header,
+        #                        text_body)
+        #
+        # # Добавляем в redis-хранилище email:code_send
+        # await self._redis.set(email, auth_code)
 
-        # Создаем задачу на удаление кода через минуту из redis-хранилища
-        await self._scheduler_storage.startup()
-        await self._task_to_delete_in_minute(username,
-                                             email)
+        # # Создаем задачу на удаление кода через минуту из redis-хранилища
+        # await self._scheduler_storage.startup()
+        # await self._task_to_delete_in_minute(username,
+        #                                      email)
 
-        return {"message": "Confirmation code sent",
-                'status_code': status.HTTP_201_CREATED}
+        # return {"message": "Confirmation code sent",
+        #         'status_code': status.HTTP_201_CREATED}
 
 
     async def confirm_register(self,
@@ -198,14 +232,30 @@ class AuthService:
             await change_status_confirmed(self._postgres,
                                           email)
             # Удаляем из redis-хранилища данные
-            # await self._redis.delete(email)
+            await self._redis.delete(email)
         else:
             # Удалить пользователя, если неправильный код
-            await delete_user(self._postgres, email)
+            # await delete_user(self._postgres, email)
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail='Incorrect code entered')
 
         return {
             'status_code': status.HTTP_200_OK,
-            'detail': 'Registration completed successfully',
+            'detail': 'User confirmed successfully',
+        }
+
+    async def close_code_confirmation_box(self,
+                                          email: str):
+        await self._postgres.execute(
+            delete(User)
+            .where(User.email == email)
+        )
+        await self._postgres.commit()
+
+        # Удаляем из redis-хранилища данные
+        await self._redis.delete(email)
+
+        return {
+            'status_code': status.HTTP_200_OK,
+            'detail': 'User deleted successfully'
         }

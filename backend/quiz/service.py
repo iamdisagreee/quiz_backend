@@ -24,7 +24,6 @@ class QuizService:
             .values(
                 name=quiz.name,
                 slug=slugify(quiz.name),
-                connection_code=quiz.connection_code,
                 user_id=user_id,
                 timer_enabled=quiz.settings.timer_enabled,
                 timer_value=quiz.settings.timer_value
