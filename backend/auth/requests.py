@@ -1,7 +1,6 @@
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.database.models.email_confirmation import EmailConfirmation
 from backend.database.models.user import User
 
 
@@ -32,18 +31,6 @@ async def add_user(session: AsyncSession,
             slug=slug,
             email=email,
             password_hash=password_hash
-        )
-    )
-    await session.commit()
-
-async def add_email_confirmation(session: AsyncSession,
-                                 user_id: str,
-                                 confirmation_code: int):
-    await session.execute(
-        insert(EmailConfirmation)
-        .values(
-            user_id=user_id,
-            confirmation_code=confirmation_code
         )
     )
     await session.commit()
