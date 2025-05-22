@@ -22,5 +22,8 @@ class CreateQuiz(CamelCaseModel):
     questions: List[CreateQuestion]
     settings: Setting
 
+class GetQuiz(CamelCaseModel):
+    quiz_id: int
+
 
 

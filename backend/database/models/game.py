@@ -15,7 +15,7 @@ class Game(Base):
                                          nullable=False)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete='cascade'),
                                          nullable=False)
-    started_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
+    finished_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
 
     results: Mapped[List["result.Result"]] = relationship(back_populates="game", cascade='delete')
 

@@ -29,6 +29,7 @@ from backend.database.models.question import Question
 from backend.database.models.quiz import Quiz
 from backend.database.models.game import Game
 from backend.database.models.result import Result
+from backend.database.models.reply import Reply
 target_metadata = Base.metadata
 
 config_site = load_config()

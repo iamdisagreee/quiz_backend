@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select, update, delete
+from sqlalchemy.orm import selectinload
 from starlette import status
 from fastapi import HTTPException
 from backend.database.models import Quiz, Question
@@ -95,43 +96,77 @@ class QuizService:
 
         return all_quizzes
 
+    @staticmethod
+    def _get_quiz_base_json(quiz: Quiz):
+        """ Json для игры"""
+
+        questions = [
+            {
+                'questionId': question.id,
+                'text': question.text,
+                'type': question.type,
+                'answers': [
+                    {
+                        'answerId': answer.id,
+                        'text': answer.text,
+                    }
+                    for answer in question.answers
+                ]
+            }
+            for question in quiz.questions
+        ]
+
+        return {
+            'quizId': quiz.id,
+            'name': quiz.name,
+            'questions': questions,
+            'settings': {
+                'timerEnabled': quiz.timer_enabled,
+                'timerValue': quiz.timer_value
+            }
+        }
+
     async def get_quiz_by_slug(self,
                                user_id: int,
                                quiz_slug: str,
                                ):
         """ Получение конкретного квиза пользователя """
-        selected_quiz = await self._postgres.scalar(
+        quiz = await self._postgres.scalar(
             select(Quiz)
             .where(
                 Quiz.user_id == user_id,
                 Quiz.slug == quiz_slug
             )
         )
-        if selected_quiz is None:
+        if quiz is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail='Not found quiz'
             )
-        return selected_quiz
+
+        return self._get_quiz_base_json(quiz)
 
     async def get_quiz_by_code(self,
                                user_id: int,
                                connection_code: int,
                                ):
-        """ Получение квиза по коду подключения """
-        selected_quiz = await self._postgres.scalar(
+        """ Получение квиза с вопросами и ответами по коду подключения """
+        quiz = await self._postgres.scalar(
             select(Quiz)
             .where(
                 Quiz.user_id == user_id,
                 Quiz.connection_code == connection_code
             )
+            .options(selectinload(Quiz.questions).selectinload(Question.answers))
         )
-        if selected_quiz is None:
+        if quiz is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail='Not found quiz'
             )
-        return selected_quiz
+
+
+        return self._get_quiz_base_json(quiz)
 
     async def update_quiz_by_slug(self,
                                   user_id: int,
@@ -177,8 +212,6 @@ class QuizService:
             'detail': 'Quiz updated successfully'
         }
 
-
-
     async def delete_quiz(self,
                           user_id: int,
                           quiz_slug: str):
@@ -196,6 +229,3 @@ class QuizService:
             'status_code': status.HTTP_200_OK,
             'detail': 'Quiz deleted successfully'
         }
-
-
-
