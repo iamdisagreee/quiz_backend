@@ -48,19 +48,33 @@
     </div>
   </main>
 
-  <!-- Модальное окно для ввода кода с почты -->
-  <div id="modal-overlay" class="modal-overlay">
-    <div class="modal">
-      <span class="close-modal" id="close-modal">&times;</span>
-      <h3 id="code-message">Введите код подтверждения</h3>
-      <form id="code-form">
-        <div class="form-group form-group-code">
-          <input type="text" id="email-code" name="email_code" placeholder="Код с почты" required>
-        </div>
-        <button type="submit" class="modal-button">Подтвердить код</button>
-      </form>
+<!-- Модальное окно для ввода кода с почты -->
+<div id="modal-overlay" class="modal-overlay">
+  <div class="modal">
+    <span class="close-modal" id="close-modal">&times;</span>
+    <h3 id="code-message">Введите код подтверждения</h3>
+    <form id="code-form">
+      <div class="form-group form-group-code">
+        <input type="text" id="email-code" name="email_code" placeholder="Код с почты" required>
+      </div>
+      <button type="submit" class="modal-button">Подтвердить код</button>
+    </form>
+    <div class="resend-code-container">
+      <button id="resend-code-btn" class="resend-code-btn disabled">
+        Повторить отправку кода (<span id="countdown">10</span>)
+      </button>
     </div>
   </div>
+</div>
+
+<div id ="modal-success" class="modal-overlay">
+  <div class="modal">
+    <h3 id="code-message">Успешная регистрация</h3>
+    <form action="./auth.html">
+      <input type="submit" value="Перейти на страницу авторизации" />
+    </form>
+  </div>
+</div>
 
   <script src="register.js"></script>
 </body>
