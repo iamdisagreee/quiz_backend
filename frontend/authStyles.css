@@ -294,7 +294,7 @@ main {
   flex: 1;
   padding: 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -455,12 +455,13 @@ main {
     }
     .quiz-info input {
       width: 100%;
-      padding: 8px;
+      padding: 15px;
+
       margin-bottom: 10px;
       margin-top: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: 16px;
     }
 /* Блок для табов */
     .tabs {
@@ -517,11 +518,11 @@ main {
     .question-block textarea.question-text {
       width: 100%;
       height: 80px;
-      padding: 8px;
+      padding: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
       resize: vertical;
-      font-size: 15px;
+      font-size: 16px;
       margin-bottom: 10px;
     }
     .question-number{
@@ -539,6 +540,7 @@ main {
       border-radius: 4px;
       font-size: 14px;
       background-color: #fff;
+      color: rgb(51, 99, 220);
     }
      /* Контейнер для вариантов ответа */
     .options-container {
@@ -556,7 +558,7 @@ main {
     }
     .option-input {
       flex-grow: 1;
-      padding: 8px;
+      padding: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 14px;
@@ -603,17 +605,18 @@ main {
     
     
 
-    .question-text:focus ,.text-answer:focus, .option-input:focus{
+    .question-text:focus ,.text-answer:focus, .option-input:focus, .input-quiz-container input:focus{
       outline: 1px solid blue;
     }
     
     /* Поле корректного ответа всегда отображается */
     .question-block input.text-answer {
       width: 100%;
-      padding: 8px;
+      padding: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-bottom: 10px;
+      font-size: 16px;
     }
     .options-toggle {
       margin-bottom: 10px;
@@ -724,6 +727,68 @@ main {
       border-radius: 4px;
     }
 
+
+/* RUN QUIZ*/
+   .hidden{
+    display: none;
+   } 
+   .run-quiz-container{
+     width: 100%;
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #bdd1d7;
+      border-radius: 8px;
+   }
+
+   .run-quiz{
+    font-weight: 600;
+    font-size: 28px;
+    color: rgb(51, 99, 220);
+    padding-bottom: 20px;
+   }
+
+  .input-quiz-container {
+    display: flex; 
+    flex-direction: row;
+    column-gap: 10px;
+    align-items: stretch; /* Уберите дублирующееся свойство */
+    height: 50px; /* Явно задайте высоту или min-height */
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.input-quiz-container input{
+    padding: 15px;
+     width: 80%;
+     font-size: 16px;
+
+}
+
+.input-quiz-code {
+    width: 80%;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Добавьте это */
+    height: 100%;
+}
+
+#find-quiz-btn {
+    background-color:rgb(51, 99, 220);
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 20%;
+    border-radius: 4px; /* Для согласованности с инпутом */
+    box-sizing: border-box; /* Добавьте это */
+    transition: background-color 0.2s;
+     font-size: 16px;
+}
+#find-quiz-btn:hover{
+  background-color: rgb(79, 79, 79);
+}
+   
 
 /* Адаптация для планшетов */
 @media (max-width: 768px) {

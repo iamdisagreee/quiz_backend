@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizMaster - Онлайн платформа для преподавателей</title>
+  <link rel="stylesheet" href="authStyles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">
+      <img src="Group 1 (1).svg">
+    </a>
+    <div class="burger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="#">Результаты</a></li>
+        <li><a href="#">Мои квизы</a></li>
+      </ul>
+    </nav>
+    
+     <a href="#" class="login">
+      <button>Личный кабинет</button>
+    </a>
+  </header>
+
+  <!-- Контент -->
+  <main style="justify-content: start; ">
+    <!-- Форма ввода кода квиза -->
+    <div class="run-quiz-container" id="code-entry-form">
+      <div class="run-quiz">Пройти квиз</div>
+      <div  style="padding-bottom: 10px;font-size: 14px;">Введите код квиза для начала тестирования</div>
+      
+      <div class="input-quiz-container">
+        <input class="input-quiz-code" type="text" id="quiz-code"  placeholder="Введите код квиза">
+        <button id="find-quiz-btn">Найти</button>
+      </div>
+      
+      <div id="error-message"></div>
+    </div>
+    
+    <!-- Информация о квизе (скрыта до ввода кода) -->
+    <div class="hidden" id="quiz-info">
+      <h2 id="quiz-title">Название квиза</h2>
+      <p id="quiz-description">Описание квиза будет отображено здесь.</p>
+      
+      <div>
+        <span id="quiz-timer">Время на прохождение: <span id="timer-value">Не ограничено</span></span>
+      </div>
+      
+      <div>
+        <span id="questions-count">Количество вопросов: <span id="questions-value">0</span></span>
+      </div>
+      
+      <button id="start-quiz-btn">Начать квиз</button>
+    </div>
+    
+    <!-- Блок прохождения квиза (скрыт изначально) -->
+    <div class="hidden" id="quiz-container">
+      <!-- Блок таймера (появляется только если таймер активирован) -->
+      <div id="timer-block">
+        <div class="flex justify-between items-center">
+          <span>Осталось времени:</span>
+          <span id="countdown">00:00</span>
+        </div>
+        <div>
+          <div id="timer-progress" style="width: 100%"></div>
+        </div>
+      </div>
+      
+      <!-- Блок вопросов -->
+      <div>
+        <div >
+          <h2>Вопрос <span id="current-question">1</span> из <span id="total-questions">10</span></h2>
+          <div>Прогресс: <span id="progress-value">10%</span></div>
+        </div>
+        
+        <div>
+          <div id="progress-bar" style="width: 10%"></div>
+        </div>
+        
+        <div id="question-text">
+          <!-- Здесь будет текст вопроса -->
+        </div>
+        
+        <!-- Блок для ввода текстового ответа -->
+        <div id="text-answer-block">
+          <input type="text" id="text-answer-input" 
+                 placeholder="Введите ваш ответ">
+        </div>
+        
+        <!-- Блок для выбора из вариантов ответа -->
+        <div id="options-block">
+          <!-- Здесь будут варианты ответов -->
+        </div>
+        
+        <div>
+          <button id="prev-question-btn">Предыдущий</button>
+          <button id="next-question-btn">Следующий</button>
+        </div>
+      </div>
+      
+      <!-- Кнопка завершения квиза (видна только на последнем вопросе) -->
+      <button id="finish-quiz-btn">Завершить квиз</button>
+      </div>
+      <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+          <h3>Завершить квиз?</h3>
+          <p>Вы уверены, что хотите завершить квиз? Результаты будут отправлены.</p>
+          <div class="modal-buttons">
+            <button id="confirm-submit" class="btn btn-danger">Завершить</button>
+            <button id="cancel-submit" class="btn btn-secondary">Отмена</button>
+          </div>
+        </div>
+      </div>
+    
+    <!-- Сообщение о завершении квиза (скрыто изначально) -->
+    <div id="completion-message" class="hidden">
+      <h2>Квиз завершен!</h2>
+      <p >Ваши ответы успешно сохранены.</p>
+      <a href="results.html">Перейти к результатам</a>
+    </div>
+  </main>
+
+  <div class="mobile-menu-overlay"></div>
+  <div class="mobile-menu">
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="#">Результаты</a></li>
+         <li><a href="#">Мои квизы</a></li>
+      </ul>
+    </nav>
+     <a href="#" class="login">
+      <button>Личный кабинет</button>
+    </a>
+  </div>
+
+  <script src="run_quiz.js"></script>
+</body>
+</html>
