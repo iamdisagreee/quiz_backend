@@ -1,26 +1,348 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const burgerMenu = document.querySelector('.burger-menu');
-  const mobileMenu = document.querySelector('.mobile-menu');
-  const overlay = document.querySelector('.mobile-menu-overlay');
-  const body = document.body;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizMaster – Создать квиз</title>
+  <style>
+    /* Сброс базовых отступов */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #333;
+      padding-top: 80px; /* учёт фиксированной шапки */
+    }
+    /* Шапка (navbar) */
+    header {
+      width: 100%;
+      height: 80px;
+      padding: 0 40px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e0e0e0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007BFF;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      color: #007BFF;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover {
+      color: #0056b3;
+    }
+    /* Стилизация кнопки Личный кабинет */
+    .cabinet-button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .cabinet-button:hover {
+      background-color: #0056b3;
+    }
+    /* Основной контейнер страницы */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px;
+    }
+    /* Блок для табов */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: #007BFF;
+      border: 1px solid transparent;
+      transition: background-color 0.3s, border 0.3s;
+    }
+    .tab.active {
+      border: 1px solid #e0e0e0;
+      border-bottom: none;
+      background-color: #f8f8f8;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      font-weight: bold;
+    }
+    /* Контент табов */
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    /* Стили для блока информации о квизе */
+    .quiz-info {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f0f8ff;
+      border: 1px solid #add8e6;
+      border-radius: 8px;
+    }
+    .quiz-info input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .quiz-info label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    /* Стили для блока создания квиза */
+    #questions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .question-block {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #f8f8f8;
+      position: relative;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .question-number {
+      font-weight: bold;
+      color: #007BFF;
+    }
+    .remove-question {
+      background: none;
+      border: none;
+      color: #ff4d4d;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .question-block textarea.question-text {
+      width: 100%;
+      height: 80px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .question-type-selector {
+      margin-bottom: 15px;
+    }
+    .question-type-selector select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: #fff;
+    }
+    /* Контейнер для текстового ответа */
+    .text-answer-container {
+      margin-bottom: 15px;
+    }
+    .text-answer-container input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    /* Контейнер для вариантов ответа */
+    .options-container {
+      margin-top: 10px;
+      border: 1px dashed #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+    .option-input {
+      flex-grow: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .is-correct-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .is-correct-radio {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .option-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .add-option-button {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #007BFF;
+      background: #fff;
+      border: 1px solid #007BFF;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .add-option-button:hover {
+      background: #007BFF;
+      color: #fff;
+    }
+    .remove-option-button {
+      background: none;
+      border: none;
+      color: #ff4d4d;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 5px;
+    }
+    /* Кнопки внизу страницы */
+    .add-question-button, .create-quiz-button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .add-question-button:hover, .create-quiz-button:hover {
+      background: #0056b3;
+    }
+    /* Стили для раздела "Настройка" */
+    #settings-tab-content {
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f8f8f8;
+      font-size: 16px;
+      color: #333;
+    }
+    .timer-toggle {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .timer-toggle label {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .timer-toggle input {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    .timer-input {
+      width: 80px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+<!-- Шапка -->
+<header>
+  <div class="logo">QuizMaster</div>
+  <nav>
+    <ul>
+      <li><a href="#">Создание квиза</a></li>
+      <li><a href="#">Пройти квиз</a></li>
+      <li><a href="#">Результаты</a></li>
+      <li><a href="#">Мои квизы</a></li>
+    </ul>
+  </nav>
+  <!-- Кнопка Личный кабинет -->
+  <button class="cabinet-button" onclick="window.location.href='cabinet.html'">Личный кабинет</button>
+</header>
 
-  burgerMenu.addEventListener('click', function() {
-    body.classList.toggle('menu-open');
-  });
+<!-- Основной контент страницы "Создать квиз" -->
+<main>
+  <!-- Информация о квизе -->
+  <div class="quiz-info">
+    <label for="quiz-name">Название квиза</label>
+    <input type="text" id="quiz-name" placeholder="Введите название квиза" required>
+  </div>
 
-  overlay.addEventListener('click', function() {
-    body.classList.remove('menu-open');
-  });
+  <!-- Табы -->
+  <div class="tabs">
+    <div class="tab active" data-tab="quiz-tab-content">Вопросы</div>
+    <div class="tab" data-tab="settings-tab-content">Настройка</div>
+  </div>
+  
+  <!-- Контент табов -->
+  <div id="quiz-tab-content" class="tab-content active">
+    <!-- Контейнер для вопросов -->
+    <div id="questions-container">
+      <!-- Вопросы будут динамически добавляться -->
+    </div>
+    <button type="button" id="add-question" class="add-question-button">Добавить вопрос</button>
+    <button type="button" id="create-quiz" class="create-quiz-button">Создать квиз</button>
+  </div>
+  
+  <div id="settings-tab-content" class="tab-content">
+    <div class="timer-toggle">
+      <label for="timer-enabled">Включить таймер:</label>
+      <input type="checkbox" id="timer-enabled">
+      <label for="timer-value">Время (мин.):</label>
+      <input type="number" id="timer-value" class="timer-input" min="1" value="15">
+    </div>
+    <!-- Дополнительные настройки можно добавить здесь -->
+  </div>
+</main>
 
-  // Закрытие меню при клике на ссылку
-  document.querySelectorAll('.mobile-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      body.classList.remove('menu-open');
-    });
-  });
-});
-
- // Переключение табов
+<script>
+  // Переключение табов
   const tabs = document.querySelectorAll(".tab");
   const tabContents = document.querySelectorAll(".tab-content");
 
@@ -57,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
     questionBlock.innerHTML = `
       <div class="question-header">
         <span class="question-number">Вопрос ${questionCount}</span>
-        <button type="button" class="delete-question" title="Удалить вопрос">× Удалить</button>
+        <button type="button" class="remove-question" title="Удалить вопрос">×</button>
       </div>
       
       <textarea class="question-text" placeholder="Введите вопрос" required></textarea>
@@ -65,11 +387,10 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="question-type-selector">
         <select class="question-type">
           <option value="text">Текстовый ответ</option>
-          <option value="single_choice">Единственный верный ответ</option>
-          <option value="multiple_choice">Несколько верных ответов</option>
+          <option value="single_choice">Одиночный выбор</option>
+          <option value="multiple_choice">Множественный выбор</option>
         </select>
       </div>
-      
       
       <!-- Контейнер для текстового ответа -->
       <div class="text-answer-container">
@@ -168,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Обработчик кнопки удаления вопроса
-    const removeQuestionButton = questionBlock.querySelector(".delete-question");
+    const removeQuestionButton = questionBlock.querySelector(".remove-question");
     removeQuestionButton.addEventListener("click", function() {
       if (confirm("Вы уверены, что хотите удалить этот вопрос?")) {
         questionBlock.remove();
@@ -367,3 +688,6 @@ document.addEventListener('DOMContentLoaded', function() {
       alert("Ошибка при создании квиза. Попробуйте снова.");
     });
   });
+</script>
+</body>
+</html>

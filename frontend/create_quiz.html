@@ -34,11 +34,16 @@
   </header>
 
   
-  <main>
+  <main style="justify-content: start;">
+    <div class="quiz-info">
+      <label for="quiz-name" class="question-number">Название квиза</label>
+      <input type="text" id="quiz-name" class="question-text" placeholder="Введите название квиза" required>
+    </div>
     <div class="tabs">
       <div class="tab active" data-tab="quiz-tab-content">Квиз</div>
       <div class="tab" data-tab="settings-tab-content">Настройка</div>
     </div>
+    
     
     <div id="quiz-tab-content" class="tab-content active">
       <!-- Контейнер для вопросов -->
@@ -50,10 +55,14 @@
     </div>
     <div id="settings-tab-content" class="tab-content">
       <div class="timer-toggle">
-        <label for="timer-enabled">Включить таймер:</label>
-        <input type="checkbox" id="timer-enabled">
-        <label for="timer-value">Время (мин.):</label>
-        <input type="number" id="timer-value" class="timer-input" min="1" value="1">
+        <div>
+          <label for="timer-enabled">Включить таймер:</label>
+          <input type="checkbox" id="timer-enabled">
+        </div>
+        <div>
+          <label for="timer-value">Время (мин.):</label>
+          <input type="number" id="timer-value" class="timer-input" min="1" max="1440" value="15">
+        </div>
       </div>
       <!-- Дополнительные настройки можно добавить здесь -->
     </div>

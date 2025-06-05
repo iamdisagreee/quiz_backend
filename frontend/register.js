@@ -6,7 +6,12 @@ const registrationForm = document.getElementById('registration-form');
     const codeMessage = document.getElementById('code-message');
     const emailInput = document.getElementById('register-email');
     const modalSuccess = document.getElementById('modal-success');
+    const codeForm = document.getElementById('code-form');
+    const resendBtn = document.getElementById('resend-code-btn');
+    const countdownElement = document.getElementById('countdown');
     let timerInterval;
+    let countdown = 10;
+    let countdownInterval;
 
     // Перехватываем отправку формы регистрации
     registrationForm.addEventListener('submit', function(e) {
@@ -36,9 +41,6 @@ const registrationForm = document.getElementById('registration-form');
       closeModalWindow();
     });
 
-    // Обработка отправки кода из модального окна
-    const codeForm = document.getElementById('code-form');
-
     codeForm.addEventListener('submit', function(e) {
       e.preventDefault();
       const emailCode = document.getElementById('email-code').value;
@@ -52,12 +54,6 @@ const registrationForm = document.getElementById('registration-form');
         document.getElementById('email-code').value = "";
       }
     });    
-
-    const resendBtn = document.getElementById('resend-code-btn');
-    const countdownElement = document.getElementById('countdown');
-    let countdown = 10;
-    let countdownInterval;
-    
     
     // Обработчик клика по кнопке
     resendBtn.addEventListener('click', function() {
@@ -68,12 +64,12 @@ const registrationForm = document.getElementById('registration-form');
     
     function startCountdown() {
       countdown = 10;
-      countdownElement.textContent = countdown;
+      countdownElement.textContent = "(" + countdown + ")";
       updateButtonState();
       
       countdownInterval = setInterval(function() {
         countdown--;
-        countdownElement.textContent = countdown;
+        countdownElement.textContent = "(" + countdown + ")";
         
         if (countdown <= 0) {
           clearInterval(countdownInterval);

@@ -55,23 +55,27 @@
     <h3 id="code-message">Введите код подтверждения</h3>
     <form id="code-form">
       <div class="form-group form-group-code">
-        <input type="text" id="email-code" name="email_code" placeholder="Код с почты" required>
+        <input type="text" id="email-code" name="email_code" placeholder="Код c почты" required>
       </div>
       <button type="submit" class="modal-button">Подтвердить код</button>
     </form>
-    <div class="resend-code-container">
-      <button id="resend-code-btn" class="resend-code-btn disabled">
-        Повторить отправку кода (<span id="countdown">10</span>)
-      </button>
-    </div>
+    <button id="resend-code-btn" class="resend-code-btn disabled link-text">
+      Повторно отправить код <span id="countdown">10</span>
+    </button>
   </div>
 </div>
 
 <div id ="modal-success" class="modal-overlay">
   <div class="modal">
-    <h3 id="code-message">Успешная регистрация</h3>
+    <div class="modal-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="120" height="120" viewBox="0 0 48 48">
+<path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
+</svg>
+    </div>
+    <div id="code-message" style="color:rgb(103, 105, 103); font-weight: 400; font-size: 20px;">Успешная регистрация!</div>
+    <div style="font-weight: 10px; font-weight: 300; margin-top: 10px;">Ваш аккаунт создан</div>
     <form action="./auth.html">
-      <input type="submit" value="Перейти на страницу авторизации" />
+      <input type="submit"  class="modal-success-btn" value="Авторизоваться" />
     </form>
   </div>
 </div>
