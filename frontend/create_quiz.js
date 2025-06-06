@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Основная структура блока вопроса
     questionBlock.innerHTML = `
-      <div class="question-header">
+      <div class="question-header ">
         <span class="question-number">Вопрос ${questionCount}</span>
         <button type="button" class="delete-question" title="Удалить вопрос">× Удалить</button>
       </div>

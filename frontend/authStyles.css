@@ -298,8 +298,9 @@ main {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Выравнивание по горизонтали */
-  align-items: center; /* Выравнивание по вертикали */
+  justify-content: start; 
+  align-items: center;
+  padding-top: 30px;
   min-height: calc(100vh - 70px); /* Высота минус шапка */
 }
 
@@ -332,9 +333,12 @@ main {
 /* Правая часть (слайдер) */
 .right {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   min-width: 300px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .slider {
@@ -442,14 +446,12 @@ main {
   visibility: visible;
 }
 
-
 /* СОЗДАНИЕ КВИЗА */
  /* Стили для блока информации о квизе */
     .quiz-info {
       width: 100%;
       margin-bottom: 20px;
       padding: 15px;
-      background-color: #f0f2f3;
       border: 1px solid #bdd1d7;
       border-radius: 8px;
     }
@@ -482,7 +484,7 @@ main {
       color: rgb(255, 255, 255);
       border: 1px solid #e0e0e0;
       border-bottom: none;
-      background-color: rgb(79, 79, 79);
+      background-color: rgb(51, 99, 220);
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
       font-weight: 600;
@@ -501,6 +503,7 @@ main {
       display: flex;
       flex-direction: column;
       gap: 20px;
+       background-color: #f8f9fa;
     }
     .question-header{
       display: flex;
@@ -509,11 +512,11 @@ main {
       align-items: center;
     }
     .question-block {
-       background-color: #f0f2f3;
       border: 1px solid #bdd1d7;
       border-radius: 8px;
       padding: 0 15px;
       position: relative;
+      padding-bottom: 15px;
     }
     .question-block textarea.question-text {
       width: 100%;
@@ -527,6 +530,7 @@ main {
     }
     .question-number{
       font-weight: 600;
+      font-size: 18px;
       color: rgb(51, 99, 220);
     }
 
@@ -540,7 +544,7 @@ main {
       border-radius: 4px;
       font-size: 14px;
       background-color: #fff;
-      color: rgb(51, 99, 220);
+      color: rgb(79, 79, 79);
     }
      /* Контейнер для вариантов ответа */
     .options-container {
@@ -675,12 +679,13 @@ main {
     }
     /* Кнопки внизу страницы */
     .add-question-button, .create-quiz-button {
-      background-color: rgb(79, 79, 79);
+      background-color: rgb(51, 99, 220);
       color: white;
       padding: 10px 20px;
       margin-top: 20px;
       width: 100%;
       font-size: 16px;
+      height: 50px;
      
       border: none;
       border-radius: 4px;
@@ -688,13 +693,10 @@ main {
       transition: background 0.3s;
       color: white;
     }
-    .create-quiz-button:hover{
-      background: rgb(80, 124, 236);
+    .create-quiz-button:hover, .add-question-button:hover {
+      background: rgb(42, 81, 182);
     }
 
-    .add-question-button:hover {
-      background:  rgb(80, 124, 236);
-    }
     /* Стили для раздела "Настройка" */
     #settings-tab-content {
       padding: 20px;
@@ -730,7 +732,7 @@ main {
 
 /* RUN QUIZ*/
    .hidden{
-    display: none;
+    display: none !important;
    } 
    .run-quiz-container{
      width: 100%;
@@ -751,17 +753,16 @@ main {
     display: flex; 
     flex-direction: row;
     column-gap: 10px;
-    align-items: stretch; /* Уберите дублирующееся свойство */
-    height: 50px; /* Явно задайте высоту или min-height */
+    align-items: stretch; 
+    height: 50px;
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 .input-quiz-container input{
     padding: 15px;
      width: 80%;
      font-size: 16px;
-
 }
 
 .input-quiz-code {
@@ -770,24 +771,75 @@ main {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
-    box-sizing: border-box; /* Добавьте это */
+    box-sizing: border-box;
     height: 100%;
 }
 
-#find-quiz-btn {
+.quiz-btn {
     background-color:rgb(51, 99, 220);
     color: white;
     border: none;
     cursor: pointer;
-    width: 20%;
-    border-radius: 4px; /* Для согласованности с инпутом */
-    box-sizing: border-box; /* Добавьте это */
+    width: auto;
+    padding: 0 10px;
+    border-radius: 4px; 
+    box-sizing: border-box; 
+    transition: background-color 0.2s;
+     font-size: 16px;
+     min-width: 20%;
+}
+.quiz-btn-prev {
+    background-color:#f8f9fa;
+    color: rgb(79, 79, 79);
+    border: none;
+    cursor: pointer;
+    width: auto;
+    min-width: 20%;
+    border-radius: 4px; 
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    
+    box-sizing: border-box; 
     transition: background-color 0.2s;
      font-size: 16px;
 }
-#find-quiz-btn:hover{
+.quiz-btn:hover{
   background-color: rgb(79, 79, 79);
 }
+.quiz-question{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.quiz-question-text{
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.option-block-margin{
+  margin-bottom: 30px;
+}
+.option-margin{
+  margin-bottom: 20px;
+}
+
+.modal-quiz {
+      position: fixed;
+      display: flex;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
    
 
 /* Адаптация для планшетов */
@@ -841,7 +893,6 @@ main {
   .left p {
     font-size: 16px;
   }
-  
 
   .slider {
     height: 200px;

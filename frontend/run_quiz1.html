@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Пройти квиз</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- Навигация -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-white shadow">
+    <div class="text-xl font-bold text-blue-600">QuizMaster</div>
+    <ul class="flex space-x-6 text-gray-700">
+      <li><a href="#" class="hover:text-blue-500">Создать квиз</a></li>
+      <li><a href="#" class="text-blue-600 font-semibold">Пройти квиз</a></li>
+      <li><a href="#" class="hover:text-blue-500">Результаты</a></li>
+      <li><a href="#" class="hover:text-blue-500">Мои квизы</a></li>
+    </ul>
+    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Личный кабинет</button>
+  </nav>
+
+  <!-- Контент -->
+  <main class="max-w-2xl mx-auto mt-10">
+    <!-- Форма ввода кода квиза -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6" id="code-entry-form">
+      <h1 class="text-2xl font-bold mb-4">Пройти квиз</h1>
+      <p class="text-gray-600 mb-4">Введите код квиза для начала тестирования</p>
+      
+      <div class="flex space-x-2">
+        <input type="text" id="quiz-code" 
+               class="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" 
+               placeholder="Введите код квиза">
+        <button id="find-quiz-btn" 
+                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+          Найти
+        </button>
+      </div>
+      
+      <div id="error-message" class="hidden mt-3 text-red-500"></div>
+    </div>
+    
+    <!-- Информация о квизе (скрыта до ввода кода) -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6" id="quiz-info">
+      <h2 class="text-xl font-bold text-gray-800 mb-2" id="quiz-title">Название квиза</h2>
+      <p class="text-gray-600 mb-4" id="quiz-description">Описание квиза будет отображено здесь.</p>
+      
+      <div class="flex items-center space-x-2 mb-6 text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id="quiz-timer">Время на прохождение: <span id="timer-value">Не ограничено</span></span>
+      </div>
+      
+      <div class="flex items-center space-x-2 mb-6 text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id="questions-count">Количество вопросов: <span id="questions-value">0</span></span>
+      </div>
+      
+      <button id="start-quiz-btn" class="w-full bg-green-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
+        Начать квиз
+      </button>
+    </div>
+    
+    <!-- Блок прохождения квиза (скрыт изначально) -->
+    <div class="hidden" id="quiz-container">
+      <!-- Блок таймера (появляется только если таймер активирован) -->
+      <div id="timer-block" class="bg-white p-4 rounded-lg shadow mb-4 hidden">
+        <div class="flex justify-between items-center">
+          <span class="font-semibold">Осталось времени:</span>
+          <span id="countdown" class="text-xl font-bold">00:00</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+          <div id="timer-progress" class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+      
+      <!-- Блок вопросов -->
+      <div class="bg-white p-6 rounded-lg shadow mb-4">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Вопрос <span id="current-question">1</span> из <span id="total-questions">10</span></h2>
+          <div class="text-gray-500">Прогресс: <span id="progress-value">10%</span></div>
+        </div>
+        
+        <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+          <div id="progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 10%"></div>
+        </div>
+        
+        <div id="question-text" class="text-lg font-medium mb-4">
+          Здесь будет текст вопроса?
+        </div>
+        
+        <!-- Блок для ввода текстового ответа -->
+        <div id="text-answer-block" class="mb-4">
+          <input type="text" id="text-answer-input" 
+                 class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" 
+                 placeholder="Введите ваш ответ">
+        </div>
+        
+        <!-- Блок для выбора из вариантов ответа -->
+        <div id="options-block" class="space-y-2 mb-4 hidden">
+          <!-- Варианты ответов будут добавлены динамически -->
+        </div>
+        
+        <div class="flex justify-between mt-6">
+          <button id="prev-question-btn" class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition disabled:opacity-50">
+            Предыдущий
+          </button>
+          <button id="next-question-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+            Следующий
+          </button>
+        </div>
+      </div>
+      
+      <!-- Кнопка завершения квиза (видна только на последнем вопросе) -->
+      <button id="finish-quiz-btn" class="hidden w-full bg-green-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-600 transition">
+        Завершить квиз
+      </button>
+    </div>
+    
+    <!-- Сообщение о завершении квиза (скрыто изначально) -->
+    <div class="hidden bg-white p-6 rounded-lg shadow text-center" id="completion-message">
+      <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <h2 class="text-2xl font-bold mb-2">Квиз завершен!</h2>
+      <p class="text-gray-600 mb-4">Ваши ответы успешно сохранены.</p>
+      <a href="results.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+        Перейти к результатам
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // Функция для поиска квиза по коду
+    document.getElementById('find-quiz-btn').addEventListener('click', function() {
+      const quizCode = document.getElementById('quiz-code').value.trim();
+      if (!quizCode) {
+        showError('Пожалуйста, введите код квиза');
+        return;
+      }
+      
+      // Заглушка для демонстрации
+      // В реальном приложении здесь будет запрос к API
+      fetch(`/api/quizzes/by-code/${quizCode}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Квиз не найден');
+          return response.json();
+        })
+        .then(quiz => {
+          // Отобразить информацию о квизе
+          document.getElementById('quiz-title').textContent = quiz.title;
+          document.getElementById('quiz-description').textContent = quiz.description || 'Без описания';
+          document.getElementById('questions-value').textContent = quiz.questions.length;
+          
+          if (quiz.settings.timerEnabled) {
+            document.getElementById('timer-value').textContent = formatTime(quiz.settings.timerValue);
+          } else {
+            document.getElementById('timer-value').textContent = 'Не ограничено';
+          }
+          
+          // Сохраняем данные квиза
+          window.quizData = quiz;
+          
+          // Показываем информацию о квизе
+          document.getElementById('code-entry-form').classList.add('hidden');
+          document.getElementById('quiz-info').classList.remove('hidden');
+        })
+        .catch(error => {
+          showError('Квиз с таким кодом не найден или недоступен');
+          console.error(error);
+        });
+    });
+    
+    // Функция для начала квиза
+    document.getElementById('start-quiz-btn').addEventListener('click', function() {
+      document.getElementById('quiz-info').classList.add('hidden');
+      document.getElementById('quiz-container').classList.remove('hidden');
+      
+      // Инициализация квиза
+      initializeQuiz(window.quizData);
+    });
+    
+    // Функция для отображения ошибок
+    function showError(message) {
+      const errorEl = document.getElementById('error-message');
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+      
+      // Скрыть ошибку через 3 секунды
+      setTimeout(() => {
+        errorEl.classList.add('hidden');
+      }, 3000);
+    }
+    
+    // Функция для форматирования времени
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs < 10 ? '0' + secs : secs}`;
+    }
+    
+    // Функция для инициализации квиза
+    function initializeQuiz(quiz) {
+      // Настройка общего состояния квиза
+      const totalQuestions = quiz.questions.length;
+      document.getElementById('total-questions').textContent = totalQuestions;
+      window.currentQuestionIndex = 0;
+      window.userAnswers = new Array(totalQuestions).fill('');
+      
+      // Если включен таймер, запускаем его
+      if (quiz.settings.timerEnabled) {
+        startTimer(quiz.settings.timerValue);
+      }
+      
+      // Отображаем первый вопрос
+      showQuestion(0);
+      
+      // Обработчики навигации по вопросам
+      document.getElementById('next-question-btn').addEventListener('click', function() {
+        saveCurrentAnswer();
+        
+        if (window.currentQuestionIndex < totalQuestions - 1) {
+          showQuestion(window.currentQuestionIndex + 1);
+        }
+      });
+      
+      document.getElementById('prev-question-btn').addEventListener('click', function() {
+        saveCurrentAnswer();
+        
+        if (window.currentQuestionIndex > 0) {
+          showQuestion(window.currentQuestionIndex - 1);
+        }
+      });
+      
+      // Обработчик завершения квиза
+      document.getElementById('finish-quiz-btn').addEventListener('click', function() {
+        saveCurrentAnswer();
+        submitQuiz();
+      });
+    }
+    
+    // Функция для отображения текущего вопроса
+    function showQuestion(index) {
+      const quiz = window.quizData;
+      const question = quiz.questions[index];
+      
+      // Обновляем индекс текущего вопроса
+      window.currentQuestionIndex = index;
+      
+      // Обновляем номер вопроса и прогресс
+      document.getElementById('current-question').textContent = index + 1;
+      const progressPercent = Math.round(((index + 1) / quiz.questions.length) * 100);
+      document.getElementById('progress-value').textContent = `${progressPercent}%`;
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+      
+      // Устанавливаем текст вопроса
+      document.getElementById('question-text').textContent = question.text;
+      
+      // Показываем или скрываем соответствующие блоки для ответа
+      const textAnswerBlock = document.getElementById('text-answer-block');
+      const optionsBlock = document.getElementById('options-block');
+      
+      if (question.hasOptions) {
+        textAnswerBlock.classList.add('hidden');
+        optionsBlock.classList.remove('hidden');
+        optionsBlock.innerHTML = ''; // Очищаем старые варианты
+        
+        // Добавляем варианты ответов
+        question.options.forEach((option, optIndex) => {
+          const optionId = `option-${optIndex}`;
+          const optionDiv = document.createElement('div');
+          optionDiv.classList.add('flex', 'items-center');
+          optionDiv.innerHTML = `
+            <input type="radio" id="${optionId}" name="question-option" value="${option}" 
+                   class="w-4 h-4 text-blue-600" ${window.userAnswers[index] === option ? 'checked' : ''}>
+            <label for="${optionId}" class="ml-2 text-gray-700">${option}</label>
+          `;
+          optionsBlock.appendChild(optionDiv);
+        });
+      } else {
+        optionsBlock.classList.add('hidden');
+        textAnswerBlock.classList.remove('hidden');
+        document.getElementById('text-answer-input').value = window.userAnswers[index] || '';
+      }
+      
+      // Управление кнопками навигации
+      document.getElementById('prev-question-btn').disabled = index === 0;
+      
+      if (index === quiz.questions.length - 1) {
+        document.getElementById('next-question-btn').classList.add('hidden');
+        document.getElementById('finish-quiz-btn').classList.remove('hidden');
+      } else {
+        document.getElementById('next-question-btn').classList.remove('hidden');
+        document.getElementById('finish-quiz-btn').classList.add('hidden');
+      }
+    }
+    
+    // Функция для сохранения ответа на текущий вопрос
+    function saveCurrentAnswer() {
+      const index = window.currentQuestionIndex;
+      const question = window.quizData.questions[index];
+      
+      if (question.hasOptions) {
+        const selectedOption = document.querySelector('input[name="question-option"]:checked');
+        window.userAnswers[index] = selectedOption ? selectedOption.value : '';
+      } else {
+        window.userAnswers[index] = document.getElementById('text-answer-input').value.trim();
+      }
+    }
+    
+    // Функция для запуска таймера
+    function startTimer(seconds) {
+      const timerBlock = document.getElementById('timer-block');
+      const countdownEl = document.getElementById('countdown');
+      const progressBar = document.getElementById('timer-progress');
+      
+      timerBlock.classList.remove('hidden');
+      let timeLeft = seconds;
+      const totalTime = seconds;
+      
+      window.quizTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = formatTime(timeLeft);
+        const percent = (timeLeft / totalTime) * 100;
+        progressBar.style.width = `${percent}%`;
+        
+        // Изменение цвета в зависимости от оставшегося времени
+        if (percent < 25) {
+          progressBar.classList.remove('bg-blue-600', 'bg-yellow-500');
+          progressBar.classList.add('bg-red-500');
+        } else if (percent < 50) {
+          progressBar.classList.remove('bg-blue-600', 'bg-red-500');
+          progressBar.classList.add('bg-yellow-500');
+        }
+        
+        if (timeLeft <= 0) {
+          clearInterval(window.quizTimer);
+          submitQuiz(true); // Автоматическая отправка при истечении времени
+        }
+      }, 1000);
+    }
+    
+    // Функция для отправки результатов квиза
+    function submitQuiz(timeExpired = false) {
+      // Останавливаем таймер, если он запущен
+      if (window.quizTimer) {
+        clearInterval(window.quizTimer);
+      }
+      
+      // Формируем данные для отправки
+      const submissionData = {
+        quizId: window.quizData.id,
+        answers: window.userAnswers.map((answer, index) => ({
+          questionId: window.quizData.questions[index].id,
+          answer: answer
+        })),
+        timeExpired: timeExpired
+      };
+      
+      // Отправляем результаты на сервер
+      fetch('/api/quiz-submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(submissionData)
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Ошибка при отправке результатов');
+        return response.json();
+      })
+      .then(data => {
+        // Показываем сообщение о завершении
+        document.getElementById('quiz-container').classList.add('hidden');
+        document.getElementById('completion-message').classList.remove('hidden');
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Произошла ошибка при отправке результатов. Пожалуйста, попробуйте еще раз.');
+      });
+    }
+  </script>
+</body>
+</html>

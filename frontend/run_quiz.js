@@ -171,17 +171,18 @@ let localQuizzes = {};
       if (question.hasOptions) {
         textAnswerBlock.classList.add('hidden');
         optionsBlock.classList.remove('hidden');
+        optionsBlock.classList.add("option-block-margin");
         optionsBlock.innerHTML = ''; // Очищаем старые варианты
         
         // Добавляем варианты ответов
         question.options.forEach((option, optIndex) => {
           const optionId = `option-${optIndex}`;
           const optionDiv = document.createElement('div');
-          optionDiv.classList.add('flex', 'items-center');
+          optionDiv.classList.add('option-margin');
           optionDiv.innerHTML = `
             <input type="radio" id="${optionId}" name="question-option" value="${option}" 
-                   class="w-4 h-4 text-blue-600" ${window.userAnswers[index] === option ? 'checked' : ''}>
-            <label for="${optionId}" class="ml-2 text-gray-700">${option}</label>
+                   ${window.userAnswers[index] === option ? 'checked' : ''}>
+            <label for="${optionId}">${option}</label>
           `;
           optionsBlock.appendChild(optionDiv);
         });
