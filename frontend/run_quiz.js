@@ -286,6 +286,8 @@ let localQuizzes = {};
       })
       .catch(error => {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при отправке результатов. Пожалуйста, попробуйте еще раз.');
+        /* alert('Произошла ошибка при отправке результатов. Пожалуйста, попробуйте еще раз.'); */
+         document.getElementById('quiz-container').classList.add('hidden');
+        document.getElementById('completion-message').classList.remove('hidden');
       });
     }

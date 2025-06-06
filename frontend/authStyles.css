@@ -222,9 +222,9 @@ nav ul li a:hover {
       text-align: center;
     }
     .modal-success-btn{
-      border-radius: 50px;
+      border-radius: 4px;
       padding: 10px 20px;
-      margin-top: 60px;
+      margin-top: 30px;
       margin-bottom: 10px;
       background: #62d6a0;
       color: #fff;
@@ -786,7 +786,7 @@ main {
     box-sizing: border-box; 
     transition: background-color 0.2s;
      font-size: 16px;
-     min-width: 20%;
+     min-width: 15%;
 }
 .quiz-btn-prev {
     background-color:#f8f9fa;
@@ -814,6 +814,7 @@ main {
   align-items: stretch;
   height: 50px;
   margin-bottom: 10px;
+  margin-top:10px;
 }
 .quiz-question-text{
   font-size: 18px;
