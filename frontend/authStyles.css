@@ -609,7 +609,7 @@ main {
     
     
 
-    .question-text:focus ,.text-answer:focus, .option-input:focus, .input-quiz-container input:focus{
+    .question-text:focus ,.text-answer:focus, .option-input:focus, .input-quiz-container input:focus, .results-input-container input:focus, .select-wrapper select:hover{
       outline: 1px solid blue;
     }
     
@@ -693,9 +693,10 @@ main {
       transition: background 0.3s;
       color: white;
     }
-    .create-quiz-button:hover, .add-question-button:hover {
+    .create-quiz-button:hover, .add-question-button:hover, .results-search-btn:hover {
       background: rgb(42, 81, 182);
     }
+    
 
     /* Стили для раздела "Настройка" */
     #settings-tab-content {
@@ -843,6 +844,160 @@ main {
     }
    
 
+/* RESULTS */
+.results-quiz-container{
+   width: 100%;
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #bdd1d7;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+}
+.results-header{
+  font-weight: 600;
+    font-size: 28px;
+    color: rgb(51, 99, 220);
+    padding-bottom: 20px;
+}
+.results-input-container {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    align-items: center;
+     align-items: stretch; 
+    height: 50px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+.results-items-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+   margin-bottom: 20px;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 50px;
+       padding: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.select-wrapper {
+    position: relative;
+    min-width: 40px;
+}
+.select-wrapper select{
+  height: 100%;
+      padding: 15px;
+}
+
+.sort-select {
+    padding: 10px 25px 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    min-width: 100%;
+    color:rgb(51, 99, 220);
+}
+
+.results-search-btn {
+    padding: 10px 16px;
+    background: rgb(51, 99, 220);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+.results-search-btn-details{
+  padding: 10px 16px;
+  background-color: white; 
+  color:rgb(51, 99, 220); 
+  border: 1px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+.results-search-btn-details:hover{
+  border: 1px solid rgb(51, 99, 220);
+}
+#results-container{
+  width: 100%;
+}
+.green-border{
+  --tw-bg-opacity: 1;
+      --tw-border-opacity: 1;
+border: 1px solid rgb(187 247 208 / var(--tw-border-opacity, 1));
+background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
+}
+.red-border{
+  --tw-bg-opacity: 1;
+  --tw-border-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
+  border:1px solid  rgb(254 202 202 / var(--tw-border-opacity, 1));
+}
+.result-quiz-name{
+  font-size: 1.125rem;
+    line-height: 1.75rem;
+  font-weight: 600;
+}
+.result-quiz-data{
+      font-size: 0.875rem;
+    line-height: 1.25rem;
+    color:grey;
+}
+
+.score-display {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.625rem;
+  margin-right: 0.5rem;
+  max-width: 200px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+/* Цветовые классы */
+.green{
+  background-color: #16a34a;
+}
+
+.yellow {
+  background-color: #eab308;
+}
+
+.red {
+  background-color: #ef4444;
+}
+
+.score-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+
+
 /* Адаптация для планшетов */
 @media (max-width: 768px) {
   header {
@@ -885,6 +1040,7 @@ main {
   }
 }
 
+
 /* Адаптация для смартфонов */
 @media (max-width: 480px) {
   .left h1 {
@@ -897,5 +1053,21 @@ main {
 
   .slider {
     height: 200px;
+  }
+  .results-search-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .search-input {
+        padding: 10px;
+    }
+    
+  .results-search-btn-details {
+    font-size: 12px;
+  }
+  .score-display{
+    flex-wrap: wrap;
+    row-gap: 10px;
   }
 }

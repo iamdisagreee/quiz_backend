@@ -41,7 +41,6 @@ let localQuizzes = {};
     }
     
     const quiz = Object.values(localQuizzes).find(q => q.code === quizCode);
-     console.log(quiz);
     
     if (!quiz) {
       showError('Квиз с таким кодом не найден');
