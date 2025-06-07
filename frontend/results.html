@@ -12,7 +12,7 @@
 <body>
   <header>
     <a href="index.html" class="logo">
-      <img src="Group 1 (1).svg">
+      <img src="logo.svg">
     </a>
     <div class="burger-menu">
       <span></span>
@@ -24,7 +24,7 @@
         <li><a href="create_quiz.html">Создать квиз</a></li>
         <li><a href="run_quiz.html">Пройти квиз</a></li>
         <li><a href="results.html">Результаты</a></li>
-        <li><a href="#">Мои квизы</a></li>
+        <li><a href="my_quizzes.html">Мои квизы</a></li>
       </ul>
     </nav>
     
@@ -34,8 +34,8 @@
   </header>
 
   <!-- Контент -->
-  <main >
-    <div class="results-quiz-container" style=" background-color: white; border: none;">
+  <main style="justify-content: space-between;">
+    <div class="results-container" style=" background-color: white; border: none;">
         <div class="results-header">Мои результаты</div>
 
         <!-- Фильтр и поиск -->
@@ -64,23 +64,55 @@
         <!-- Результаты будут загружаться сюда -->
         </div>
 
-        <!-- Пагинация -->
-        <div class="flex justify-center mt-8">
-        <nav class="inline-flex rounded-md shadow">
-            <button onclick="prevPage()" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-            Назад
-            </button>
-            <span id="page-info" class="px-3 py-2 border-t border-b border-gray-300 bg-blue-50 text-blue-600 font-medium">
-            Страница 1
-            </span>
-            <button onclick="nextPage()" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-            Вперед
-            </button>
-        </nav>
-        </div>
+        
     </div>
+    <!-- Пагинация -->
+        <div >
+          <div id="pagination" class="pagination">
+            <div id="prev-button" class="arrow-button" onclick="prevPage()">
+              <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  stroke="white" 
+                  stroke-width="15"  
+                  fill="white"       
+                  d="M263.78 18.9c4.28-4.3 4.3-11.31.04-15.64a10.865 10.865 0 0 0-15.48-.04L3.22 248.38c-4.28 4.3-4.3 11.31-.04 15.64l245.16 245.2c4.28 4.3 11.22 4.28 15.48-.05s4.24-11.33-.04-15.63L26.5 256.22 263.78 18.9z"
+                />
+              </svg>
+            </div>
+
+            <span id="page-info">1 / 1</span>
+
+            <div id="next-button" class="arrow-button" onclick="nextPage()">
+              <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  stroke="white"  
+                  stroke-width="15"  
+                  fill="white"       
+                  d="M3.22 18.9c-4.28-4.3-4.3-11.31-.04-15.64s11.2-4.35 15.48-.04l245.12 245.16c4.28 4.3 4.3 11.31.04 15.64L18.66 509.22a10.874 10.874 0 0 1-15.48-.05c-4.26-4.33-4.24-11.33.04-15.63L240.5 256.22 3.22 18.9z"
+                />
+              </svg>
+            </div>
+              
+          </div>
+        </div>
     
   </main>
+  
+<!-- Добавьте этот div перед закрывающим </body> -->
+<div class="mobile-menu-overlay"></div>
+<div class="mobile-menu">
+  <nav>
+    <ul>
+      <li><a href="create_quiz.html">Создать квиз</a></li>
+      <li><a href="run_quiz.html">Пройти квиз</a></li>
+      <li><a href="results.html">Результаты</a></li>
+       <li><a href="my_quizzes.html">Мои квизы</a></li>
+    </ul>
+  </nav>
+  <a href="auth.html" class="login">
+    <button>Войти</button>
+  </a>
+</div>
 
   <script src="results.js"></script>
 </body>

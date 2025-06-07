@@ -61,14 +61,78 @@
             isCorrect: false
           }
         ]
+      },
+      {
+        id: 1,
+        title: "Биология: Клеточное строение",
+        date: "2023-05-23",
+        score: 9,
+        total: 10,
+        details: [
+          {
+            question: "Что такое клетка?",
+            userAnswer: "Основная структурная и функциональная единица всех живых организмов",
+            correctAnswer: "Основная структурная и функциональная единица всех живых организмов",
+            isCorrect: true
+          },
+          {
+            question: "Какая органелла отвечает за синтез белка в клетке?",
+            userAnswer: "Митохондрия",
+            correctAnswer: "Рибосома",
+            isCorrect: false
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "История: Древний Египет",
+        date: "2023-05-18",
+        score: 3,
+        total: 5,
+        details: [
+          {
+            question: "В каком году началось правление Рамзеса II?",
+            userAnswer: "1279 г. до н.э.",
+            correctAnswer: "1279 г. до н.э.",
+            isCorrect: true
+          },
+          {
+            question: "Кто построил Великую пирамиду в Гизе?",
+            userAnswer: "Тутанхамон",
+            correctAnswer: "Хеопс (Хуфу)",
+            isCorrect: false
+          }
+        ]
       }
     ];
 
+document.addEventListener('DOMContentLoaded', function() {
+  const burgerMenu = document.querySelector('.burger-menu');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const overlay = document.querySelector('.mobile-menu-overlay');
+  const body = document.body;
 
-    let currentPage = 1;
-    const resultsPerPage = 3;
+  burgerMenu.addEventListener('click', function() {
+    body.classList.toggle('menu-open');
+  });
 
-    // Загрузка данных (в реальном проекте - fetch API)
+  overlay.addEventListener('click', function() {
+    body.classList.remove('menu-open');
+  });
+
+  // Закрытие меню при клике на ссылку
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+  });
+});
+
+
+let currentPage = 1;
+const resultsPerPage = 3;
+
+// Загрузка данных (в реальном проекте - fetch API)
 function loadResults() {
   const container = document.getElementById('results-container');
   container.innerHTML = '';
@@ -80,7 +144,8 @@ function loadResults() {
   const paginatedResults = sortedResults.slice(startIndex, startIndex + resultsPerPage);
 
   if (paginatedResults.length === 0) {
-    container.innerHTML = '<p>Нет результатов</p>';
+    container.innerHTML = '<div class="result-quiz-name" style="font-weight:400;" >Нет результатов.</div>';
+    updatePagination();
     return;
   }
 
@@ -106,7 +171,7 @@ function loadResults() {
         <div class="results-items-container">
 
             <div style="min-width: 30%;" >
-                <h2 class="result-quiz-name">${result.title}</h2>
+                <div class="result-quiz-name">${result.title}</div>
                 <p class="result-quiz-data">Пройден: ${formatDate(result.date)}</p>
 
                 <div class="score-display">
@@ -184,7 +249,29 @@ function prevPage() {
 function updatePagination() {
   const totalResults = filterResultsBySearch().length;
   const totalPages = Math.ceil(totalResults / resultsPerPage);
-  document.getElementById('page-info').textContent = `Страница ${currentPage} из ${totalPages}`;
+  document.getElementById('page-info').textContent = `${currentPage} / ${totalPages}`;
+  
+  const prevButton = document.querySelector('.arrow-button:first-child');
+  const nextButton = document.querySelector('.arrow-button:last-child');
+  const pagination = document.getElementById('pagination');
+
+  if (totalPages === 0) {
+    pagination.classList.add('hidden');
+  }
+  else{
+    pagination.classList.remove('hidden');
+    if (currentPage === 1) {
+      prevButton.classList.add('disabled');
+    } else {
+      prevButton.classList.remove('disabled');
+    }
+    
+    if (currentPage >= totalPages ) {
+      nextButton.classList.add('disabled');
+    } else {
+      nextButton.classList.remove('disabled');
+    }
+  }
 }
 
 // Вспомогательные функции
@@ -213,4 +300,5 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Первоначальная загрузка
   loadResults();
+  updatePagination();
 });

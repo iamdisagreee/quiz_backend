@@ -20,6 +20,115 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  const quizId = urlParams.get('id');
+
+  if (mode === 'edit' && quizId) {
+    // Загружаем данные из sessionStorage
+    const quizData = JSON.parse(sessionStorage.getItem('editQuizData'));
+    
+    if (quizData) {
+      populateForm(quizData);
+    }
+  }
+});
+
+function populateForm(quizData) {
+  document.getElementById('quiz-name').value = quizData.title;
+  
+  // Заполняем настройки
+  document.getElementById('timer-enabled').checked = quizData.settings.timerEnabled;
+  document.getElementById('timer-value').value = quizData.settings.timerValue;
+  
+  // Заполняем вопросы
+  renderQuestions(quizData.questions);
+}
+
+function renderQuestions(questions) {
+  const questionsContainer = document.getElementById('questions-container');
+  questionsContainer.innerHTML = '';
+  
+  // Сбрасываем счетчик вопросов
+  questionCount = 0;
+  
+  questions.forEach((question, index) => {
+    const questionBlock = createQuestionBlock();
+    if (!questionBlock) return;
+    
+    questionBlock.querySelector('.question-text').value = question.text;
+    
+    const typeSelector = questionBlock.querySelector('.question-type');
+    typeSelector.value = question.type;
+    
+    // Триггерим событие изменения типа вопроса
+    typeSelector.dispatchEvent(new Event('change'));
+    
+    renderQuestionOptions(questionBlock, question);
+  });
+}
+
+function renderQuestionOptions(questionBlock, question) {
+  const questionType = question.type;
+  
+  switch (questionType) {
+    case 'text':
+      const textAnswerInput = questionBlock.querySelector('.text-answer');
+      if (question.answers.length > 0) {
+        textAnswerInput.value = question.answers[0].text;
+      }
+      break;
+      
+    case 'single_choice':
+    case 'multiple_choice':
+      const optionsContainer = questionBlock.querySelector('.options-container');
+      
+      // Удаляем все варианты, кроме первого (он есть по умолчанию)
+      const existingOptions = optionsContainer.querySelectorAll('.option-item');
+      for (let i = 1; i < existingOptions.length; i++) {
+        existingOptions[i].remove();
+      }
+      
+      // Заполняем первый вариант
+      const firstOption = existingOptions[0];
+      if (question.answers.length > 0) {
+        firstOption.querySelector('.option-input').value = question.answers[0].text;
+        
+        if (questionType === 'single_choice') {
+          firstOption.querySelector('.is-correct-radio').checked = question.answers[0].isCorrect;
+        } else {
+          firstOption.querySelector('.is-correct-checkbox').checked = question.answers[0].isCorrect;
+        }
+      }
+      
+      // Добавляем остальные варианты
+      for (let i = 1; i < question.answers.length; i++) {
+        const answer = question.answers[i];
+        
+        // Кликаем по кнопке добавления варианта
+        const addButton = questionBlock.querySelector('.add-option-button');
+        addButton.click();
+        
+        // Получаем последний добавленный вариант
+        const optionItems = optionsContainer.querySelectorAll('.option-item');
+        const newOption = optionItems[optionItems.length - 1];
+        
+        // Заполняем данные
+        newOption.querySelector('.option-input').value = answer.text;
+        
+        if (questionType === 'single_choice') {
+          newOption.querySelector('.is-correct-radio').checked = answer.isCorrect;
+        } else {
+          newOption.querySelector('.is-correct-checkbox').checked = answer.isCorrect;
+        }
+      }
+      break;
+  }
+}
+
+
+
  // Переключение табов
   const tabs = document.querySelectorAll(".tab");
   const tabContents = document.querySelectorAll(".tab-content");
