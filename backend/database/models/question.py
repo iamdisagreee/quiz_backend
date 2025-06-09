@@ -8,7 +8,7 @@ from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-from . import quiz, answer
+from . import quiz, answer, result
 
 class Question(Base):
     __tablename__ = 'questions'
@@ -23,3 +23,4 @@ class Question(Base):
 
     quiz: Mapped["quiz.Quiz"] = relationship(back_populates="questions", cascade="delete")
     answers: Mapped[List["answer.Answer"]] = relationship(back_populates="question", cascade='delete')
+    result: Mapped["result.Result"] = relationship(back_populates='question', cascade='delete')

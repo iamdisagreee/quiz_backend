@@ -106,8 +106,8 @@ class QuizService:
             }
         }
 
-    async def get_all_quizzes(self,
-                              user_id: int):
+    async def get_all_created_quizzes(self,
+                                      user_id: int):
         """ Получение всех квизов пользователя """
         all_quizzes = (
             await self._postgres.scalars(
@@ -326,3 +326,41 @@ class QuizService:
             'status_code': status.HTTP_201_CREATED,
             'detail': 'Result successfully loaded'
         }
+
+    @staticmethod
+    def _quiz_scoring(game):
+        """ Подсчет набранных очков """
+        count_sum = 0
+        for result in game.results:
+            if result.question.type in ('text', 'single_choice'):
+                count_sum += result.replies[0].is_correct
+            else:
+                count_sum += sum(cur.is_correct if cur.is_correct else -1 for cur in result.replies) / \
+                    len(result.replies)
+        return count_sum
+
+    async def get_all_completed_quizzes(self, user_id: int):
+        find_games = await self._postgres.scalars(
+            select(Game)
+            .where(Game.user_id == user_id)
+            .options(selectinload(Game.quiz),
+                     selectinload(Game.results).selectinload(Result.replies),
+                     selectinload(Game.results).selectinload(Result.question))
+        )
+
+        result = {'games': []}
+        for game in find_games:
+            count_right = self._quiz_scoring(game)
+            count_all = len(game.results)
+            percentage = count_right / count_all
+            result['games'].append(
+                {
+                    'id': game.id,
+                    'name': game.quiz.name,
+                    'countRight': count_right,
+                    'countAll': count_all,
+                    'percentage': f"{percentage:.2f}",
+                    'finishedAt': game.finished_at.strftime("%d.%m.%y %H:%M")
+                }
+            )
+        return result

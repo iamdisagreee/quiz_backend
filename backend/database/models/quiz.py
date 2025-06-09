@@ -6,7 +6,7 @@ from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-from . import user, question
+from . import user, question, game
 
 class Quiz(Base):
     __tablename__ = 'quizzes'
@@ -24,3 +24,4 @@ class Quiz(Base):
 
     user: Mapped["user.User"] = relationship(back_populates="quizzes", cascade='delete')
     questions: Mapped[List["question.Question"]] = relationship(back_populates="quiz", cascade="delete")
+    games: Mapped[List["game.Game"]] = relationship(back_populates="quiz", cascade='delete')
