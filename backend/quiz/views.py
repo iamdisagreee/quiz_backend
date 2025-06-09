@@ -9,7 +9,7 @@ from redis.asyncio import Redis
 
 from backend.dependecies.postgres_depends import get_postgres
 from backend.dependecies.user_depends import get_current_user
-from backend.quiz.dto import CreateQuiz
+from backend.quiz.dto import CreateQuiz, ResultQuiz
 from backend.quiz.service import QuizService
 
 router = APIRouter(prefix='/quiz', tags=['quiz'])
@@ -58,9 +58,10 @@ async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       quiz_slug: str):
     return await QuizService(postgres).delete_quiz(get_user.get('id'), quiz_slug)
 
-@router.post("/",
-             summary="Получение результатов квиза, который прошел участник")
+@router.post("/result-quiz/{user_id}",
+             status_code=status.HTTP_201_CREATED,
+             summary="Обрабатываем результаты пройденного квиза")
 async def get_user_quiz_result(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                                get_user: Annotated[dict, Depends(get_current_user)],
-                               ):
-    pass
+                               result_quiz: ResultQuiz):
+    return await QuizService(postgres).get_user_quiz_result(get_user.get('id'), result_quiz)
