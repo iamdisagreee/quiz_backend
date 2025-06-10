@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select, update, delete
@@ -253,7 +254,7 @@ class QuizService:
         if not find_answers:
             return {
                 'status_code': status.HTTP_404_NOT_FOUND,
-                'detail': 'Not found information'
+                'detail': 'Not found completed quizzes'
             }
 
         # Создаем словарь правильных ответов: {question_id: [str] | [int] | [int1, int2, ...]}
@@ -336,7 +337,7 @@ class QuizService:
                 count_sum += result.replies[0].is_correct
             else:
                 count_sum += sum(cur.is_correct if cur.is_correct else -1 for cur in result.replies) / \
-                    len(result.replies)
+                             len(result.replies)
         return count_sum
 
     async def get_all_completed_quizzes(self, user_id: int):
@@ -360,7 +361,35 @@ class QuizService:
                     'countRight': count_right,
                     'countAll': count_all,
                     'percentage': f"{percentage:.2f}",
-                    'finishedAt': game.finished_at.strftime("%d.%m.%y %H:%M")
+                    'finishedAt': game.finished_at.astimezone(ZoneInfo("Europe/Moscow")).strftime("%d.%m.%y %H:%M")
                 }
             )
         return result
+
+    async def get_main_information_quizzes(self, user_id: int):
+        created_quizzes = (
+            await self._postgres.scalars(
+                select(Quiz)
+                .where(Quiz.user_id == user_id)
+            )
+        ).all()
+
+        if not created_quizzes:
+            return {
+                'status_code': status.HTTP_404_NOT_FOUND,
+                'detail': 'Not found created quizzes'
+            }
+
+        return {
+            'quizzes':
+                [
+                    {
+                        'id': quiz.id,
+                        'name': quiz.name,
+                        'createdAt': quiz.created_at.astimezone(ZoneInfo("Europe/Moscow")).strftime("%d.%m.%y %H:%M"),
+                        'connectionCode': quiz.connection_code,
+                        'isOpened': quiz.is_opened
+                    }
+                    for quiz in created_quizzes
+                ]
+        }

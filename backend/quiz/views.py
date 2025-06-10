@@ -78,3 +78,10 @@ async def get_user_quiz_result(postgres: Annotated[AsyncSession, Depends(get_pos
 async def get_all_completed_quizzes(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                                     get_user: Annotated[dict, Depends(get_current_user)]):
     return await QuizService(postgres).get_all_completed_quizzes(get_user.get('id'))
+
+@router.get("/my-quizzes/",
+            summary="Получение заголовочной информации о  созданных квизах пользователя")
+async def get_main_information_quizzes(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                                       get_user: Annotated[dict, Depends(get_current_user)]):
+    return await QuizService(postgres).get_main_information_quizzes(get_user.get('id'))
+
