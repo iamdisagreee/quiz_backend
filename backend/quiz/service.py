@@ -131,14 +131,14 @@ class QuizService:
 
     async def get_quiz_by_slug(self,
                                user_id: int,
-                               quiz_slug: str,
+                               quiz_id: int,
                                ):
         """ Получение конкретного квиза пользователя """
         quiz = await self._postgres.scalar(
             select(Quiz)
             .where(
                 Quiz.user_id == user_id,
-                Quiz.slug == quiz_slug
+                Quiz.id == quiz_id
             )
             .options(selectinload(Quiz.questions).selectinload(Question.answers))
 
@@ -172,11 +172,11 @@ class QuizService:
 
         return self._get_quiz_base_json(quiz)
 
-    async def update_quiz_by_slug(self,
-                                  user_id: int,
-                                  quiz_slug: str,
-                                  quiz: CreateQuiz,
-                                  ):
+    async def update_quiz(self,
+                          user_id: int,
+                          quiz_id: int,
+                          quiz: CreateQuiz,
+                          ):
         """ Обновление квиза """
 
         # Обновляем Quiz
@@ -184,18 +184,23 @@ class QuizService:
             update(Quiz)
             .where(
                 Quiz.user_id == user_id,
-                Quiz.slug == quiz_slug
+                Quiz.id == quiz_id
             )
             .values(
                 name=quiz.name,
                 slug=slugify(quiz.name),
-                connection_code=quiz.connection_code,
-                timer_enabled=quiz.timer_enabled,
-                timer_value=quiz.timer_value,
+                timer_enabled=quiz.settings.timer_enabled,
+                timer_value=quiz.settings.timer_value,
                 updated_at=datetime.now()
             )
             .returning(Quiz.id)
         )
+
+        if not quiz_id:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Quiz not found'
+            )
 
         # Удаляем все вопросы и ответы
         await self._postgres.execute(
@@ -218,16 +223,22 @@ class QuizService:
 
     async def delete_quiz(self,
                           user_id: int,
-                          quiz_slug: str):
+                          quiz_id: int):
 
-        await self._postgres.execute(
+        result = await self._postgres.execute(
             delete(Quiz)
             .where(
                 Quiz.user_id == user_id,
-                Quiz.slug == quiz_slug
+                Quiz.id == quiz_id
             )
         )
         await self._postgres.commit()
+
+        if not result.rowcount:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Quiz not found'
+            )
 
         return {
             'status_code': status.HTTP_200_OK,
@@ -264,7 +275,6 @@ class QuizService:
                 right_answers.setdefault(answer.question_id, []).append(answer.text)
             else:
                 right_answers.setdefault(answer.question_id, []).append(answer.id)
-        print(right_answers)
 
         # Добавляем игрока в games
         game_id = await self._postgres.scalar(
@@ -375,10 +385,10 @@ class QuizService:
         ).all()
 
         if not created_quizzes:
-            return {
-                'status_code': status.HTTP_404_NOT_FOUND,
-                'detail': 'Not found created quizzes'
-            }
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Not found created quizzes'
+            )
 
         return {
             'quizzes':
@@ -392,4 +402,24 @@ class QuizService:
                     }
                     for quiz in created_quizzes
                 ]
+        }
+
+    async def opening_quiz(self, user_id: int, quiz_id: int):
+        result = await self._postgres.execute(
+            update(Quiz)
+            .where(Quiz.id == quiz_id,
+                   Quiz.user_id == user_id)
+            .values(is_opened = True)
+        )
+        await self._postgres.commit()
+
+        if not result:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Not found quiz'
+            )
+
+        return {
+            'status_code': status.HTTP_200_OK,
+            'detail': 'Quiz successfully opened'
         }

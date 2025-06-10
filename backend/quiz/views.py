@@ -31,37 +31,12 @@ async def get_all_created_quizzes(postgres: Annotated[AsyncSession, Depends(get_
     return await QuizService(postgres).get_all_created_quizzes(get_user.get('id'))
 
 
-@router.get("/{quiz_slug}",
-            summary="Получение информации о конкретном созданном квизе пользователя")
-async def get_quiz_by_slug(postgres: Annotated[AsyncSession, Depends(get_postgres)],
-                           get_user: Annotated[dict, Depends(get_current_user)],
-                           quiz_slug: str):
-    return await QuizService(postgres).get_quiz_by_slug(get_user.get('id'), quiz_slug)
-
-
 @router.get("/by-code/{connection_code}",
             summary="Получение данных о созданном квизе по коду подключения")
 async def get_quiz_by_code(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                            get_user: Annotated[dict, Depends(get_current_user)],
                            connection_code: int):
     return await QuizService(postgres).get_quiz_by_code(get_user.get('id'), connection_code)
-
-
-@router.put("/{quiz_slug}",
-            summary="Обновление квиза пользователя")
-async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
-                      get_user: Annotated[dict, Depends(get_current_user)],
-                      quiz_slug: str,
-                      quiz: CreateQuiz):
-    return await QuizService(postgres).update_quiz_by_slug(get_user.get('id'), quiz_slug, quiz)
-
-
-@router.delete("/{quiz_slug}",
-               summary="Удаление квиза пользователя")
-async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
-                      get_user: Annotated[dict, Depends(get_current_user)],
-                      quiz_slug: str):
-    return await QuizService(postgres).delete_quiz(get_user.get('id'), quiz_slug)
 
 
 @router.post("/result-quiz/{user_id}",
@@ -79,9 +54,43 @@ async def get_all_completed_quizzes(postgres: Annotated[AsyncSession, Depends(ge
                                     get_user: Annotated[dict, Depends(get_current_user)]):
     return await QuizService(postgres).get_all_completed_quizzes(get_user.get('id'))
 
+
 @router.get("/my-quizzes/",
             summary="Получение заголовочной информации о  созданных квизах пользователя")
 async def get_main_information_quizzes(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                                        get_user: Annotated[dict, Depends(get_current_user)]):
     return await QuizService(postgres).get_main_information_quizzes(get_user.get('id'))
+
+@router.get("/my-quizzes/{quiz_id}",
+            summary="Получение информации о конкретном созданном квизе пользователя")
+async def get_quiz_by_slug(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                           get_user: Annotated[dict, Depends(get_current_user)],
+                           quiz_id: int):
+    return await QuizService(postgres).get_quiz_by_slug(get_user.get('id'), quiz_id)
+
+@router.patch("/open/{quiz_id}",
+              summary="Открытие созданного квиза")
+async def opening_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                       get_user: Annotated[dict, Depends(get_current_user)],
+                       quiz_id: int):
+    return await QuizService(postgres).opening_quiz(get_user.get('id'), quiz_id)
+
+
+@router.put("/{quiz_id}",
+            summary="Обновление квиза пользователя")
+async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                      get_user: Annotated[dict, Depends(get_current_user)],
+                      quiz_id: int,
+                      quiz: CreateQuiz):
+    return await QuizService(postgres).update_quiz(get_user.get('id'), quiz_id, quiz)
+
+
+@router.delete("/{quiz_id}",
+               summary="Удаление квиза пользователя")
+async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                      get_user: Annotated[dict, Depends(get_current_user)],
+                      quiz_id: int):
+    return await QuizService(postgres).delete_quiz(get_user.get('id'), quiz_id)
+
+
 
