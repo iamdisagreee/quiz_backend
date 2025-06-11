@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,7 +6,7 @@ from sqlalchemy import insert, select, update, delete
 from sqlalchemy.orm import selectinload
 from starlette import status
 from fastapi import HTTPException
-from backend.database.models import Quiz, Question, Game, Result, Reply
+from backend.database.models import Quiz, Question, Game, Result, Reply, User
 from backend.database.models.answer import Answer
 from backend.quiz.dto import CreateAnswer, CreateQuiz, CreateQuestion, ResultQuiz
 from slugify import slugify
@@ -129,19 +129,21 @@ class QuizService:
 
         return [self._get_quiz_base_json(quiz) for quiz in all_quizzes]
 
-    async def get_quiz_by_slug(self,
-                               user_id: int,
-                               quiz_id: int,
-                               ):
-        """ Получение конкретного квиза пользователя """
+    async def get_created_quiz_by_id(self,
+                                     user_id: int,
+                                     quiz_id: int,
+                                     ):
+        """ Получение конкретного созданного квиза пользователем """
+
         quiz = await self._postgres.scalar(
             select(Quiz)
             .where(
                 Quiz.user_id == user_id,
                 Quiz.id == quiz_id
             )
-            .options(selectinload(Quiz.questions).selectinload(Question.answers))
-
+            .options(selectinload(Quiz.games).selectinload(Game.results).selectinload(Result.replies))
+            .options(selectinload(Quiz.games).selectinload(Game.user))
+            .options(selectinload(Quiz.questions))
         )
         if quiz is None:
             raise HTTPException(
@@ -149,7 +151,34 @@ class QuizService:
                 detail='Not found quiz'
             )
 
-        return self._get_quiz_base_json(quiz)
+        all_right_count = 0
+        count_questions = len(quiz.questions)
+        count_participants = len(set(game.user_id for game in quiz.games))
+        participants = []
+        for game in quiz.games:
+            count_right = self._quiz_scoring(game)
+            participants.append(
+                {
+                    'username': game.user.username,
+                    'emil': game.user.email,
+                    'finishedAt': game.finished_at,
+                    'countRight': count_right,
+                }
+            )
+            all_right_count += count_right
+
+        percentage = round(all_right_count / (count_participants * count_questions) * 100) \
+            if count_participants != 0 else 0
+
+        return {
+            'name': quiz.name,
+            'createdAt': quiz.created_at,
+            'countQuestions': count_questions,
+            'connectionCode': quiz.connection_code,
+            'countParticipants': count_participants,
+            'percentage': percentage,
+            'participants': participants
+        }
 
     async def get_quiz_by_code(self,
                                user_id: int,
@@ -168,6 +197,18 @@ class QuizService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail='Not found quiz'
+            )
+
+        if not quiz.is_opened and not quiz.is_closed:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Quiz hasn't opened yet"
+            )
+
+        if quiz.is_closed:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Quiz has already closed"
             )
 
         return self._get_quiz_base_json(quiz)
@@ -246,7 +287,7 @@ class QuizService:
         }
 
     async def get_user_quiz_result(self, user_id: int, result_quiz: ResultQuiz):
-
+        """ Обработка результатлв прохождения квиза пользователем """
         # Собираем все id вопросов
         question_ids = set(question.question_id for question in result_quiz.questions)
 
@@ -301,7 +342,7 @@ class QuizService:
             current_answer = right_answers.get(question.question_id)
             # Проверяем правильность ответа в зависимости от типа вопроса
             if question.type == 'text':
-                print(question.answers.lower(), current_answer[0])
+                # print(question.answers.lower(), current_answer[0])
                 results.append(
                     Reply(
                         result_id=result_id,
@@ -339,7 +380,7 @@ class QuizService:
         }
 
     @staticmethod
-    def _quiz_scoring(game):
+    def _quiz_scoring(game: Game):
         """ Подсчет набранных очков """
         count_sum = 0
         for result in game.results:
@@ -363,7 +404,7 @@ class QuizService:
         for game in find_games:
             count_right = self._quiz_scoring(game)
             count_all = len(game.results)
-            percentage = count_right / count_all
+            percentage = round((count_right / count_all) * 100)
             result['games'].append(
                 {
                     'id': game.id,
@@ -377,6 +418,7 @@ class QuizService:
         return result
 
     async def get_main_information_quizzes(self, user_id: int):
+
         created_quizzes = (
             await self._postgres.scalars(
                 select(Quiz)
@@ -405,15 +447,17 @@ class QuizService:
         }
 
     async def opening_quiz(self, user_id: int, quiz_id: int):
+        """ Открываем квиз для прохождения """
         result = await self._postgres.execute(
             update(Quiz)
             .where(Quiz.id == quiz_id,
                    Quiz.user_id == user_id)
-            .values(is_opened = True)
+            .values(is_opened=True,
+                    is_closed=False)
         )
         await self._postgres.commit()
 
-        if not result:
+        if not result.rowcount:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail='Not found quiz'
@@ -422,4 +466,58 @@ class QuizService:
         return {
             'status_code': status.HTTP_200_OK,
             'detail': 'Quiz successfully opened'
+        }
+
+    async def closing_quiz(self, user_id: int, quiz_id: int):
+        """ Закрываем квиз для ппохождения """
+        result = await self._postgres.execute(
+            update(Quiz)
+            .where(Quiz.id == quiz_id,
+                   Quiz.user_id == user_id)
+            .values(is_opened=False,
+                    is_closed=True)
+        )
+        await self._postgres.commit()
+
+        if not result.rowcount:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Not found quiz'
+            )
+
+        return {
+            'status_code': status.HTTP_200_OK,
+            'detail': 'Quiz successfully closed'
+        }
+
+    async def get_personal(self, user_id: int):
+        user = await self._postgres.scalar(
+            select(User)
+            .where(
+                User.id == user_id
+            )
+            .options(selectinload(User.quizzes),
+                     selectinload(User.games).selectinload(Game.results).selectinload(Result.replies),
+                     selectinload(User.games).selectinload(Game.results).selectinload(Result.question))
+        )
+
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Not found user"
+            )
+
+        all_count_right, all_count = 0, 0
+        for game in user.games:
+            all_count_right += self._quiz_scoring(game)
+            all_count +=  len(game.results)
+
+        percentage = round(all_count_right / all_count * 100) if all_count != 0 else 0
+
+        return {
+            'username': user.username,
+            'email': user.email,
+            'countCreated': len(user.quizzes),
+            'countCompleted': len(user.games),
+            'percentage': percentage
         }

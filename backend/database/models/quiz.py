@@ -22,6 +22,7 @@ class Quiz(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     is_opened: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    is_closed: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
     user: Mapped["user.User"] = relationship(back_populates="quizzes", cascade='delete')
     questions: Mapped[List["question.Question"]] = relationship(back_populates="quiz", cascade="delete")

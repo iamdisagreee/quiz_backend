@@ -54,29 +54,40 @@ async def get_all_completed_quizzes(postgres: Annotated[AsyncSession, Depends(ge
                                     get_user: Annotated[dict, Depends(get_current_user)]):
     return await QuizService(postgres).get_all_completed_quizzes(get_user.get('id'))
 
+# @router.get("/my-results/{quiz_id}",
+#             summary="Получение подробной информации о конкретном пройденном квизе пользователя")
+# async def get_completed_quiz_by_id(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+#                                    get_user: Annotated[dict, Depends(get_current_user)]):
 
 @router.get("/my-quizzes/",
-            summary="Получение заголовочной информации о  созданных квизах пользователя")
+            summary="Получение заголовочной информации о созданных квизах пользователя")
 async def get_main_information_quizzes(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                                        get_user: Annotated[dict, Depends(get_current_user)]):
     return await QuizService(postgres).get_main_information_quizzes(get_user.get('id'))
 
+
 @router.get("/my-quizzes/{quiz_id}",
             summary="Получение информации о конкретном созданном квизе пользователя")
-async def get_quiz_by_slug(postgres: Annotated[AsyncSession, Depends(get_postgres)],
-                           get_user: Annotated[dict, Depends(get_current_user)],
-                           quiz_id: int):
-    return await QuizService(postgres).get_quiz_by_slug(get_user.get('id'), quiz_id)
+async def get_created_quiz_by_id(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                                 get_user: Annotated[dict, Depends(get_current_user)],
+                                 quiz_id: int):
+    return await QuizService(postgres).get_created_quiz_by_id(get_user.get('id'), quiz_id)
 
-@router.patch("/open/{quiz_id}",
+@router.patch("/my-quizzes/open/{quiz_id}",
               summary="Открытие созданного квиза")
 async def opening_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                        get_user: Annotated[dict, Depends(get_current_user)],
                        quiz_id: int):
     return await QuizService(postgres).opening_quiz(get_user.get('id'), quiz_id)
 
+@router.patch("/my-quizzes/close/{quiz_id}",
+              summary="Закрытие созданного квиза")
+async def closing_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                       get_user: Annotated[dict, Depends(get_current_user)],
+                       quiz_id: int):
+    return await QuizService(postgres).closing_quiz(get_user.get('id'), quiz_id)
 
-@router.put("/{quiz_id}",
+@router.put("my-quizzes/{quiz_id}",
             summary="Обновление квиза пользователя")
 async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       get_user: Annotated[dict, Depends(get_current_user)],
@@ -85,12 +96,18 @@ async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
     return await QuizService(postgres).update_quiz(get_user.get('id'), quiz_id, quiz)
 
 
-@router.delete("/{quiz_id}",
+@router.delete("my-quizzes/{quiz_id}",
                summary="Удаление квиза пользователя")
 async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       get_user: Annotated[dict, Depends(get_current_user)],
                       quiz_id: int):
     return await QuizService(postgres).delete_quiz(get_user.get('id'), quiz_id)
+
+@router.get("/personal",
+            summary="Получение данных о профиле")
+async def get_personal(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                      get_user: Annotated[dict, Depends(get_current_user)]):
+    return await QuizService(postgres).get_personal(get_user.get('id'))
 
 
 

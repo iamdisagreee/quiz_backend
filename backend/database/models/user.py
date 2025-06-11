@@ -5,7 +5,7 @@ from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-from . import quiz
+from . import quiz, game
 
 
 class User(Base):
@@ -21,4 +21,4 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
 
     quizzes: Mapped[List["quiz.Quiz"]] = relationship(back_populates="user", cascade='delete')
-
+    games: Mapped[List["game.Game"]] = relationship(back_populates="user", cascade='delete')
