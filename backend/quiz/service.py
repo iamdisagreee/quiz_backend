@@ -189,10 +189,11 @@ class QuizService:
             select(Quiz)
             .where(
                 Quiz.user_id == user_id,
-                Quiz.connection_code == connection_code
+                Quiz.connection_code == connection_code,
             )
             .options(selectinload(Quiz.questions).selectinload(Question.answers))
         )
+
         if quiz is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -205,7 +206,7 @@ class QuizService:
                 detail="Quiz hasn't opened yet"
             )
 
-        if quiz.is_closed:
+        if not quiz.is_opened and quiz.is_closed:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Quiz has already closed"
