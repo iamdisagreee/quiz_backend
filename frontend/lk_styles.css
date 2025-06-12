@@ -1,0 +1,343 @@
+/* Базовые стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+  background-color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+header {
+  padding: 15px 20px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  height: 70px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #6b8bdd;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 70px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #3a3d3a;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #0056b3;
+}
+
+.login button {
+  background-color: rgb(79, 79, 79);
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login button:hover {
+  background-color: rgb(103, 105, 103);
+}
+
+/* Бургер-меню */
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 100;
+  position: relative;
+}
+
+.burger-menu span {
+  width: 25px;
+  height: 3px;
+  background-color: #3a3d3a;
+}
+
+main {
+  height: 80%;
+  width: 80%;
+  align-self: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h2 {
+  text-align: center;
+      margin-bottom: 40px;
+      color: #6b8bdd;
+      font-weight: bold;
+}
+
+#profile-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-container {
+  height: 70%;
+  border: 1px solid #bdd1d7;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  padding: 50px;
+  align-self: center;
+  width: 100%; 
+  display: flex;
+  flex-direction: column; 
+  gap: 40px;
+  align-items: flex-start;
+}
+
+@media (min-width: 1080px) {
+  .profile-container {
+    flex-direction: row;
+    width: 50%;
+    align-items: center;
+  }
+
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%; 
+}
+
+.profile-image {
+  border: 1px solid #7e7e7e;;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+  width: 15vh;
+  border-radius: 50%;
+  background-color: #e9e8e8;
+}
+
+.profile-image-name {
+  color: rgb(78, 78, 78);
+  font-size: xx-large;
+  font-weight: 500;
+  text-align: center;
+}
+
+.profile-right {
+  width: 100%;
+}
+
+#username, #email{
+  height: 5vh;
+}
+
+.profile-statistics {
+  margin-top: 20px;
+}
+
+.statistics p {
+  margin: 5px 0;
+}
+
+.statistics span {
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.fio-group .form-group {
+  width: 100%; 
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (max-width: 1080px) {
+    header {
+    padding: 10px 15px;
+  }
+  .logo img {
+    height: 30px; /* Уменьшаем логотип */
+  }
+
+  .tabs, .tab-content.active{
+    width: 100%;
+  }
+
+  /* Скрываем навигацию и кнопку "Войти" */
+  nav, .login {
+    display: none;
+  }
+
+  /* Показываем бургер-меню */
+  .burger-menu {
+    display: flex;
+  }
+  main{
+    margin: 0 auto;
+    height: 91.5%;
+  }
+
+  .fio-group {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .profile-container{
+    width: 90vw;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .profile-left{
+    align-items: center;
+  }
+
+  .fio-group .form-group {
+    width: 48%;
+  }
+}
+
+
+.burger-menu span {
+  width: 25px;
+  height: 3px;
+  background-color: #3a3d3a;
+}
+
+/* Стили для мобильного меню */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: #faf9f9;
+  z-index: 99;
+  padding: 80px 20px 20px;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+.mobile-menu nav {
+  display: block;
+}
+.mobile-menu nav ul {
+  flex-direction: column;
+  gap: 30px;
+}
+
+.mobile-menu nav ul li a {
+  font-size: 18px;
+  color: #3a3d3a;
+  padding: 10px 0;
+  text-decoration: none;
+  color: #3a3d3a;
+  transition: color 0.3s;
+}
+.mobile-menu nav ul li a:hover{
+   color: #0056b3;
+}
+
+.mobile-menu .login {
+  margin-top: 30px;
+  display: block;
+}
+
+.mobile-menu .login button {
+  width: 100%;
+}
+
+/* Класс для показа меню */
+.menu-open .mobile-menu {
+  right: 0;
+}
+
+.menu-open .mobile-menu-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+

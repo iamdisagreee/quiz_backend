@@ -367,11 +367,12 @@ main {
 
 /* Анимация слайдера */
 @keyframes slideAnimation {
-  0%, 30% { transform: translateX(0%); }
-  33%, 63% { transform: translateX(-33.33%); }
-  66%, 96% { transform: translateX(-66.66%); }
-  100% { transform: translateX(0%); }
-}
+      0% { transform: translateX(0%); }
+      25% { transform: translateX(-33.33%); }
+      50% { transform: translateX(-66.66%); }
+      75% { transform: translateX(0%); } /* Мгновенный возврат */
+      100% { transform: translateX(0%); }
+    }
 
 /* Кнопка "Создать квиз" в index */
 .left .login button {
@@ -1242,4 +1243,9 @@ background-color: rgb(240 253 244 / var(--tw-bg-opacity, 1));
    #my-quizzes-btn-container *{
     font-size: 12px;
   }
+}
+
+.create-quiz-img{
+  height: 300px;
+  width: 500px;
 }
