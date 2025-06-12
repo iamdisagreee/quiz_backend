@@ -412,7 +412,7 @@ class QuizService:
                     'name': game.quiz.name,
                     'countRight': count_right,
                     'countAll': count_all,
-                    'percentage': f"{percentage:.2f}",
+                    'percentage': percentage,
                     'finishedAt': game.finished_at.astimezone(ZoneInfo("Europe/Moscow")).strftime("%d.%m.%y %H:%M")
                 }
             )
@@ -441,7 +441,8 @@ class QuizService:
                         'name': quiz.name,
                         'createdAt': quiz.created_at.astimezone(ZoneInfo("Europe/Moscow")).strftime("%d.%m.%y %H:%M"),
                         'connectionCode': quiz.connection_code,
-                        'isOpened': quiz.is_opened
+                        'isOpened': quiz.is_opened,
+                        'isClosed': quiz.is_closed
                     }
                     for quiz in created_quizzes
                 ]
