@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizMaster - Онлайн платформа для преподавателей</title>
+  <link rel="stylesheet" href="authStyles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">
+      <img src="logo.svg">
+    </a>
+    <div class="burger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="results.html">Результаты</a></li>
+        <li><a href="my_quizzes.html">Мои квизы</a></li>
+      </ul>
+    </nav>
+    
+     <a href="#" class="login">
+      <button>Личный кабинет</button>
+    </a>
+  </header>
+
+  
+  <main style="justify-content: start;">
+      <div class="quiz-info">
+        <label for="quiz-name" class="run-quiz">Название квиза</label>
+        <input type="text" id="quiz-name" class="question-text" placeholder="Введите название квиза" required>
+      </div>
+      <div class="tabs">
+        <div class="tab active" data-tab="quiz-tab-content">Квиз</div>
+        <div class="tab" data-tab="settings-tab-content">Настройка</div>
+      </div>
+    
+    
+    <div id="quiz-tab-content" class="tab-content active">
+      <!-- Контейнер для вопросов -->
+      <div id="questions-container">
+        <!-- Вопросы будут динамически добавляться -->
+      </div>
+      <button type="button" id="add-question" class="add-question-button">Добавить вопрос</button>
+      <button type="button" id="create-quiz" class="create-quiz-button">Создать квиз</button>
+    </div>
+    <div id="settings-tab-content" class="tab-content">
+      <div class="timer-toggle">
+        <div>
+          <label for="timer-enabled">Включить таймер:</label>
+          <input type="checkbox" id="timer-enabled">
+        </div>
+        <div>
+          <label for="timer-value">Время (мин.):</label>
+          <input type="number" id="timer-value" class="timer-input" min="1" max="1440" value="15">
+        </div>
+      </div>
+      <!-- Дополнительные настройки можно добавить здесь -->
+    </div>
+  </main>
+
+  <div class="mobile-menu-overlay"></div>
+  <div class="mobile-menu">
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="results.html">Результаты</a></li>
+         <li><a href="my_quizzes.html">Мои квизы</a></li>
+      </ul>
+    </nav>
+     <a href="#" class="login">
+      <button>Личный кабинет</button>
+    </a>
+  </div>
+
+  <script src="create_quiz.js"></script>
+</body>
+</html>
