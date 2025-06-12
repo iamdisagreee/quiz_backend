@@ -23,7 +23,7 @@ async def login(postgres: Annotated[AsyncSession, Depends(get_postgres)],
     return await AuthService(postgres).login(form_data.username,
                                        form_data.password)
 
-@router.get("/read_current_user",
+@router.get("/read-current-user",
             summary='Информация об авторизованном пользователе')
 async def read_current_user(user: dict = Depends(get_current_user)):
     return {'User': user}
@@ -41,7 +41,7 @@ async def create_user(postgres: Annotated[AsyncSession, Depends(get_postgres)],
 
     return await AuthService(postgres, redis, scheduler_storage).register_user(username, email, password)
 
-@router.post("/sending_code",
+@router.post("/sending-code",
              summary="Отправка кода подтверждения")
 async def sending_code(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       redis: Annotated[Redis, Depends(get_redis)],
@@ -56,7 +56,7 @@ async def confirm_add_user(postgres: Annotated[AsyncSession, Depends(get_postgre
                            email: Annotated[str, Form(...)]):
     return await AuthService(postgres, redis).confirm_register(entered_code, email)
 
-@router.delete("/close_code_confirm_box",
+@router.delete("/close-code-confirm-box",
                summary="Закрытие окна с подтверждением кода")
 async def close_code_confirmation_box(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                                     redis: Annotated[Redis, Depends(get_redis)],
