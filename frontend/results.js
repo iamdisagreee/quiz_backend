@@ -154,44 +154,30 @@ function loadResults() {
     const color = percentage >= 80 ? 'green' : 
                   percentage >= 50 ? 'yellow' : 'red';
 
-    const detailsHtml = result.details.map(detail => `
-      <div class="${detail.isCorrect ? 'green-border' : 'red-border'}">
-        <p class="font-medium">${detail.question}</p>
-        <div class="mt-1 text-sm">
-          <p><span class="font-semibold">Ваш ответ:</span> ${detail.userAnswer}</p>
-          <p class="${detail.isCorrect ? 'text-green-700' : 'text-red-700'}">
-            <span class="font-semibold">Правильный ответ:</span> ${detail.correctAnswer}
-          </p>
-        </div>
-      </div>
-    `).join('');
 
     return `
       <div class="results-quiz-container">
         <div class="results-items-container">
 
-            <div style="min-width: 30%;" >
+            <div class="results-items-container-items" >
                 <div class="result-quiz-name">${result.title}</div>
                 <p class="result-quiz-data">Пройден: ${formatDate(result.date)}</p>
 
+            </div>
+            <div class="results-items-container-items" style="justify-items: end; display:flex; align-items:center;">
                 <div class="score-display">
-                <div class="progress-bar">
-                    <div class="progress-fill ${color}" style="width: ${percentage}%"></div>
+                  <div class="progress-bar">
+                      <div class="progress-fill ${color}" style="width: ${percentage}%"></div>
+                  </div>
+                  <span class="score-text">${result.score}/${result.total} (${percentage}%)</span>
                 </div>
-                <span class="score-text">${result.score}/${result.total} (${percentage}%)</span>
-                </div>
-
             </div>
-            <div style="align-self: center;" ">
-                <button class="results-search-btn-details" onclick="toggleDetails('details-${result.id}')">Подробнее</button>
+
             </div>
 
 
         </div>
-        <div id="details-${result.id}" class="hidden mt-4 pt-4 border-t border-gray-200">
-          <h3 class="font-medium mb-2">Детальные результаты:</h3>
-          <div class="space-y-3">${detailsHtml}</div>
-        </div>
+       
       </div>
     `;
   }).join('');
