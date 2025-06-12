@@ -318,7 +318,7 @@ function loadResults() {
             <div id="my-quizzes-btn-container">
                 <button class="my-quizess-btn btn-green" id="btn-start-${result.id}" onclick="startQuiz(${result.id})">Начать</button>
                 <button class="my-quizess-btn btn-blue" id="btn-edit-${result.id}" onclick="editQuiz('${result.id}')">Редактировать</button>
-                <button class="my-quizess-btn btn-yellow" id="btn-statistic-${result.id}" >Статистика</button>
+                <button class="my-quizess-btn btn-yellow" id="btn-statistic-${result.id}" onclick="openQuizStatistics('${result.id}')">Статистика</button>
                 <button class="my-quizess-btn btn-red" id="btn-remove-${result.id}" onclick="removeQuiz('${result.id}')" >Удалить</button>
             </div>
 
@@ -360,6 +360,15 @@ window.editQuiz = function(quizId) {
   
   window.location.href = 'create_quiz.html?mode=edit&id=' + quizId;
 };
+
+
+function openQuizStatistics(quizId) {
+  // Сохраняем ID квиза в localStorage или передаем через URL
+  localStorage.setItem('currentQuizId', quizId);
+  
+  // Переходим на страницу статистики
+  window.location.href = 'statistics.html';
+}
 
 window.removeQuiz = function(quizId){
     const quizToEdit = quizResults.find(quiz => quiz.id === quizId);
