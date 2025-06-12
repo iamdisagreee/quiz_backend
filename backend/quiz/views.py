@@ -87,7 +87,7 @@ async def closing_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                        quiz_id: int):
     return await QuizService(postgres).closing_quiz(get_user.get('id'), quiz_id)
 
-@router.put("my-quizzes/{quiz_id}",
+@router.put("/my-quizzes/{quiz_id}",
             summary="Обновление квиза пользователя")
 async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       get_user: Annotated[dict, Depends(get_current_user)],
@@ -96,7 +96,7 @@ async def update_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
     return await QuizService(postgres).update_quiz(get_user.get('id'), quiz_id, quiz)
 
 
-@router.delete("my-quizzes/{quiz_id}",
+@router.delete("/my-quizzes/{quiz_id}",
                summary="Удаление квиза пользователя")
 async def delete_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                       get_user: Annotated[dict, Depends(get_current_user)],
