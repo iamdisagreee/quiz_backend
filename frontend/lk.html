@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuizMaster - Онлайн платформа для преподавателей</title>
-  <link rel="stylesheet" href="lk_styles.css">
+  <link rel="stylesheet" href="authStyles.css">
+  <link rel="icon" href="./static/logo-cropped.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">   
   <link rel="preconnect" href="https://fonts.gstatic.com"  crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
@@ -12,7 +13,7 @@
 <body>
   <header>
     <a href="index.html" class="logo">
-      <img src="logo.svg">
+      <img src="./static/logo.svg">
     </a>
     <div class="burger-menu">
       <span></span>
@@ -28,13 +29,12 @@
       </ul>
     </nav>
     <a href="auth.html" class="login">
-      <button>Войти</button>
+      <button>Личный кабинет</button>
     </a>
   </header>
 
-  <!-- Основное содержимое страницы -->
-  <main style="max-width: 85%; padding-top: 60px;">
-    <h2>Личный кабинет</h2>
+  <main id="lk-main" style="max-width: 85%; padding-top: 60px;">
+    <h2 id="lk-header">Личный кабинет</h2>
 
     <div class="profile-container">
       <div class="profile-left">

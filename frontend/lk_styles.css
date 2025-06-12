@@ -88,7 +88,7 @@ nav ul li a:hover {
   background-color: #3a3d3a;
 }
 
-main {
+#lk-main {
   height: 80%;
   width: 80%;
   align-self: center;
@@ -98,10 +98,10 @@ main {
   justify-content: center;
 }
 
-h2 {
+#lk-header {
   text-align: center;
       margin-bottom: 40px;
-      color: #6b8bdd;
+      color: rgb(51, 99, 220);
       font-weight: bold;
 }
 
@@ -223,6 +223,13 @@ h2 {
   gap: 15px;
 }
 
+@media (max-width: 306px) {
+   #lk-main{
+    margin: 0 auto;
+    height: 100%;
+  }
+}
+
 @media (max-width: 1080px) {
     header {
     padding: 10px 15px;
@@ -244,9 +251,8 @@ h2 {
   .burger-menu {
     display: flex;
   }
-  main{
+  #lk-main{
     margin: 0 auto;
-    height: 91.5%;
   }
 
   .fio-group {
@@ -262,10 +268,6 @@ h2 {
 
   .profile-left{
     align-items: center;
-  }
-
-  .fio-group .form-group {
-    width: 48%;
   }
 }
 
