@@ -1,0 +1,135 @@
+1. Создаем/обновляем квиз (отправляем на бек)
+{
+  "name": "name",
+  "questions": [
+    {
+      "text": "Вопрос 1",
+      "type": "single_choice",           
+      "answers": [
+        { "text": "Ответ 1", "isCorrect": false },
+        { "text": "Ответ 2", "isCorrect": true },
+        { "text": "Ответ 3", "isCorrect": false }
+      ]
+    },
+    {
+      "text": "Вопрос 2",
+      "type": "text",
+      "answers": [
+        { "text": "Ответ", "isCorrect": true }
+      ]
+    },
+    ...
+  ],
+  "settings": {
+    "timerEnabled": true,
+    "timerValue": 15,
+  }
+}
+
+
+2. Получаем данные для прохождения квиза (получаем с бека)
+{
+    'quizId': "string",
+    'name': "string",
+    'questions': [
+       {
+        'questionId': 0,
+        'text': "string",
+        'type': "string",
+        'answers': [
+          {
+            'answerId': 0,
+            'text':  "string",
+          },
+           ...
+         ]
+       },
+       ...
+     ],
+     'settings': {
+         'timerEnabled': false,
+         'timerValue': 0
+     }
+}
+
+
+3. Отправляем после прохождения квиза (отправляем на бек)
+{
+  'quiz_id': 0,
+  'questions': [
+    {
+      'question_id': 0,
+      'type': 'text'|'single-choice'|'multiple_choice',
+  
+       # В зависимости от type разный ответ
+  
+       # type == 'text'
+       'answers' : 'string' (текстовый ответ)
+  
+       #type == 'single_choice'
+       'answers':  0 (один answerId)
+  
+       #type == 'multiple_choice'
+       'answers':  [0, 1, 2, ...] # несколько answerId
+    },
+    ...
+  ]
+}
+
+4. Все пройденные квизы (получаем с бека) 
+{
+  'games': [
+      {
+          'name': 'string'
+          'countRight': 0,
+          'countAll': 0,
+          'finishedAt': '23.01.2025 19:30'
+      },
+      ...
+  ]
+}
+
+5. Все созданные квизы пользователя (получаем с бека)
+{
+  'quizzes': [
+    {
+      'id': 0,
+      'name': 'string',
+      'createdAt': '10.10.2010 18:30',
+      'connectionCode': 0,
+      'isOpened': False,
+      'isClosed': False,
+    },
+    ...
+  ]
+}
+
+6. Страница со статистикой конкретного квиза (получаем с бека)
+{
+  'name': 'string',
+  'createdAt': '10.10.2025 10:48',
+  'countQuestions': 0,
+  'connectionCode': 0,
+  'countParticipants': 0,
+  'percentage': 0,
+  
+  'participiants': [
+    {
+      'username': 'string',
+      'email': 'string',
+      'finishedAt': '11.10.2025',
+      'countRight': 0,
+    }
+  ]
+}
+
+7. Данные о профиле (получаем с бека)
+{
+  "username": "string",
+  "email": "string",
+  "countCreated": 0,
+  "countCompleted": 0,
+  "percentage": 0
+}
+
+
