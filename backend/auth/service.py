@@ -189,6 +189,8 @@ class AuthService:
                        email,
                        self._bcrypt_context.hash(password))
 
+        await self.create_send_email(email)
+
         return {
             'status_code': status.HTTP_201_CREATED,
             'detail': 'Not confirmed user created'

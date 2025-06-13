@@ -1,13 +1,10 @@
 from typing import List
 
 from backend.database.base import Base
-from datetime import datetime, timezone
-from random import randint
 
 from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from backend.database.base import Base
 from . import quiz, answer, result
 
 class Question(Base):

@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
   <title>QuizMaster - Регистрация</title>
 </head>
-<body class="background-color">
+<body>
   <!-- Шапка -->
   <header>
     <a href="index.html" class="logo">
@@ -18,7 +18,7 @@
     </a>
     
     <a href="auth.html" class="login">
-      <button >Войти</button>
+      <button>Войти</button>
     </a>
   </header>
 
@@ -26,10 +26,10 @@
   <main>
     <div class="form-card">
       <h2>РЕГИСТРАЦИЯ</h2>
-      <form id="registration-form">
+      <form id="register-form" action="#" method="post">
         <div class="form-group">
           <label for="register-username">ЛОГИН</label>
-          <input type="text" id="register-username" name="username"  required>
+          <input type="text" id="register-username" name="username" required>
         </div>
         <div class="form-group">
           <label for="register-email">EMAIL</label>
@@ -39,48 +39,56 @@
           <label for="register-password">ПАРОЛЬ</label>
           <input type="password" id="register-password" name="password" required>
         </div>
-        <button type="submit" id="reg-button" class="form-button">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <button type="submit" class="form-button" id="reg-button">ЗАРЕГИСТРИРОВАТЬСЯ</button>
       </form>
       <div class="link-text">
-        <a href="auth.html">Уже есть аккаунт? <span style="font-weight: 600;">Войти</span></a>
+        <a href="auth.html">У меня есть аккаунт</a>
       </div>
-      <!-- Блок для отображения таймера если модальное окно закрыто -->
-      <div id="timer" class="timer" style="display: none;"></div>
     </div>
   </main>
 
-<!-- Модальное окно для ввода кода с почты -->
-<div id="modal-overlay" class="modal-overlay">
-  <div class="modal">
-    <span class="close-modal" id="close-modal">&times;</span>
-    <h3 id="code-message">Введите код подтверждения</h3>
-    <form id="code-form">
-      <div class="form-group form-group-code">
-        <input type="text" id="email-code" name="email_code" placeholder="Код c почты" required>
+  <!-- Модальное окно подтверждения -->
+  <div class="modal-overlay" id="modal-overlay" style="display: none;">
+    <div class="modal">
+      <span class="close-modal" id="close-modal">×</span>
+      <div class="modal-icon">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="#6E7FF3"/>
+        </svg>
       </div>
-      <button type="submit" class="modal-button">Подтвердить код</button>
-    </form>
-    <button id="resend-code-btn" class="resend-code-btn disabled link-text">
-      Повторно отправить код <span id="countdown">10</span>
-    </button>
-  </div>
-</div>
-
-<div id ="modal-success" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="120" height="120" viewBox="0 0 48 48">
-<path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
-</svg>
+      <h3>Подтверждение email</h3>
+      <p>Мы отправили код подтверждения на вашу почту</p>
+      
+      <div class="form-group form-group-code">
+        <input type="number" id="confirmation-code" placeholder="Введите код" required>
+      </div>
+      
+      <button type="button" class="modal-button" id="confirm-btn">Подтвердить</button>
+      <button type="button" class="resend-code-btn" id="resend-code-btn">Отправить код повторно</button>
+      
+      <div class="timer" id="timer" style="display: none;">
+        Повторная отправка через: <span id="countdown">60</span> сек
+      </div>
     </div>
-    <div id="code-message" style="color:rgb(103, 105, 103); font-weight: 400; font-size: 20px;">Успешная регистрация!</div>
-    <div style="font-weight: 10px; font-weight: 300; margin-top: 10px;">Ваш аккаунт создан</div>
-    <form action="./auth.html">
-      <input type="submit"  class="modal-success-btn" value="Авторизоваться" />
-    </form>
   </div>
-</div>
 
+  <!-- Модальное окно успеха -->
+  <div class="modal-overlay" id="modal-success" style="display: none;">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#62d6a0" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <h3>Регистрация завершена!</h3>
+      <p>Ваш аккаунт успешно подтвержден</p>
+      <button type="button" class="modal-success-btn" onclick="window.location.href='/auth.html'">
+        Войти в аккаунт
+      </button>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
   <script src="register.js"></script>
 </body>
 </html>

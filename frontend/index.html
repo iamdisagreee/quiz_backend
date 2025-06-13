@@ -5,10 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuizMaster - Онлайн платформа для преподавателей</title>
   <link rel="icon" href="./static/logo-cropped.svg">
-  <link rel="stylesheet" href="authStyles.css">
+  <link rel="stylesheet" href="./authStyles.css">
+  <link rel="stylesheet" href="./index.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('./static/bg-index.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+  </style>
 </head>
 <body>
   <!-- Шапка сайта -->
@@ -16,12 +26,16 @@
     <a href="index.html" class="logo">
       <img src="./static/logo.svg">
     </a>
+    
+    <!-- Бургер-меню -->
     <div class="burger-menu">
       <span></span>
       <span></span>
       <span></span>
     </div>
-    <nav>
+    
+    <!-- Навигация для авторизованных пользователей (скрыта по умолчанию) -->
+    <nav id="auth-nav" class="hidden">
       <ul>
         <li><a href="create_quiz.html">Создать квиз</a></li>
         <li><a href="run_quiz.html">Пройти квиз</a></li>
@@ -29,52 +43,172 @@
         <li><a href="my_quizzes.html">Мои квизы</a></li>
       </ul>
     </nav>
-    <a href="auth.html" class="login">
-      <button>Войти</button>
-    </a>
+    
+    <!-- Кнопки в зависимости от статуса авторизации -->
+    <div id="guest-buttons" class="header-buttons">
+      <a href="auth.html" class="login">
+        <button>Войти</button>
+      </a>
+    </div>
+    
+    <div id="user-buttons" class="header-buttons hidden">
+      <div class="user-menu">
+        <button class="user-menu-btn" id="user-menu-toggle">
+          <span id="username-display">Пользователь</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <div class="user-dropdown" id="user-dropdown">
+          <a href="lk.html">Личный кабинет</a>
+          <button onclick="logout()" class="logout-btn">Выйти</button>
+        </div>
+      </div>
+    </div>
   </header>
 
   <!-- Основное содержимое страницы -->
   <main style="max-width: 85%; padding-top: 60px;">
-    <div class="content">
+    
+    <!-- Контент для неавторизованных пользователей -->
+    <div id="guest-content" class="content">
       <!-- Левая часть: текстовая информация -->
       <div class="left">
         <p style="font-size: 35px;">Интерактивное обучение c QuizMaster</p>
         <p>QuizMaster — инновационная онлайн-платформа для преподавателей и учебных заведений, позволяющая создавать квизы с разнообразными типами вопросов.</p>
         <p>Автоматическая проверка, интеграция c нейросетью и гибкая настройка времени проведения упрощают процесс оценки и помогают сфокусироваться на обучении.</p>
         <p>Экспортируйте результаты для детального анализа и улучшайте качество обучения, создавая квизы, которые превращают процесс обучения в увлекательное приключение! <span style="color: #3a3d3a; font-weight: 600;">Зарегистрируйтесь сегодня и начните менять образование вместе c нами!</span></p>
-        <a href="create_quiz.html" class="login">
-          <button>Создать квиз</button>
-        </a>
+        
+        <div class="cta-buttons">
+          <a href="register.html" class="login">
+            <button>Зарегистрироваться</button>
+          </a>
+          <a href="auth.html" class="login" style="margin-left: 15px;">
+            <button style="background-color: transparent; color: rgb(51, 99, 220); border: 2px solid rgb(51, 99, 220);">Войти</button>
+          </a>
+        </div>
       </div>
 
       <!-- Правая часть: слайдер с примером формы -->
       <div class="right">
         <div class="slider">
           <div class="slides">
-            <div class="slide"><img  src="./static/creare_quiz_img.jpg"> </div>
-            <div class="slide"><img  src="./static/pass_quiz_img.jpg"></div>
+            <div class="slide"><img src="./static/creare_quiz_img.jpg"> </div>
+            <div class="slide"><img src="./static/pass_quiz_img.jpg"></div>
             <div class="slide"><img src="./static/results_img.jpg"></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Контент для авторизованных пользователей (скрыт по умолчанию) -->
+    <div id="user-content" class="content hidden">
+      <div class="dashboard">
+        <div class="welcome-section">
+          <h1>Добро пожаловать, <span id="user-welcome-name">Пользователь</span>!</h1>
+          <p>Выберите действие для начала работы с платформой</p>
+        </div>
+        
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="rgb(51, 99, 220)"/>
+              </svg>
+            </div>
+            <h3>Создать квиз</h3>
+            <p>Создайте новый квиз с различными типами вопросов</p>
+            <a href="create_quiz.html" class="card-btn">Создать</a>
+          </div>
+          
+          <div class="dashboard-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="rgb(51, 99, 220)" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <h3>Пройти квиз</h3>
+            <p>Пройдите квиз по коду подключения</p>
+            <a href="run_quiz.html" class="card-btn">Пройти</a>
+          </div>
+          
+          <div class="dashboard-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M9 17H7v-2a3 3 0 013-3h4a3 3 0 013 3v2h-2m-7 0h2m-2 0v2m2-2v2m8-2h2m-2 0v2" stroke="rgb(51, 99, 220)" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+            <h3>Мои квизы</h3>
+            <p>Управляйте созданными квизами</p>
+            <a href="my_quizzes.html" class="card-btn">Управлять</a>
+          </div>
+          
+          <div class="dashboard-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M16 4v12l-4-2-4 2V4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2z" fill="rgb(51, 99, 220)"/>
+              </svg>
+            </div>
+            <h3>Результаты</h3>
+            <p>Просмотрите результаты пройденных квизов</p>
+            <a href="results.html" class="card-btn">Посмотреть</a>
+          </div>
+        </div>
+        
+        <!-- Быстрая статистика -->
+        <div class="quick-stats" id="quick-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="created-count">-</span>
+            <span class="stat-label">Создано квизов</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="completed-count">-</span>
+            <span class="stat-label">Пройдено квизов</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="average-score">-</span>
+            <span class="stat-label">Средний балл</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
-  <!-- Добавьте этот div перед закрывающим </body> -->
-<div class="mobile-menu-overlay"></div>
-<div class="mobile-menu">
-  <nav>
-    <ul>
-      <li><a href="create_quiz.html">Создать квиз</a></li>
-      <li><a href="run_quiz.html">Пройти квиз</a></li>
-      <li><a href="results.html">Результаты</a></li>
-       <li><a href="my_quizzes.html">Мои квизы</a></li>
-    </ul>
-  </nav>
-  <a href="auth.html" class="login">
-    <button>Войти</button>
-  </a>
-</div>
+
+  <!-- Мобильное меню -->
+  <div class="mobile-menu-overlay"></div>
+  <div class="mobile-menu">
+    <!-- Контент для неавторизованных -->
+    <div id="mobile-guest-menu">
+      <div class="mobile-auth-buttons">
+        <a href="auth.html" class="login">
+          <button>Войти</button>
+        </a>
+        <a href="register.html" class="login">
+          <button style="background-color: transparent; color: rgb(51, 99, 220); border: 2px solid rgb(51, 99, 220); margin-top: 10px;">Зарегистрироваться</button>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Контент для авторизованных -->
+    <div id="mobile-user-menu" class="hidden">
+      <nav>
+        <ul>
+          <li><a href="create_quiz.html">Создать квиз</a></li>
+          <li><a href="run_quiz.html">Пройти квиз</a></li>
+          <li><a href="results.html">Результаты</a></li>
+          <li><a href="my_quizzes.html">Мои квизы</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-user-actions">
+        <a href="lk.html" class="login">
+          <button>Личный кабинет</button>
+        </a>
+        <button onclick="logout()" class="logout-mobile-btn">Выйти</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="api.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

@@ -1,11 +1,10 @@
 import jwt
 
 from datetime import datetime, timezone
-from http.client import HTTPException
 from typing import Annotated
 
 from backend.config import load_config
-from fastapi import Depends,HTTPException
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 
@@ -47,4 +46,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token expired!"
+        )
+    except jwt.DecodeError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not decode token"
         )

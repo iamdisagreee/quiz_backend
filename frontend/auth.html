@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
   <title>QuizMaster - Авторизация</title>
 </head>
-<body >
+<body>
   <!-- Шапка -->
   <header>
     <a href="index.html" class="logo">
@@ -18,7 +18,7 @@
     </a>
     
     <a href="auth.html" class="login">
-      <button >Войти</button>
+      <button>Войти</button>
     </a>
   </header>
 
@@ -26,21 +26,24 @@
   <main>
     <div class="form-card">
       <h2>ВХОД</h2>
-      <form action="#" method="post">
+      <form id="login-form" action="#" method="post">
         <div class="form-group">
           <label for="login-username">ЛОГИН</label>
-          <input type="text" id="login-username" name="username"  required>
+          <input type="text" id="login-username" name="username" required>
         </div>
         <div class="form-group">
           <label for="login-password">ПАРОЛЬ</label>
           <input type="password" id="login-password" name="password" required>
         </div>
-        <button type="submit" class="form-button">ВОЙТИ</button>
+        <button type="submit" class="form-button" id="login-btn">ВОЙТИ</button>
       </form>
       <div class="link-text">
         <a href="register.html">У меня нет аккаунта</a>
       </div>
     </div>
   </main>
+
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>
