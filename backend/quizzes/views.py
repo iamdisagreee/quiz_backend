@@ -6,7 +6,7 @@ from starlette import status
 from backend.dependecies.postgres_depends import get_postgres
 from backend.dependecies.user_depends import get_current_user
 from backend.quizzes.service import QuizService
-from backend.quizzes.dto import CreateQuiz
+from backend.quizzes.dto import CreateQuiz, SubmitQuizAnswers
 
 router = APIRouter(prefix='/quizzes', tags=['quizzes'])
 
@@ -20,6 +20,19 @@ async def create_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                      user: Annotated[dict, Depends(get_current_user)],
                      quiz: CreateQuiz):
     return await QuizService(postgres).add_quiz(user.get('id'), quiz)
+
+@router.get("/by-code/{connection_code}", summary="Получение квиза по коду доступа")
+async def get_quiz_by_code(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                          user: Annotated[dict, Depends(get_current_user)],
+                          connection_code: int):
+    return await QuizService(postgres).get_quiz_by_connection_code(connection_code)
+
+@router.post("/{quiz_id}/submit", summary="Отправка результатов квиза")
+async def submit_quiz_answers(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                             user: Annotated[dict, Depends(get_current_user)],
+                             quiz_id: int,
+                             answers: SubmitQuizAnswers):
+    return await QuizService(postgres).submit_quiz_results(user.get('id'), quiz_id, answers)
 
 @router.get("/{quiz_id}", summary="Получение конкретного квиза")
 async def get_quiz(postgres: Annotated[AsyncSession, Depends(get_postgres)],
@@ -82,4 +95,3 @@ async def get_quiz_statistics(postgres: Annotated[AsyncSession, Depends(get_post
                              quiz_id: int):
     """Получение детальной статистики квиза для страницы статистики"""
     return await QuizService(postgres).get_quiz_statistics(user.get('id'), quiz_id)
-

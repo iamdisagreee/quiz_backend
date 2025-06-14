@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,137 @@
   <link rel="icon" href="./static/logo-cropped.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet">
+  <!-- Добавьте в секцию <head> или в CSS файл -->
+  <style>
+    .results-details-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    .results-details-btn:hover {
+      background: #0056b3;
+    }
+
+    .score-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-bar {
+      width: 100px;
+      height: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-fill.green {
+      background-color: #28a745;
+    }
+
+    .progress-fill.yellow {
+      background-color: #ffc107;
+    }
+
+    .progress-fill.red {
+      background-color: #dc3545;
+    }
+
+    .score-text {
+      font-weight: bold;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-size: 16px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Стили для модального окна */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+      padding: 5px;
+    }
+
+    .close-modal:hover {
+      color: #333;
+    }
+
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+      .modal-content {
+        margin: 10px;
+        padding: 20px;
+        max-height: 90vh;
+      }
+
+      .results-items-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .results-details-btn {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+
+      .score-display {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -28,8 +159,8 @@
         <li><a href="my_quizzes.html">Мои квизы</a></li>
       </ul>
     </nav>
-    
-     <a href="lk.html" class="login">
+
+    <a href="lk.html" class="login">
       <button>Личный кабинет</button>
     </a>
   </header>
@@ -37,84 +168,72 @@
   <!-- Контент -->
   <main style="justify-content: space-between;">
     <div class="results-container" style=" background-color: white; border: none;">
-        <div class="results-header">Мои результаты</div>
+      <div class="results-header">Мои результаты</div>
 
-        <!-- Фильтр и поиск -->
-        <div class="results-input-container">
-            <input 
-                type="text" 
-                id="search-input" 
-                placeholder="Поиск..." 
-                class="search-input"
-            >
-            
-            <div class="select-wrapper">
-                <select id="sort-select" class="sort-select" onchange="sortResults()">
-                    <option value="date-desc">Новые</option>
-                    <option value="date-asc">Старые</option>
-                    <option value="score-desc">Лучшие </option>
-                    <option value="score-asc">Худшие</option>
-                </select>
-            </div>
-            
-            <button id="result-search-btn" class="results-search-btn">Найти</button>
+      <!-- Фильтр и поиск -->
+      <div class="results-input-container">
+        <input type="text" id="search-input" placeholder="Поиск..." class="search-input">
+
+        <div class="select-wrapper">
+          <select id="sort-select" class="sort-select" onchange="sortResults()">
+            <option value="date-desc">Новые</option>
+            <option value="date-asc">Старые</option>
+            <option value="score-desc">Лучшие </option>
+            <option value="score-asc">Худшие</option>
+          </select>
         </div>
 
-        <!-- Контейнер для результатов -->
-        <div id="results-container">
+        <button id="result-search-btn" class="results-search-btn">Найти</button>
+      </div>
+
+      <!-- Контейнер для результатов -->
+      <div id="results-container">
         <!-- Результаты будут загружаться сюда -->
-        </div>
+      </div>
 
-        
+
     </div>
     <!-- Пагинация -->
-        <div >
-          <div id="pagination" class="pagination">
-            <div id="prev-button" class="arrow-button" onclick="prevPage()">
-              <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                  stroke="white" 
-                  stroke-width="15"  
-                  fill="white"       
-                  d="M263.78 18.9c4.28-4.3 4.3-11.31.04-15.64a10.865 10.865 0 0 0-15.48-.04L3.22 248.38c-4.28 4.3-4.3 11.31-.04 15.64l245.16 245.2c4.28 4.3 11.22 4.28 15.48-.05s4.24-11.33-.04-15.63L26.5 256.22 263.78 18.9z"
-                />
-              </svg>
-            </div>
-
-            <span id="page-info">1 / 1</span>
-
-            <div id="next-button" class="arrow-button" onclick="nextPage()">
-              <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
-                <path 
-                  stroke="white"  
-                  stroke-width="15"  
-                  fill="white"       
-                  d="M3.22 18.9c-4.28-4.3-4.3-11.31-.04-15.64s11.2-4.35 15.48-.04l245.12 245.16c4.28 4.3 4.3 11.31.04 15.64L18.66 509.22a10.874 10.874 0 0 1-15.48-.05c-4.26-4.33-4.24-11.33.04-15.63L240.5 256.22 3.22 18.9z"
-                />
-              </svg>
-            </div>
-              
-          </div>
+    <div>
+      <div id="pagination" class="pagination">
+        <div id="prev-button" class="arrow-button" onclick="prevPage()">
+          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="white" stroke-width="15" fill="white"
+              d="M263.78 18.9c4.28-4.3 4.3-11.31.04-15.64a10.865 10.865 0 0 0-15.48-.04L3.22 248.38c-4.28 4.3-4.3 11.31-.04 15.64l245.16 245.2c4.28 4.3 11.22 4.28 15.48-.05s4.24-11.33-.04-15.63L26.5 256.22 263.78 18.9z" />
+          </svg>
         </div>
-    
+
+        <span id="page-info">1 / 1</span>
+
+        <div id="next-button" class="arrow-button" onclick="nextPage()">
+          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 267 512.43" xmlns="http://www.w3.org/2000/svg">
+            <path stroke="white" stroke-width="15" fill="white"
+              d="M3.22 18.9c-4.28-4.3-4.3-11.31-.04-15.64s11.2-4.35 15.48-.04l245.12 245.16c4.28 4.3 4.3 11.31.04 15.64L18.66 509.22a10.874 10.874 0 0 1-15.48-.05c-4.26-4.33-4.24-11.33.04-15.63L240.5 256.22 3.22 18.9z" />
+          </svg>
+        </div>
+
+      </div>
+    </div>
+
   </main>
-  
-<!-- Добавьте этот div перед закрывающим </body> -->
-<div class="mobile-menu-overlay"></div>
-<div class="mobile-menu">
-  <nav>
-    <ul>
-      <li><a href="create_quiz.html">Создать квиз</a></li>
-      <li><a href="run_quiz.html">Пройти квиз</a></li>
-      <li><a href="results.html">Результаты</a></li>
-       <li><a href="my_quizzes.html">Мои квизы</a></li>
-    </ul>
-  </nav>
-  <a href="lk.html" class="login">
-    <button>Личный кабинет</button>
-  </a>
-</div>
+
+  <!-- Добавьте этот div перед закрывающим </body> -->
+  <div class="mobile-menu-overlay"></div>
+  <div class="mobile-menu">
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="results.html">Результаты</a></li>
+        <li><a href="my_quizzes.html">Мои квизы</a></li>
+      </ul>
+    </nav>
+    <a href="lk.html" class="login">
+      <button>Личный кабинет</button>
+    </a>
+  </div>
 
   <script src="results.js"></script>
 </body>
+
 </html>

@@ -91,8 +91,7 @@ async function loadQuizzesFromServer() {
             code: quiz.connectionCode,
             isOpened: quiz.isOpened,
             isClosed: quiz.isClosed,
-            // Добавляем дополнительные поля для совместимости
-            question_count: 0, // будем получать отдельно если нужно
+            question_count: 0,
             stats: {
                 totalAttempts: 0,
                 averageScore: 0,
@@ -111,7 +110,6 @@ async function loadQuizzesFromServer() {
 
 // Загрузка и отображение результатов
 async function loadResults() {
-    // Проверяем авторизацию
     if (!checkAuthAndRedirect()) {
         return;
     }
@@ -119,7 +117,6 @@ async function loadResults() {
     const container = document.getElementById('results-container');
     container.innerHTML = '<div class="loading">Загрузка...</div>';
 
-    // Загружаем данные с сервера
     await loadQuizzesFromServer();
 
     container.innerHTML = '';
@@ -144,7 +141,7 @@ async function loadResults() {
                 <div class="results-items-container">
                     <div>
                         <div class="result-quiz-name">${result.title}</div>
-                        <p class="result-quiz-data">Создан: ${formatDate(result.createdAt)}</p>
+                        <p class="result-quiz-data">Создан: ${result.createdAt}</p>
                         <p class="result-quiz-data">Код доступа: ${result.code}</p>
                         <p class="result-quiz-data">Статус: ${getStatusText(result)}</p>
                     </div>
@@ -179,7 +176,7 @@ function getStatusText(quiz) {
     } else if (quiz.isClosed) {
         return '<span style="color: red;">Закрыт</span>';
     } else {
-        return '<span style="color: gray;">Закрыт</span>';
+        return '<span style="color: red;">Закрыт</span>';
     }
 }
 
@@ -294,6 +291,27 @@ function filterResultsBySearch() {
     );
 }
 
+function parseServerDate(dateString) {
+    // Парсим формат "dd.mm.yy hh:mm"
+    if (!dateString || typeof dateString !== 'string') {
+        return new Date(0); // Возвращаем минимальную дату если дата невалидна
+    }
+    
+    try {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('.');
+        const [hours, minutes] = (timePart || '00:00').split(':');
+        
+        // Преобразуем 2-значный год в 4-значный
+        const fullYear = parseInt(year) + (parseInt(year) > 50 ? 1900 : 2000);
+        
+        return new Date(fullYear, parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
+    } catch (error) {
+        console.error('Ошибка парсинга даты:', dateString, error);
+        return new Date(0);
+    }
+}
+
 // Сортировка
 function sortResults(results = quizResults) {
     const sortBy = document.getElementById('sort-select').value;
@@ -301,10 +319,20 @@ function sortResults(results = quizResults) {
 
     switch (sortBy) {
         case 'date-desc':
-            sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            // Для уже отформатированных дат с сервера используем строковую сортировку
+            sorted.sort((a, b) => {
+                // Преобразуем дату обратно для сортировки
+                const dateA = parseServerDate(a.createdAt);
+                const dateB = parseServerDate(b.createdAt);
+                return dateB - dateA;
+            });
             break;
         case 'date-asc':
-            sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            sorted.sort((a, b) => {
+                const dateA = parseServerDate(a.createdAt);
+                const dateB = parseServerDate(b.createdAt);
+                return dateA - dateB;
+            });
             break;
         case 'score-desc':
             sorted.sort((a, b) => (b.stats?.averageScore || 0) - (a.stats?.averageScore || 0));
@@ -358,19 +386,6 @@ function updatePagination() {
             nextButton.classList.remove('disabled');
         }
     }
-}
-
-// Форматирование даты
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    };
-    return date.toLocaleDateString('ru-RU', options);
 }
 
 // Функции для показа уведомлений

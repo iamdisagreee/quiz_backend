@@ -9,7 +9,8 @@ from fastapi import HTTPException
 
 from backend.database.models import Quiz, Question, Game, Result, Reply, User
 from backend.database.models.answers import Answer
-from backend.quizzes.dto import CreateAnswer, CreateQuiz, CreateQuestion, ResultQuiz
+from backend.quizzes.dto import CreateAnswer, CreateQuiz, CreateQuestion, ResultQuiz, SubmitQuizAnswers, \
+    RunQuizTextAnswer, RunQuizSingleChoiceAnswer, RunQuizMultipleChoiceAnswer
 from slugify import slugify
 
 
@@ -461,3 +462,151 @@ class QuizService:
                 count_sum += sum(cur.is_correct if cur.is_correct else -1 for cur in result.replies) / \
                              len(result.replies)
         return count_sum
+
+    async def get_quiz_by_connection_code(self, connection_code: int):
+        """Получение квиза по коду доступа"""
+        quiz = await self._postgres.scalar(
+            select(Quiz)
+            .where(
+                Quiz.connection_code == connection_code,
+                Quiz.is_opened == True  # Только открытые квизы
+            )
+            .options(
+                selectinload(Quiz.questions).selectinload(Question.answers),
+                selectinload(Quiz.user)
+            )
+        )
+
+        if quiz is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Quiz not found or not available'
+            )
+
+        # Формируем ответ в формате, ожидаемом фронтендом
+        questions = []
+        for question in quiz.questions:
+            question_data = {
+                'id': question.id,
+                'text': question.text,
+                'type': question.type,
+            }
+            
+            if question.type in ['single_choice', 'multiple_choice']:
+                question_data['options'] = [answer.text for answer in question.answers]
+            
+            questions.append(question_data)
+
+        return {
+            'id': quiz.id,
+            'title': quiz.name,
+            'description': f'Квиз от пользователя {quiz.user.username}',
+            'code': str(connection_code),
+            'questions': questions,
+            'settings': {
+                'timerEnabled': quiz.timer_enabled,
+                'timerValue': quiz.timer_value
+            }
+        }
+
+    async def submit_quiz_results(self, user_id: int, quiz_id: int, answers_data: SubmitQuizAnswers):
+        """Сохранение результатов прохождения квиза"""
+        
+        # Проверяем существование квиза
+        quiz = await self._postgres.scalar(
+            select(Quiz)
+            .where(Quiz.id == quiz_id)
+            .options(selectinload(Quiz.questions).selectinload(Question.answers))
+        )
+
+        if quiz is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='Quiz not found'
+            )
+
+        # Создаем запись игры
+        game_id = await self._postgres.scalar(
+            insert(Game)
+            .values(
+                quiz_id=quiz_id,
+                user_id=user_id,
+                finished_at=datetime.now()
+            )
+            .returning(Game.id)
+        )
+
+        # Обрабатываем каждый ответ
+        for answer_data in answers_data.answers:
+            question = next((q for q in quiz.questions if q.id == answer_data.question_id), None)
+            if not question:
+                continue
+
+            # Создаем запись результата
+            result_id = await self._postgres.scalar(
+                insert(Result)
+                .values(
+                    game_id=game_id,
+                    question_id=question.id
+                )
+                .returning(Result.id)
+            )
+
+            # Обрабатываем ответ в зависимости от типа
+            if isinstance(answer_data, RunQuizTextAnswer):
+                # Для текстовых вопросов
+                correct_answer = next((a for a in question.answers if a.is_correct), None)
+                is_correct = False
+                if correct_answer and answer_data.answer_text:
+                    is_correct = answer_data.answer_text.strip().lower() == correct_answer.text.strip().lower()
+
+                await self._postgres.execute(
+                    insert(Reply)
+                    .values(
+                        result_id=result_id,
+                        answer_text=answer_data.answer_text,
+                        is_correct=is_correct
+                    )
+                )
+
+            elif isinstance(answer_data, RunQuizSingleChoiceAnswer):
+                # Для одиночного выбора
+                answer_index = answer_data.answer_id
+                if 0 <= answer_index < len(question.answers):
+                    selected_answer = question.answers[answer_index]
+                    is_correct = selected_answer.is_correct
+
+                    await self._postgres.execute(
+                        insert(Reply)
+                        .values(
+                            result_id=result_id,
+                            answer_id=selected_answer.id,
+                            answer_text=selected_answer.text,
+                            is_correct=is_correct
+                        )
+                    )
+
+            elif isinstance(answer_data, RunQuizMultipleChoiceAnswer):
+                # Для множественного выбора
+                for answer_index in answer_data.answer_ids:
+                    if 0 <= answer_index < len(question.answers):
+                        selected_answer = question.answers[answer_index]
+                        is_correct = selected_answer.is_correct
+                        
+                        await self._postgres.execute(
+                            insert(Reply)
+                            .values(
+                                result_id=result_id,
+                                answer_id=selected_answer.id,
+                                answer_text=selected_answer.text,
+                                is_correct=is_correct
+                            )
+                        )
+
+        await self._postgres.commit()
+
+        return {
+            'status_code': status.HTTP_201_CREATED,
+            'detail': 'Quiz results submitted successfully',
+            'game_id': game_id
+        }

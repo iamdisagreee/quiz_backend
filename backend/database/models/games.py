@@ -17,6 +17,6 @@ class Game(Base):
                                          nullable=False)
     finished_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
 
-    results: Mapped[List["Result"]] = relationship(back_populates="game", cascade='delete')
-    quiz: Mapped["Quiz"] = relationship(back_populates="games", cascade='delete')
-    user: Mapped["User"] = relationship(back_populates="games", cascade='delete')
+    results: Mapped[List["results.Result"]] = relationship(back_populates="game", cascade='delete')
+    quiz: Mapped["quizzes.Quiz"] = relationship(back_populates="games", cascade='delete')
+    user: Mapped["users.User"] = relationship(back_populates="games", cascade='delete')

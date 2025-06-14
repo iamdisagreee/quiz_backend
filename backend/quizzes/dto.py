@@ -56,3 +56,30 @@ class ResultQuiz(CamelCaseModel):
             Field(discriminator='type')
         ]
     ]
+
+class RunQuizTextAnswer(CamelCaseModel):
+    question_id: int
+    type: Literal['text']
+    answer_text: str
+
+
+class RunQuizSingleChoiceAnswer(CamelCaseModel):
+    question_id: int
+    type: Literal['single_choice']
+    answer_id: int  # индекс варианта ответа (0, 1, 2, ...)
+
+
+class RunQuizMultipleChoiceAnswer(CamelCaseModel):
+    question_id: int
+    type: Literal['multiple_choice']
+    answer_ids: List[int]  # список индексов выбранных вариантов
+
+
+class SubmitQuizAnswers(CamelCaseModel):
+    answers: List[
+        Annotated[
+            Union[RunQuizTextAnswer, RunQuizSingleChoiceAnswer, RunQuizMultipleChoiceAnswer],
+            Field(discriminator='type')
+        ]
+    ]
+    time_expired: bool = False

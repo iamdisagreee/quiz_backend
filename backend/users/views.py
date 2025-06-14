@@ -17,3 +17,8 @@ async def get_user_profile(postgres: Annotated[AsyncSession, Depends(get_postgre
 async def get_user_stats(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                         user: Annotated[dict, Depends(get_current_user)]):
     return await UserService(postgres).get_personal(user.get('id'))
+
+@router.get("/me/results", summary="Результаты пользователя")
+async def get_user_results(postgres: Annotated[AsyncSession, Depends(get_postgres)],
+                          user: Annotated[dict, Depends(get_current_user)]):
+    return await UserService(postgres).get_user_results(user.get('id'))

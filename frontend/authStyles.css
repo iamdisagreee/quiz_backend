@@ -1731,3 +1731,272 @@ main {
 .btn-secondary:hover {
   background-color: #7f8c8d;
 }
+
+/* Стили для страницы прохождения квиза */
+.quiz-search-container {
+  max-width: 800px;
+  margin: 100px auto 50px;
+  padding: 0 20px;
+}
+
+.search-form {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.quiz-details {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.quiz-description {
+  color: #666;
+  margin: 15px 0 25px;
+  font-size: 16px;
+}
+
+.quiz-info {
+  margin: 25px 0;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.info-value {
+  color: #666;
+}
+
+.quiz-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.quiz-btn-secondary {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 2px solid #dee2e6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.quiz-btn-secondary:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+/* Стили для вопросов */
+.quiz-question-container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.quiz-timer {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+#timer-display {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745;
+  background: #f8f9fa;
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 2px solid #28a745;
+}
+
+.question-progress {
+  margin-bottom: 30px;
+}
+
+.question-progress span {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #666;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3363dc, #1e40af);
+  transition: width 0.3s ease;
+}
+
+.question-content h3 {
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.answer-options {
+  margin-bottom: 30px;
+}
+
+.option-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option-label:hover {
+  border-color: #3363dc;
+  background: #f8f9ff;
+}
+
+.option-label input {
+  margin: 0;
+  transform: scale(1.2);
+}
+
+.option-label input:checked + .option-text {
+  font-weight: 600;
+  color: #3363dc;
+}
+
+.option-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.text-answer {
+  width: 100%;
+  min-height: 120px;
+  padding: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.text-answer:focus {
+  outline: none;
+  border-color: #3363dc;
+}
+
+.question-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-btn-prev {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-btn-prev:hover {
+  background: #5a6268;
+}
+
+/* Стили для завершения квиза */
+.quiz-completion {
+  background: white;
+  padding: 50px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.completion-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.completion-icon.success {
+  color: #28a745;
+}
+
+.completion-icon.warning {
+  color: #ffc107;
+}
+
+.completion-icon.error {
+  color: #dc3545;
+}
+
+.completion-message {
+  color: #666;
+  margin: 20px 0 30px;
+  font-size: 16px;
+}
+
+.completion-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .quiz-search-container {
+    margin: 80px auto 30px;
+    padding: 0 15px;
+  }
+  
+  .search-form,
+  .quiz-details,
+  .quiz-question-container,
+  .quiz-completion {
+    padding: 25px;
+  }
+  
+  .quiz-actions,
+  .completion-actions {
+    flex-direction: column;
+  }
+  
+  .question-navigation {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .quiz-btn,
+  .quiz-btn-secondary,
+  .quiz-btn-prev {
+    width: 100%;
+  }
+}

@@ -165,7 +165,7 @@ function createQuestionBlock() {
     return null;
   }
 
-  questionCount++;
+  questionCount = questionsContainer.children.length + 1;
 
   const questionBlock = document.createElement('div');
   questionBlock.className = 'question-block';
@@ -295,6 +295,7 @@ function deleteQuestion(button) {
   }
 
   questionBlock.remove();
+  questionCount = questionsContainer.children.length;
   updateQuestionNumbers();
 }
 

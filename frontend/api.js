@@ -194,8 +194,14 @@ const API = {
     },
 
     async getQuizStatistics(quizId) {
-    return await apiRequest(`/quizzes/${quizId}/statistics`, {
-        method: 'GET'
-    });
-}
+        return await apiRequest(`/quizzes/${quizId}/statistics`, {
+            method: 'GET'
+        });
+    },
+    
+    async getUserResults() {
+        return await apiRequest('/users/me/results', {
+            method: 'GET'
+        });
+    }
 };

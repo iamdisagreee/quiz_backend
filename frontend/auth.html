@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,39 @@
   <link rel="icon" href="./static/logo-cropped.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet">
   <title>QuizMaster - Авторизация</title>
+  <style>
+    body {
+      background-image: url('./static/bg-login.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    /* Делаем header прозрачным */
+    header {
+      background: transparent !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    header .login button {
+      background: rgba(255, 255, 255, 0.9) !important;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: #333 !important;
+      font-weight: 500 !important;
+    }
+
+    header .login button:hover {
+      background: rgba(255, 255, 255, 1) !important;
+      color: #000 !important;
+    }
+  </style>
 </head>
 <body>
   <!-- Шапка -->
@@ -16,7 +48,7 @@
     <a href="index.html" class="logo">
       <img src="./static/logo.svg">
     </a>
-    
+
     <a href="auth.html" class="login">
       <button>Войти</button>
     </a>
@@ -46,4 +78,5 @@
   <script src="api.js"></script>
   <script src="auth.js"></script>
 </body>
+
 </html>
