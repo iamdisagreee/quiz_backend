@@ -40,9 +40,6 @@ jobs:
       - name: Start docker compose
         run: docker compose up -d
 
-      - name: Change rules for docker backup
-        run: sudo chmod -R 777 docker_info/*
-
       - name: Wait PostgreSQL
         run: |
           source venv/bin/activate
@@ -53,7 +50,3 @@ jobs:
           source venv/bin/activate
           alembic upgrade head
 
-      - name: Run web app
-        run: |
-          source venv/bin/activate
-          uvicorn backend.main:app --reload --port 8000 --reload-exclude docker_info
