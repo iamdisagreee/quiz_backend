@@ -1,20 +1,20 @@
-from typing import TYPE_CHECKING
+from backend.database.base import Base
+from datetime import datetime, timezone
+from random import randint
 
-from sqlalchemy import Integer, String, Boolean, ForeignKey
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-
-if TYPE_CHECKING:
-    from .questions import Question
-
+from . import questions
 
 class Answer(Base):
     __tablename__ = 'answers'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    question_id: Mapped[int] = mapped_column(Integer, ForeignKey("questions.id", ondelete='cascade'), nullable=False)
+    question_id: Mapped[int] = mapped_column(Integer, ForeignKey("questions.id", ondelete='cascade'),
+                                         nullable=False)
     text: Mapped[str] = mapped_column(String(256), nullable=False)
     is_correct: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    question: Mapped["Question"] = relationship("Question", back_populates='answers')
+    question: Mapped["questions.Question"] = relationship(back_populates='answers', cascade='delete')

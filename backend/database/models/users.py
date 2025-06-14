@@ -1,14 +1,11 @@
 from datetime import datetime, timezone
-from typing import List, TYPE_CHECKING
+from typing import List
 
 from sqlalchemy import Integer, String, Boolean, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-
-if TYPE_CHECKING:
-    from .quizzes import Quiz
-    from .games import Game
+from . import quizzes
 
 
 class User(Base):
@@ -23,5 +20,4 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
 
-    quizzes: Mapped[List["Quiz"]] = relationship("Quiz", back_populates="user", cascade='all, delete-orphan')
-    games: Mapped[List["Game"]] = relationship("Game", back_populates="user", cascade='all, delete-orphan')
+    quizzes: Mapped[List["quizzes.Quiz"]] = relationship(back_populates="user", cascade='delete')

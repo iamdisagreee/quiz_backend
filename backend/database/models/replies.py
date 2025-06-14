@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING
-from sqlalchemy import Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.database.base import Base
+from datetime import datetime
 
-if TYPE_CHECKING:
-    from .results import Result
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Float
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from backend.database.base import Base
+from . import games, results
 
 class Reply(Base):
     __tablename__ = 'replies'
@@ -16,4 +16,4 @@ class Reply(Base):
     answer_text: Mapped[str] = mapped_column(String(128), nullable=True)
     is_correct: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    result: Mapped["Result"] = relationship(back_populates="replies")
+    result: Mapped["results.Result"] = relationship(back_populates="replies", cascade='delete')

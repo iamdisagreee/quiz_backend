@@ -9,8 +9,7 @@ from backend.users.service import UserService
 router = APIRouter(prefix='/users', tags=['users'])
 
 @router.get("/me", summary="Профиль пользователя")
-async def get_user_profile(postgres: Annotated[AsyncSession, Depends(get_postgres)],
-                          user: Annotated[dict, Depends(get_current_user)]):
+async def get_user_profile(user: Annotated[dict, Depends(get_current_user)]):
     return {"User": user}
 
 @router.get("/me/stats", summary="Статистика пользователя")

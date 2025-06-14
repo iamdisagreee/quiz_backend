@@ -9,7 +9,6 @@ from redis.asyncio import Redis
 
 from backend.dependecies.postgres_depends import get_postgres
 from backend.dependecies.redis_depends import get_redis
-from backend.dependecies.taskiq_depends import get_scheduler_storage
 from backend.dependecies.user_depends import get_current_user
 from taskiq_nats import NATSKeyValueScheduleSource
 
@@ -32,11 +31,10 @@ async def get_current_user_info(user: dict = Depends(get_current_user)):
              status_code=status.HTTP_201_CREATED)
 async def register(postgres: Annotated[AsyncSession, Depends(get_postgres)],
                    redis: Annotated[Redis, Depends(get_redis)],
-                   scheduler_storage: Annotated[NATSKeyValueScheduleSource, Depends(get_scheduler_storage)],
                    username: Annotated[str, Form(...)],
                    email: Annotated[str, Form(...)],
                    password: Annotated[str, Form(...)]):
-    return await AuthService(postgres, redis, scheduler_storage).register_user(username, email, password)
+    return await AuthService(postgres, redis).register_user(username, email, password)
 
 @router.post("/send-confirmation",
              summary="Отправка кода подтверждения")
