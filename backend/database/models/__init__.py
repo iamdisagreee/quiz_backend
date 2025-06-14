@@ -7,11 +7,11 @@ from .results import Result
 from .replies import Reply
 
 __all__ = [
-    'quizzes',
-    'users',
-    'questions',
-    'answers',
-    'games',
-    'results',
-    'replies'
+    "User",
+    "Quiz",
+    "Question",
+    "Answer",
+    "Game",
+    "Result",
+    "Reply"
 ]

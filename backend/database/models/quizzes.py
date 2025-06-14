@@ -1,12 +1,17 @@
 from datetime import datetime, timezone
 from random import randint
-from typing import List
+from typing import List, TYPE_CHECKING
 
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, false
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-from . import users, questions, games
+
+if TYPE_CHECKING:
+    from .users import User
+    from .questions import Question
+    from .games import Game
+
 
 class Quiz(Base):
     __tablename__ = 'quizzes'
@@ -20,7 +25,9 @@ class Quiz(Base):
     timer_value: Mapped[int] = mapped_column(Integer, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
+    is_opened: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    is_closed: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
-    user: Mapped["users.User"] = relationship(back_populates="quizzes", cascade='delete')
-    questions: Mapped[List["questions.Question"]] = relationship(back_populates="quiz", cascade="delete")
-    games: Mapped[List["games.Game"]] = relationship(back_populates="quiz", cascade='delete')
+    user: Mapped["User"] = relationship("User", back_populates="quizzes")
+    questions: Mapped[List["Question"]] = relationship("Question", back_populates="quiz", cascade="all, delete-orphan")
+    games: Mapped[List["Game"]] = relationship("Game", back_populates="quiz", cascade='all, delete-orphan')

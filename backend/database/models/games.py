@@ -5,7 +5,7 @@ from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.database.base import Base
-from . import results, quizzes
+from . import results, quizzes, users
 
 class Game(Base):
     __tablename__ = 'games'
@@ -19,3 +19,4 @@ class Game(Base):
 
     results: Mapped[List["results.Result"]] = relationship(back_populates="game", cascade='delete')
     quiz: Mapped["quizzes.Quiz"] = relationship(back_populates="games", cascade='delete')
+    user: Mapped["users.User"] = relationship(back_populates="games", cascade='delete')
