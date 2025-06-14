@@ -1,20 +1,17 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, status
+from backend.auth.service import AuthService
+from fastapi import APIRouter, Depends, Form
 from fastapi.security import OAuth2PasswordRequestForm
-from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from redis.asyncio import Redis
 
-from backend.auth.service import AuthService
-from backend.dependencies.postgres_depends import get_postgres
-from backend.dependencies.redis_depends import get_redis
-from backend.dependencies.user_depends import get_current_user
+from backend.dependecies.postgres_depends import get_postgres
+from backend.dependecies.redis_depends import get_redis
+from backend.dependecies.user_depends import get_current_user
 
-router = APIRouter(
-    prefix="/auth",
-    tags=["auth"]
-)
+router = APIRouter(prefix='/auth', tags=['auth'])
 
 
 @router.post(
@@ -26,8 +23,8 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
     return await AuthService(postgres).login(
-        username=form_data.username,
-        password=form_data.password
+        form_data.username,
+        form_data.password
     )
 
 
@@ -38,7 +35,7 @@ async def login(
 async def get_current_user_info(
     user: dict = Depends(get_current_user)
 ):
-    return {"user": user}
+    return {'User': user}  
 
 
 @router.post(
@@ -54,9 +51,9 @@ async def register(
     password: Annotated[str, Form(...)]
 ):
     return await AuthService(postgres, redis).register_user(
-        username=username,
-        email=email,
-        password=password
+        username,
+        email,
+        password
     )
 
 
@@ -69,9 +66,7 @@ async def send_confirmation_code(
     redis: Annotated[Redis, Depends(get_redis)],
     email: str
 ):
-    return await AuthService(postgres, redis).create_send_email(
-        email=email
-    )
+    return await AuthService(postgres, redis).create_send_email(email)
 
 
 @router.post(
@@ -85,8 +80,8 @@ async def confirm_email(
     email: Annotated[str, Form(...)]
 ):
     return await AuthService(postgres, redis).confirm_register(
-        entered_code=entered_code,
-        email=email
+        entered_code,
+        email
     )
 
 
@@ -99,6 +94,4 @@ async def cancel_registration(
     redis: Annotated[Redis, Depends(get_redis)],
     email: str
 ):
-    return await AuthService(postgres, redis).close_code_confirmation_box(
-        email=email
-    )
+    return await AuthService(postgres, redis).close_code_confirmation_box(email)
