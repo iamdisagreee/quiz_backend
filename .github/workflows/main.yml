@@ -1,0 +1,43 @@
+name: Backend CI
+on: 
+  push:
+    branches: [ main ]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+
+    - name: Create and activate venv
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+
+    - name: Install dependecies
+      run: |
+        source venv/bin/activate
+        pip install -r requirements.txt
+        
+    - name: Start docker compose
+      run: docker compose up -d
+
+    - name: Change rules for docker backup
+      run: sudo chmod -R 777 docker_info/*
+
+    - name: Wait PostgreSQL
+      run: |
+        source venv/bin/activate
+        timeout 30s bash -c 'until docker compose exec db pg_isready; do sleep 2; done'
+
+    - name: Run migrations
+      run: alembic upgrade head
+
+    - name: Run web app
+      run: uvicorn backend.main:app --reload --port 8000
