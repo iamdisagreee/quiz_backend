@@ -1,0 +1,95 @@
+/* Дополнительные стили для страницы статистики */
+
+.statistics-header-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.arrow-button1 {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.arrow-button1:hover {
+    background-color: rgba(51, 99, 220, 0.1);
+}
+
+.arrow-icon1 {
+    width: 20px;
+    height: 20px;
+}
+
+.statistics-quiz-container {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.statistics-quiz-container2 {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.statistics-participants-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.statistics-participants-container:last-child {
+    border-bottom: none;
+}
+
+.statistic-participants-container-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.score-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-text {
+    font-weight: 600;
+    min-width: 45px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .statistics-participants-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .statistic-participants-container-item {
+        align-items: center;
+    }
+    
+    .statistics-header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .statistics-quiz-container {
+        padding: 15px;
+    }
+}

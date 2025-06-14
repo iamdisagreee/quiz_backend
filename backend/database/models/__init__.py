@@ -1,17 +1,17 @@
-from .quiz import Quiz
-from .user import User
-from .question import Question
-from .answer import Answer
-from .game import Game
-from .result import Result
-from .reply import Reply
+from .quizzes import Quiz
+from .users import User
+from .questions import Question
+from .answers import Answer
+from .games import Game
+from .results import Result
+from .replies import Reply
 
 __all__ = [
-    'quiz',
-    'user',
-    'question',
-    'answer',
-    'game',
-    'result',
-    'reply'
+    "User",
+    "Quiz", 
+    "Question",
+    "Answer",
+    "Game",
+    "Result",
+    "Reply"
 ]

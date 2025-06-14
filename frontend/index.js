@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadUserStats() {
         try {
             console.log('📊 Запрашиваем статистику...');
-            const response = await fetch('/api/v1/quiz/personal', {
+            const response = await fetch('/api/v1/users/me/stats', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }

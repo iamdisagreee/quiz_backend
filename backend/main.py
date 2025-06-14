@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from backend.auth import views as auth
-from backend.quiz import views as quiz
+from backend.users import views as users
+from backend.quizzes import views as quizzes
 
 app = FastAPI(
     title="Quiz Backend API",
@@ -18,11 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app_v1 = FastAPI()
-
-app_v1.include_router(auth.router)
-app_v1.include_router(quiz.router)
-
-app.mount("/api/v1", app_v1)
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(users.router, prefix="/api/v1")
+app.include_router(quizzes.router, prefix="/api/v1")
 
 app.mount("/", StaticFiles(directory="./frontend", html=True), name="static")

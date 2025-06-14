@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from alembic import context
 
 # Импортируйте вашу метадату моделей
-from backend.database.base import Base  # замените на ваш импорт target_metadata
+from backend.database.base import Base
 
 config = context.config
 fileConfig(config.config_file_name)

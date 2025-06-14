@@ -1,4 +1,4 @@
-"""Change quiz, question, answer models
+"""Change quizzes, question, answer models
 
 Revision ID: 803709742f05
 Revises: 

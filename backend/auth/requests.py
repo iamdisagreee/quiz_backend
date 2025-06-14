@@ -1,7 +1,7 @@
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.database.models.user import User
+from backend.database.models.users import User
 
 
 async def get_user_by_username(session: AsyncSession,

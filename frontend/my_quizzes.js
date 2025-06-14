@@ -20,482 +20,438 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-let quizResults = [
-  {
-    "id": "1",
-    "title": "Продвинутый JavaScript",
-    "description": "Тест на продвинутые концепции JavaScript",
-    "code": "JS-2023",
-    "question_count": 3,
-    "createdAt": "2023-06-10",
-    "updatedAt": "2023-06-15",
-    "author": {
-      "id": "6g9e3b0a2d9e550000e58b22",
-      "name": "Алексей Смирнов"
-    },
-    "settings": {
-      "timerEnabled": true,
-      "timerValue": 900,
-      "showCorrectAnswers": false,
-      "passingScore": 80
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "text": "Что такое Event Loop в JavaScript?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "Механизм обработки асинхронного кода", "isCorrect": true },
-          { "text": "Специальный тип цикла for", "isCorrect": false },
-          { "text": "Событие загрузки страницы", "isCorrect": false },
-          { "text": "Метод оптимизации производительности", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q2",
-        "text": "Какие из этих методов являются иммутабельными?",
-        "type": "multiple_choice",
-        "answers": [
-          { "text": "map()", "isCorrect": true },
-          { "text": "push()", "isCorrect": false },
-          { "text": "slice()", "isCorrect": true },
-          { "text": "concat()", "isCorrect": true }
-        ]
-      },
-      {
-        "id": "q3",
-        "text": "Объясните разницу между == и ===",
-        "type": "text",
-        "answers": [
-          { "text": "== выполняет приведение типов, === проверяет без приведения", "isCorrect": true }
-        ]
-      }
-    ],
-    "stats": {
-      "totalAttempts": 128,
-      "averageScore": 72.5,
-      "bestScore": 100
-    }
-  },
-  {
-    "id": "2",
-    "title": "Основы Python",
-    "description": "Базовый тест по языку Python",
-    "code": "PY-101",
-    "question_count": 5,
-    "createdAt": "2023-05-15",
-    "updatedAt": "2023-06-20",
-    "author": {
-      "id": "7h0f4c1b3e9f660001f69c33",
-      "name": "Иван Петров"
-    },
-    "settings": {
-      "timerEnabled": false,
-      "timerValue": 0,
-      "showCorrectAnswers": true,
-      "passingScore": 60
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "text": "Какой оператор используется для возведения в степень?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "**", "isCorrect": true },
-          { "text": "^", "isCorrect": false },
-          { "text": "^^", "isCorrect": false },
-          { "text": "pow()", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q2",
-        "text": "Как создать пустой список?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "list()", "isCorrect": true },
-          { "text": "[]", "isCorrect": true },
-          { "text": "new List()", "isCorrect": false },
-          { "text": "list.new()", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q3",
-        "text": "Какой тип данных изменяемый (mutable)?",
-        "type": "multiple_choice",
-        "answers": [
-          { "text": "Список (list)", "isCorrect": true },
-          { "text": "Кортеж (tuple)", "isCorrect": false },
-          { "text": "Множество (set)", "isCorrect": true },
-          { "text": "Строка (str)", "isCorrect": false }
-        ]
-      }
-    ],
-    "stats": {
-      "totalAttempts": 95,
-      "averageScore": 68.3,
-      "bestScore": 95
-    }
-  },
-  {
-    "id": "3",
-    "title": "Веб-разработка (HTML/CSS)",
-    "description": "Тест по основам HTML и CSS",
-    "code": "WEB-2023",
-    "question_count": 4,
-    "createdAt": "2023-04-22",
-    "updatedAt": "2023-05-30",
-    "author": {
-      "id": "8i1g5d2c4f0g770002g7ad44",
-      "name": "Мария Иванова"
-    },
-    "settings": {
-      "timerEnabled": true,
-      "timerValue": 600,
-      "showCorrectAnswers": true,
-      "passingScore": 70
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "text": "Какой тег используется для создания ссылки?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "<a>", "isCorrect": true },
-          { "text": "<link>", "isCorrect": false },
-          { "text": "<href>", "isCorrect": false },
-          { "text": "<url>", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q2",
-        "text": "Как изменить цвет текста на красный в CSS?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "color: red;", "isCorrect": true },
-          { "text": "text-color: red;", "isCorrect": false },
-          { "text": "font-color: red;", "isCorrect": false },
-          { "text": "color: #ff0000;", "isCorrect": true }
-        ]
-      }
-    ],
-    "stats": {
-      "totalAttempts": 210,
-      "averageScore": 75.2,
-      "bestScore": 100
-    }
-  },
-  {
-    "id": "4",
-    "title": "Базы данных (SQL)",
-    "description": "Тест по основам SQL и реляционным базам данных",
-    "code": "SQL-101",
-    "question_count": 6,
-    "createdAt": "2023-03-18",
-    "updatedAt": "2023-04-05",
-    "author": {
-      "id": "9j2h6e3d5g1h880003h8be55",
-      "name": "Дмитрий Кузнецов"
-    },
-    "settings": {
-      "timerEnabled": true,
-      "timerValue": 1200,
-      "showCorrectAnswers": false,
-      "passingScore": 75
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "text": "Какой оператор используется для выборки данных?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "SELECT", "isCorrect": true },
-          { "text": "GET", "isCorrect": false },
-          { "text": "QUERY", "isCorrect": false },
-          { "text": "FIND", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q2",
-        "text": "Какой тип JOIN возвращает все строки из обеих таблиц?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "FULL OUTER JOIN", "isCorrect": true },
-          { "text": "INNER JOIN", "isCorrect": false },
-          { "text": "LEFT JOIN", "isCorrect": false },
-          { "text": "CROSS JOIN", "isCorrect": false }
-        ]
-      }
-    ],
-    "stats": {
-      "totalAttempts": 87,
-      "averageScore": 65.8,
-      "bestScore": 92
-    }
-  },
-  {
-    "id": "5",
-    "title": "Алгоритмы и структуры данных",
-    "description": "Тест по алгоритмам и структурам данных",
-    "code": "ALG-2023",
-    "question_count": 8,
-    "createdAt": "2023-02-10",
-    "updatedAt": "2023-03-15",
-    "author": {
-      "id": "0k3i7f4e6h2i990004i9cf66",
-      "name": "Анна Соколова"
-    },
-    "settings": {
-      "timerEnabled": true,
-      "timerValue": 1800,
-      "showCorrectAnswers": false,
-      "passingScore": 85
-    },
-    "questions": [
-      {
-        "id": "q1",
-        "text": "Какая сложность у алгоритма пузырьковой сортировки?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "O(n²)", "isCorrect": true },
-          { "text": "O(n log n)", "isCorrect": false },
-          { "text": "O(n)", "isCorrect": false },
-          { "text": "O(1)", "isCorrect": false }
-        ]
-      },
-      {
-        "id": "q2",
-        "text": "Какая структура данных работает по принципу LIFO?",
-        "type": "single_choice",
-        "answers": [
-          { "text": "Стек (Stack)", "isCorrect": true },
-          { "text": "Очередь (Queue)", "isCorrect": false },
-          { "text": "Дек (Deque)", "isCorrect": false },
-          { "text": "Куча (Heap)", "isCorrect": false }
-        ]
-      }
-    ],
-    "stats": {
-      "totalAttempts": 64,
-      "averageScore": 70.1,
-      "bestScore": 98
-    }
-  }
-];
-
+// Глобальные переменные
+let quizResults = [];
 let currentPage = 1;
 const resultsPerPage = 3;
 
-// Загрузка данных (в реальном проекте - fetch API)
-function loadResults() {
-  const container = document.getElementById('results-container');
-  container.innerHTML = '';
+// Функция для получения JWT токена
+function getAuthToken() {
+    return localStorage.getItem('access_token');
+}
 
-  const filteredResults = filterResultsBySearch();
-  const sortedResults = sortResults(filteredResults);
+// Функция для проверки авторизации
+function checkAuthAndRedirect() {
+    const token = getAuthToken();
+    if (!token) {
+        window.location.href = 'auth.html';
+        return false;
+    }
+    return true;
+}
 
-  const startIndex = (currentPage - 1) * resultsPerPage;
-  const paginatedResults = sortedResults.slice(startIndex, startIndex + resultsPerPage);
+// Функция для выполнения авторизованного запроса
+async function fetchWithAuth(url, options = {}) {
+    const token = getAuthToken();
+    
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    };
+    
+    const mergedOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+    
+    const response = await fetch(`/api/v1${url}`, mergedOptions);
+    
+    // Если токен недействителен, редиректим на авторизацию
+    if (response.status === 401) {
+        localStorage.removeItem('access_token');
+        window.location.href = 'auth.html';
+        return null;
+    }
+    
+    return response;
+}
 
-  if (paginatedResults.length === 0) {
-    container.innerHTML = '<div class="result-quiz-name" style="font-weight:400;">Нет результатов или <span style="font-weight: 600;">Вы еще не добавили ни одного квиза.</span></div>';
+// Загрузка квизов с сервера
+async function loadQuizzesFromServer() {
+    try {
+        const response = await fetchWithAuth('/quizzes/');
+        
+        if (!response || !response.ok) {
+            throw new Error('Ошибка загрузки квизов');
+        }
+        
+        const data = await response.json();
+        
+        // Преобразуем данные с сервера в формат, ожидаемый фронтендом
+        quizResults = data.quizzes.map(quiz => ({
+            id: quiz.id.toString(),
+            title: quiz.name,
+            createdAt: quiz.createdAt,
+            code: quiz.connectionCode,
+            isOpened: quiz.isOpened,
+            isClosed: quiz.isClosed,
+            // Добавляем дополнительные поля для совместимости
+            question_count: 0, // будем получать отдельно если нужно
+            stats: {
+                totalAttempts: 0,
+                averageScore: 0,
+                bestScore: 0
+            }
+        }));
+        
+        return quizResults;
+        
+    } catch (error) {
+        console.error('Ошибка загрузки квизов:', error);
+        showErrorMessage('Не удалось загрузить квизы. Попробуйте обновить страницу.');
+        return [];
+    }
+}
+
+// Загрузка и отображение результатов
+async function loadResults() {
+    // Проверяем авторизацию
+    if (!checkAuthAndRedirect()) {
+        return;
+    }
+
+    const container = document.getElementById('results-container');
+    container.innerHTML = '<div class="loading">Загрузка...</div>';
+
+    // Загружаем данные с сервера
+    await loadQuizzesFromServer();
+
+    container.innerHTML = '';
+
+    const filteredResults = filterResultsBySearch();
+    const sortedResults = sortResults(filteredResults);
+
+    const startIndex = (currentPage - 1) * resultsPerPage;
+    const paginatedResults = sortedResults.slice(startIndex, startIndex + resultsPerPage);
+
+    if (paginatedResults.length === 0) {
+        container.innerHTML = '<div class="result-quiz-name" style="font-weight:400;">Нет результатов или <span style="font-weight: 600;">Вы еще не добавили ни одного квиза.</span></div>';
+        updatePagination();
+        return;
+    }
+
+    container.innerHTML = paginatedResults.map(result => {
+        const statusButton = getStatusButton(result);
+        
+        return `
+            <div class="results-quiz-container">
+                <div class="results-items-container">
+                    <div>
+                        <div class="result-quiz-name">${result.title}</div>
+                        <p class="result-quiz-data">Создан: ${formatDate(result.createdAt)}</p>
+                        <p class="result-quiz-data">Код доступа: ${result.code}</p>
+                        <p class="result-quiz-data">Статус: ${getStatusText(result)}</p>
+                    </div>
+                    <div id="my-quizzes-btn-container">
+                        ${statusButton}
+                        <button class="my-quizess-btn btn-yellow" id="btn-statistic-${result.id}" onclick="openQuizStatistics('${result.id}')">Статистика</button>
+                        <button class="my-quizess-btn btn-red" id="btn-remove-${result.id}" onclick="removeQuiz('${result.id}')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
     updatePagination();
-    return;
-  }
-
-  container.innerHTML = paginatedResults.map(result => {
-
-    return `
-      <div class="results-quiz-container">
-        <div class="results-items-container">
-
-            <div >
-                <div class="result-quiz-name">${result.title}</div>
-                <p class="result-quiz-data">Создан: ${formatDate(result.createdAt)}</p>
-                <p class="result-quiz-data">${result.question_count} вопроса</p>
-                <p class="result-quiz-data">Код доступа: ${result.code}</p>
-
-            </div>
-            <div id="my-quizzes-btn-container">
-                <button class="my-quizess-btn btn-green" id="btn-start-${result.id}" onclick="startQuiz(${result.id})">Начать</button>
-                <button class="my-quizess-btn btn-blue" id="btn-edit-${result.id}" onclick="editQuiz('${result.id}')">Редактировать</button>
-                <button class="my-quizess-btn btn-yellow" id="btn-statistic-${result.id}" onclick="openQuizStatistics('${result.id}')">Статистика</button>
-                <button class="my-quizess-btn btn-red" id="btn-remove-${result.id}" onclick="removeQuiz('${result.id}')" >Удалить</button>
-            </div>
-
-
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  updatePagination();
 }
 
-window.startQuiz = function(quizId) {
-    btn = document.getElementById('btn-start-'+quizId);
-    btn_edit = document.getElementById('btn-edit-'+quizId);
-
-    if (btn.textContent.trim() == "Начать") {
-        btn.textContent='Завершить';
-        btn.classList.add('btn-orange');
-        btn_edit.classList.add('hidden');
-         // Здесь должна быть логика по запуску таймера в квизе
-    }
-    else{
-        btn.classList.add('hidden');
-         // Здесь должна быть логика по отключению таймера в квизе
+// Получение кнопки статуса квиза
+function getStatusButton(quiz) {
+    if (quiz.isOpened) {
+        return `<button class="my-quizess-btn btn-orange" id="btn-status-${quiz.id}" onclick="toggleQuizStatus('${quiz.id}', 'close')">Закрыть</button>`;
+    } else if (quiz.isClosed) {
+        return `<button class="my-quizess-btn btn-green" id="btn-status-${quiz.id}" onclick="toggleQuizStatus('${quiz.id}', 'open')">Открыть</button>`;
+    } else {
+        return `<button class="my-quizess-btn btn-green" id="btn-status-${quiz.id}" onclick="toggleQuizStatus('${quiz.id}', 'open')">Открыть</button>`;
     }
 }
 
-window.editQuiz = function(quizId) {
-  const quizToEdit = quizResults.find(quiz => quiz.id === quizId);
-  
-  if (!quizToEdit) {
-    console.error('Quiz not found');
-    return;
-  }
+// Получение текста статуса
+function getStatusText(quiz) {
+    if (quiz.isOpened) {
+        return '<span style="color: green;">Открыт</span>';
+    } else if (quiz.isClosed) {
+        return '<span style="color: red;">Закрыт</span>';
+    } else {
+        return '<span style="color: gray;">Закрыт</span>';
+    }
+}
 
-  // Сохраняем данные квиза в sessionStorage
-  sessionStorage.setItem('editQuizData', JSON.stringify(quizToEdit));
-  
-  window.location.href = 'create_quiz.html?mode=edit&id=' + quizId;
+// Изменение статуса квиза
+window.toggleQuizStatus = async function(quizId, action) {
+    try {
+        const response = await fetchWithAuth(`/quizzes/${quizId}/status?action=${action}`, {
+            method: 'PATCH'
+        });
+
+        if (!response || !response.ok) {
+            throw new Error('Ошибка изменения статуса квиза');
+        }
+
+        const result = await response.json();
+        showSuccessMessage(result.detail);
+        
+        // Перезагружаем данные
+        await loadResults();
+        
+    } catch (error) {
+        console.error('Ошибка изменения статуса:', error);
+        showErrorMessage('Не удалось изменить статус квиза');
+    }
 };
 
+// Редактирование квиза
+window.editQuiz = function(quizId) {
+    const quizToEdit = quizResults.find(quiz => quiz.id === quizId);
+    
+    if (!quizToEdit) {
+        console.error('Quiz not found');
+        return;
+    }
+
+    // Сохраняем ID квиза для редактирования
+    sessionStorage.setItem('editQuizId', quizId);
+    
+    window.location.href = 'create_quiz.html?mode=edit&id=' + quizId;
+};
 
 function openQuizStatistics(quizId) {
-  // Сохраняем ID квиза в localStorage или передаем через URL
-  localStorage.setItem('currentQuizId', quizId);
-  
-  // Переходим на страницу статистики
-  window.location.href = 'statistics.html';
+    // Сохраняем ID квиза в localStorage
+    localStorage.setItem('currentQuizId', quizId);
+    
+    // Переходим на страницу статистики
+    window.location.href = 'statistics.html';
 }
 
-window.removeQuiz = function(quizId){
-    const quizToEdit = quizResults.find(quiz => quiz.id === quizId);
+// Обновляем глобальную область видимости функции
+window.openQuizStatistics = openQuizStatistics;
 
-    if (!quizToEdit) {
-    console.error('Quiz not found');
-    return;
-  }
+// Удаление квиза
+window.removeQuiz = function(quizId) {
+    const quizToRemove = quizResults.find(quiz => quiz.id === quizId);
 
-  showConfirmationModal();
-}
+    if (!quizToRemove) {
+        console.error('Quiz not found');
+        return;
+    }
 
-// Показ модального окна завершения квиза
+    // Сохраняем ID для удаления
+    window.currentQuizToRemove = quizId;
+    showConfirmationModal();
+};
+
+// Показ модального окна подтверждения удаления
 function showConfirmationModal() {
-        const modal = document.getElementById('confirmation-modal');
-        modal.classList.remove('hidden');
-        
-        // Обработчики для кнопок
-        document.getElementById('remove-quiz').onclick = function() {
-            modal.classList.add('hidden');
-            
-            updatePagination();
-
-            // Можно реализовать анимацию удаления
-
-            // Логика отправки запроса на удаление на сервер
-        };
-        
-        document.getElementById('cancel-remove-quiz').onclick = function() {
+    const modal = document.getElementById('confirmation-modal');
+    modal.classList.remove('hidden');
+    
+    // Обработчики для кнопок
+    document.getElementById('remove-quiz').onclick = async function() {
         modal.classList.add('hidden');
-        };
+        await deleteQuiz(window.currentQuizToRemove);
+    };
+    
+    document.getElementById('cancel-remove-quiz').onclick = function() {
+        modal.classList.add('hidden');
+        window.currentQuizToRemove = null;
+    };
+}
+
+// Удаление квиза на сервере
+async function deleteQuiz(quizId) {
+    try {
+        const response = await fetchWithAuth(`/quizzes/${quizId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response || !response.ok) {
+            throw new Error('Ошибка удаления квиза');
+        }
+
+        const result = await response.json();
+        showSuccessMessage(result.detail);
+        
+        // Перезагружаем данные
+        await loadResults();
+        
+    } catch (error) {
+        console.error('Ошибка удаления квиза:', error);
+        showErrorMessage('Не удалось удалить квиз');
+    }
 }
 
 // Фильтрация по поиску
 function filterResultsBySearch() {
-  const searchTerm = document.getElementById('search-input').value.toLowerCase();
-  return quizResults.filter(result => 
-    result.title.toLowerCase().includes(searchTerm)
-  );
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    return quizResults.filter(result => 
+        result.title.toLowerCase().includes(searchTerm)
+    );
 }
 
 // Сортировка
 function sortResults(results = quizResults) {
-  const sortBy = document.getElementById('sort-select').value;
-  let sorted = [...results];
+    const sortBy = document.getElementById('sort-select').value;
+    let sorted = [...results];
 
-  switch (sortBy) {
-    case 'date-desc':
-      sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      break;
-    case 'date-asc':
-      sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      break;
-    case 'score-desc':
-      sorted.sort((a, b) => (b.stats.averageScore) - (a.stats.averageScore));
-      break;
-    case 'score-asc':
-      sorted.sort((a, b) => (a.stats.averageScore) - (b.stats.averageScore));
-      break;
-  }
+    switch (sortBy) {
+        case 'date-desc':
+            sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            break;
+        case 'date-asc':
+            sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            break;
+        case 'score-desc':
+            sorted.sort((a, b) => (b.stats?.averageScore || 0) - (a.stats?.averageScore || 0));
+            break;
+        case 'score-asc':
+            sorted.sort((a, b) => (a.stats?.averageScore || 0) - (b.stats?.averageScore || 0));
+            break;
+    }
 
-  return sorted;
+    return sorted;
 }
 
 // Пагинация
 function nextPage() {
-  const totalPages = Math.ceil(filterResultsBySearch().length / resultsPerPage);
-  if (currentPage < totalPages) {
-    currentPage++;
-    loadResults();
-  }
+    const totalPages = Math.ceil(filterResultsBySearch().length / resultsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        loadResults();
+    }
 }
 
 function prevPage() {
-  if (currentPage > 1) {
-    currentPage--;
-    loadResults();
-  }
+    if (currentPage > 1) {
+        currentPage--;
+        loadResults();
+    }
 }
 
 function updatePagination() {
-  const totalResults = filterResultsBySearch().length;
-  const totalPages = Math.ceil(totalResults / resultsPerPage);
-  document.getElementById('page-info').textContent = `${currentPage} / ${totalPages}`;
-  
-  const prevButton = document.querySelector('.arrow-button:first-child');
-  const nextButton = document.querySelector('.arrow-button:last-child');
-  const pagination = document.getElementById('pagination');
-
-  if (totalPages === 0) {
-    pagination.classList.add('hidden');
-  }
-  else{
-    pagination.classList.remove('hidden');
-    if (currentPage === 1) {
-      prevButton.classList.add('disabled');
-    } else {
-      prevButton.classList.remove('disabled');
-    }
+    const totalResults = filterResultsBySearch().length;
+    const totalPages = Math.ceil(totalResults / resultsPerPage);
+    document.getElementById('page-info').textContent = `${currentPage} / ${totalPages}`;
     
-    if (currentPage >= totalPages ) {
-      nextButton.classList.add('disabled');
+    const prevButton = document.querySelector('.arrow-button:first-child');
+    const nextButton = document.querySelector('.arrow-button:last-child');
+        const pagination = document.getElementById('pagination');
+
+    if (totalPages === 0) {
+        pagination.classList.add('hidden');
     } else {
-      nextButton.classList.remove('disabled');
+        pagination.classList.remove('hidden');
+        if (currentPage === 1) {
+            prevButton.classList.add('disabled');
+        } else {
+            prevButton.classList.remove('disabled');
+        }
+        
+        if (currentPage >= totalPages) {
+            nextButton.classList.add('disabled');
+        } else {
+            nextButton.classList.remove('disabled');
+        }
     }
-  }
 }
 
+// Форматирование даты
 function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  return new Date(dateString).toLocaleDateString('ru-RU', options);
+    const date = new Date(dateString);
+    const options = { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return date.toLocaleDateString('ru-RU', options);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('result-search-btn').addEventListener('click', () => {
-    currentPage = 1; 
-    loadResults();
-  });
-  
-  document.getElementById('search-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      currentPage = 1;
-      loadResults();
+// Функции для показа уведомлений
+function showErrorMessage(message) {
+    showNotification(message, 'error');
+}
+
+function showSuccessMessage(message) {
+    showNotification(message, 'success');
+}
+
+function showNotification(message, type = 'info') {
+    // Создаем элемент уведомления
+    const notification = document.createElement('div');
+    const backgroundColor = type === 'error' ? '#f8d7da' : type === 'success' ? '#d4edda' : '#d1ecf1';
+    const borderColor = type === 'error' ? '#f5c6cb' : type === 'success' ? '#c3e6cb' : '#bee5eb';
+    const textColor = type === 'error' ? '#721c24' : type === 'success' ? '#155724' : '#0c5460';
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: ${backgroundColor};
+        border: 1px solid ${borderColor};
+        color: ${textColor};
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        max-width: 300px;
+        font-size: 14px;
+        cursor: pointer;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Убираем уведомление через 5 секунд
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+
+    // Добавляем возможность закрыть по клику
+    notification.addEventListener('click', () => {
+        notification.remove();
+    });
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', async () => {
+    // Проверяем авторизацию
+    if (!checkAuthAndRedirect()) {
+        return;
     }
-  });
-  
-  // Первоначальная загрузка
-  loadResults();
-  updatePagination();
+
+    // Обработчики событий
+    document.getElementById('result-search-btn').addEventListener('click', () => {
+        currentPage = 1; 
+        loadResults();
+    });
+    
+    document.getElementById('search-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            currentPage = 1;
+            loadResults();
+        }
+    });
+    
+    document.getElementById('sort-select').addEventListener('change', () => {
+        currentPage = 1;
+        loadResults();
+    });
+    
+    // Первоначальная загрузка
+    await loadResults();
 });
+
+// Функция выхода из системы (если потребуется)
+function logout() {
+    localStorage.removeItem('access_token');
+    window.location.href = 'auth.html';
+}

@@ -17,7 +17,6 @@ class CreateQuestion(CamelCaseModel):
 class Setting(CamelCaseModel):
     timer_enabled: bool = False
     timer_value: int
-    # timer_to_one_question: int
 
 
 class CreateQuiz(CamelCaseModel):

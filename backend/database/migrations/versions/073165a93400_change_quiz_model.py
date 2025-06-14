@@ -1,4 +1,4 @@
-"""Change quiz model
+"""Change quizzes model
 
 Revision ID: 073165a93400
 Revises: e75fe281b579

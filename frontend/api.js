@@ -1,4 +1,3 @@
-console.log('🚀 api.js НАЧАЛ ЗАГРУЖАТЬСЯ');
 // Базовая конфигурация API
 const API_BASE_URL = '/api/v1';
 
@@ -102,36 +101,36 @@ const API = {
         formData.append('entered_code', code);
         formData.append('email', email);
         
-        return await apiRequest('/auth/confirm-register', {
-            method: 'PATCH',
+        return await apiRequest('/auth/confirm-email', {
+            method: 'POST',
             body: formData
         });
     },
 
     // Отправка кода подтверждения
     async sendConfirmationCode(email) {
-        return await apiRequest(`/auth/sending-code?email=${encodeURIComponent(email)}`, {
+        return await apiRequest(`/auth/send-confirmation?email=${encodeURIComponent(email)}`, {
             method: 'POST'
         });
     },
 
     // Закрытие окна подтверждения
     async closeConfirmationBox(email) {
-        return await apiRequest(`/auth/close-code-confirm-box?email=${encodeURIComponent(email)}`, {
+        return await apiRequest(`/auth/cancel-registration?email=${encodeURIComponent(email)}`, {
             method: 'DELETE'
         });
     },
 
     // Получение информации о текущем пользователе
     async getCurrentUser() {
-        return await apiRequest('/auth/read-current-user', {
+        return await apiRequest('/auth/me', {
             method: 'GET'
         });
     },
     
     // Создание квиза
     async createQuiz(quizData) {
-        return await apiRequest('/quiz/', {
+        return await apiRequest('/quizzes/', {
             method: 'POST',
             body: JSON.stringify(quizData)
         });
@@ -139,9 +138,64 @@ const API = {
     
     // Получение квизов пользователя
     async getUserQuizzes() {
-        return await apiRequest('/quiz/', {
+        return await apiRequest('/quizzes/', {
             method: 'GET'
         });
-    }
+    },
+
+    // Получение конкретного квиза
+    async getQuiz(quizId) {
+        return await apiRequest(`/quizzes/${quizId}`, {
+            method: 'GET'
+        });
+    },
+
+    // Получение детальной информации о квизе для редактирования
+    async getQuizDetails(quizId) {
+        return await apiRequest(`/quizzes/${quizId}/details`, {
+            method: 'GET'
+        });
+    },
+
+    // Обновление квиза
+    async updateQuiz(quizId, quizData) {
+        return await apiRequest(`/quizzes/${quizId}`, {
+            method: 'PUT',
+            body: JSON.stringify(quizData)
+        });
+    },
+
+    // Удаление квиза
+    async deleteQuiz(quizId) {
+        return await apiRequest(`/quizzes/${quizId}`, {
+            method: 'DELETE'
+        });
+    },
+
+    // Изменение статуса квиза
+    async updateQuizStatus(quizId, action) {
+        return await apiRequest(`/quizzes/${quizId}/status?action=${action}`, {
+            method: 'PATCH'
+        });
+    },
+
+    // Получение результатов квиза
+    async getQuizResults(quizId) {
+        return await apiRequest(`/quizzes/${quizId}/results`, {
+            method: 'GET'
+        });
+    },
+
+    // Получение участников квиза
+    async getQuizParticipants(quizId) {
+        return await apiRequest(`/quizzes/${quizId}/participants`, {
+            method: 'GET'
+        });
+    },
+
+    async getQuizStatistics(quizId) {
+    return await apiRequest(`/quizzes/${quizId}/statistics`, {
+        method: 'GET'
+    });
+}
 };
-console.log('✅ api.js ЗАГРУЖЕН ПОЛНОСТЬЮ');

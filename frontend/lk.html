@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuizMaster - Онлайн платформа для преподавателей</title>
-  <link rel="stylesheet" href="authStyles.css">
+  <title>QuizMaster - Личный кабинет</title>
+  <link rel="stylesheet" href="lk_styles.css">
   <link rel="icon" href="./static/logo-cropped.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">   
-  <link rel="preconnect" href="https://fonts.gstatic.com"  crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">
-      <img src="./static/logo.svg">
+      <img src="./static/logo.svg" alt="QuizMaster">
     </a>
     <div class="burger-menu">
       <span></span>
@@ -28,9 +28,9 @@
         <li><a href="my_quizzes.html">Мои квизы</a></li>
       </ul>
     </nav>
-    <a href="auth.html" class="login">
-      <button>Личный кабинет</button>
-    </a>
+    <div class="login">
+      <button id="logout-button">Выйти</button>
+    </div>
   </header>
 
   <main id="lk-main" style="max-width: 85%; padding-top: 60px;">
@@ -39,14 +39,14 @@
     <div class="profile-container">
       <div class="profile-left">
         <div class="profile-image">
-            <div class="profile-image-name">I</div>
+            <div class="profile-image-name">U</div>
         </div>
 
         <div class="profile-statistics">
           <p><strong>Статистика</strong></p>
-          <p>Создано квизов: <span>12</span></p>
-          <p>Пройдено квизов: <span>23</span></p>
-          <p>Средний результат: <span>76%</span></p>
+          <p>Создано квизов: <span>—</span></p>
+          <p>Пройдено квизов: <span>—</span></p>
+          <p>Средний результат: <span>—%</span></p>
         </div>
       </div>
 
@@ -54,34 +54,35 @@
         <form id="profile-form">
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" value="ivan.petrov@example.com" readonly>
+            <input type="email" id="email" value="" readonly>
             <small>Email используется для входа в систему и не может быть изменен</small>
           </div>
           <div class="form-group">
             <label for="username">Логин</label>
-            <input type="text" id="username" value="ipetrov" readonly>
+            <input type="text" id="username" value="" readonly>
             <small>Логин используется для входа в систему и не может быть изменен</small>
           </div>
-          <!-- <button type="submit" class="save-btn">Сохранить изменения</button> -->
         </form>
       </div>
     </div>
   </main>
 
   <div class="mobile-menu-overlay"></div>
-<div class="mobile-menu">
-  <nav>
-    <ul>
-      <li><a href="create_quiz.html">Создать квиз</a></li>
-      <li><a href="run_quiz.html">Пройти квиз</a></li>
-      <li><a href="results.html">Результаты</a></li>
-       <li><a href="my_quizzes.html">Мои квизы</a></li>
-    </ul>
-  </nav>
-  <a href="auth.html" class="login">
-    <button>Войти</button>
-  </a>
-</div>
+  <div class="mobile-menu">
+    <nav>
+      <ul>
+        <li><a href="create_quiz.html">Создать квиз</a></li>
+        <li><a href="run_quiz.html">Пройти квиз</a></li>
+        <li><a href="results.html">Результаты</a></li>
+        <li><a href="my_quizzes.html">Мои квизы</a></li>
+      </ul>
+    </nav>
+    <div class="login">
+      <button onclick="logout()">Выйти</button>
+    </div>
+  </div>
+
+  <script src="auth-check.js"></script>
+  <script src="lk.js"></script>
 </body>
-<script src="lk.js"></script>
 </html>

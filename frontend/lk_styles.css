@@ -343,3 +343,70 @@ nav ul li a:hover {
   visibility: visible;
 }
 
+/* Стили для уведомлений об ошибках */
+.error-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  max-width: 300px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.error-notification:hover {
+  opacity: 0.8;
+}
+
+/* Стили для состояния загрузки */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Стили для кнопки выхода */
+#logout-button, .mobile-menu button {
+  background-color: #dc3545;
+  transition: background-color 0.3s;
+}
+
+#logout-button:hover, .mobile-menu button:hover {
+  background-color: #c82333;
+}
+
+/* Стили для readonly полей */
+input[readonly] {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+input[readonly]:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}

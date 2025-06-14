@@ -4,13 +4,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const overlay = document.querySelector('.mobile-menu-overlay');
   const body = document.body;
 
-  burgerMenu.addEventListener('click', function() {
-    body.classList.toggle('menu-open');
-  });
+  if (burgerMenu) {
+    burgerMenu.addEventListener('click', function() {
+      body.classList.toggle('menu-open');
+    });
+  }
 
-  overlay.addEventListener('click', function() {
-    body.classList.remove('menu-open');
-  });
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      body.classList.remove('menu-open');
+    });
+  }
 
   // Закрытие меню при клике на ссылку
   document.querySelectorAll('.mobile-menu a').forEach(link => {
@@ -20,432 +24,437 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-let quizStat =[
-    {
-  "id": "1",
-  "code": "14",
-  "title": "Основы JavaScript",
-  "createdAt": "2023-05-15",
-  "author": {
-    "id": "5f8d3a1b1c9d440000d47a11",
-    "name": "Иван Петров"
-  },
-  "settings": {
-    "timerEnabled": true,
-    "timerValue": 600
-  },
-  "stats": {
-    "participantsCount": 4,
-    "averageTime": 452,
-    "averageScore": 66.7,
-    "questionsCount": 5
-  },
-  "participants": [
-    {
-      "id": "1",
-      "name": "Алексей Смирнов",
-      "email": "alex.smirnov@example.com",
-      "completionDate": "2023-05-16",
-      "timeSpent": 523,
-      "score": 8,
-      "total":10,
-      "details": [
-        {
-          "question": "Что выведет console.log(typeof null) в JavaScript?",
-          "userAnswer": "object",
-          "correctAnswer": "object",
-          "isCorrect": true
-        },
-        {
-          "question": "Какой метод массива возвращает новый массив?",
-          "userAnswer": "map",
-          "correctAnswer": "map",
-          "isCorrect": true
-        },
-        {
-          "question": "Что такое замыкание (closure) в JavaScript?",
-          "userAnswer": "Функция внутри другой функции",
-          "correctAnswer": "Функция, которая запоминает свое лексическое окружение",
-          "isCorrect": false
-        },
-        {
-          "question": "Как объявить переменную с блочной областью видимости?",
-          "userAnswer": "let",
-          "correctAnswer": "let или const",
-          "isCorrect": false
-        },
-        {
-          "question": "Что делает оператор '==='?",
-          "userAnswer": "Сравнивает без приведения типов",
-          "correctAnswer": "Сравнивает без приведения типов",
-          "isCorrect": true
-        }
-      ]
-    },
-    {
-      "id": "1",
-      "name": "Алексей Смирнов",
-      "email": "alex.smirnov@example.com",
-      "completionDate": "2023-05-16",
-      "timeSpent": 523,
-      "score": 3,
-      "total":10,
-      "details": [
-        {
-          "question": "Что выведет console.log(typeof null) в JavaScript?",
-          "userAnswer": "object",
-          "correctAnswer": "object",
-          "isCorrect": true
-        },
-        {
-          "question": "Какой метод массива возвращает новый массив?",
-          "userAnswer": "map",
-          "correctAnswer": "map",
-          "isCorrect": true
-        },
-        {
-          "question": "Что такое замыкание (closure) в JavaScript?",
-          "userAnswer": "Функция внутри другой функции",
-          "correctAnswer": "Функция, которая запоминает свое лексическое окружение",
-          "isCorrect": false
-        },
-        {
-          "question": "Как объявить переменную с блочной областью видимости?",
-          "userAnswer": "let",
-          "correctAnswer": "let или const",
-          "isCorrect": false
-        },
-        {
-          "question": "Что делает оператор '==='?",
-          "userAnswer": "Сравнивает без приведения типов",
-          "correctAnswer": "Сравнивает без приведения типов",
-          "isCorrect": true
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "name": "Елена Иванова",
-      "email": "elena.ivanova@example.com",
-      "completionDate": "2023-05-17",
-      "timeSpent": 387,
-      "score": 6,
-      "total":10,
-      "details": [
-        {
-          "question": "Что выведет console.log(typeof null) в JavaScript?",
-          "userAnswer": "null",
-          "correctAnswer": "object",
-          "isCorrect": false
-        },
-        {
-          "question": "Какой метод массива возвращает новый массив?",
-          "userAnswer": "forEach",
-          "correctAnswer": "map",
-          "isCorrect": false
-        },
-        {
-          "question": "Что такое замыкание (closure) в JavaScript?",
-          "userAnswer": "Функция, которая запоминает свое лексическое окружение",
-          "correctAnswer": "Функция, которая запоминает свое лексическое окружение",
-          "isCorrect": true
-        },
-        {
-          "question": "Как объявить переменную с блочной областью видимости?",
-          "userAnswer": "const",
-          "correctAnswer": "let или const",
-          "isCorrect": true
-        },
-        {
-          "question": "Что делает оператор '==='?",
-          "userAnswer": "Сравнивает без приведения типов",
-          "correctAnswer": "Сравнивает без приведения типов",
-          "isCorrect": true
-        }
-      ]
-    },
-    {
-      "id": "3",
-      "name": "Сергей Кузнецов",
-      "email": "sergey.kuznetsov@example.com",
-      "completionDate": "2023-05-18",
-      "timeSpent": 446,
-      "score": 4,
-      "total":10,
-      "details": [
-        {
-          "question": "Что выведет console.log(typeof null) в JavaScript?",
-          "userAnswer": "object",
-          "correctAnswer": "object",
-          "isCorrect": true
-        },
-        {
-          "question": "Какой метод массива возвращает новый массив?",
-          "userAnswer": "map",
-          "correctAnswer": "map",
-          "isCorrect": true
-        },
-        {
-          "question": "Что такое замыкание (closure) в JavaScript?",
-          "userAnswer": "Способ скрытия переменных",
-          "correctAnswer": "Функция, которая запоминает свое лексическое окружение",
-          "isCorrect": false
-        },
-        {
-          "question": "Как объявить переменную с блочной областью видимости?",
-          "userAnswer": "var",
-          "correctAnswer": "let или const",
-          "isCorrect": false
-        },
-        {
-          "question": "Что делает оператор '==='?",
-          "userAnswer": "Сравнивает с приведением типов",
-          "correctAnswer": "Сравнивает без приведения типов",
-          "isCorrect": false
-        }
-      ]
-    }
-  ]
-}
-]
-
+// Глобальные переменные
+let quizStatistics = null;
 let currentPage = 1;
 const resultsPerPage = 3;
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('result-search-btn').addEventListener('click', () => {
-    currentPage = 1; 
-    displayQuizStatistics();
-  });
-  
-  document.getElementById('search-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      currentPage = 1;
-      displayQuizStatistics();
+// Функция для получения JWT токена
+function getAuthToken() {
+    return localStorage.getItem('access_token');
+}
+
+// Функция для проверки авторизации
+function checkAuthAndRedirect() {
+    const token = getAuthToken();
+    if (!token) {
+        window.location.href = 'auth.html';
+        return false;
     }
-  });
-  
-  displayQuizStatistics();
-  updatePagination();
-});
-
-function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  return new Date(dateString).toLocaleDateString('ru-RU', options);
-}
-function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${mins}:${secs < 10 ? '0' + secs : secs}`;
+    return true;
 }
 
-
-function displayQuizStatistics(){
-
-  const quizId = localStorage.getItem('currentQuizId');
-  
-  if (!quizId) {
-    console.error('Quiz ID not found');
-    return;
-  }
-
-   const quiz = quizStat.find(q => q.id === quizId);
-  
-  if (!quiz) {
-    console.error('Quiz not found with id:', quizId);
-    return;
-  }
-  const filteredResults = filterResultsBySearch();
-  const filteredScore = scoreFilter(filteredResults);
-  const sortedResults = sortResults(filteredScore);
- 
-
-  const startIndex = (currentPage - 1) * resultsPerPage;
-  const paginatedResults = sortedResults.slice(startIndex, startIndex + resultsPerPage);
-
-  if (paginatedResults.length === 0) {
+// Функция для выполнения авторизованного запроса
+async function fetchWithAuth(url, options = {}) {
+    const token = getAuthToken();
     
-    document.getElementById('results-container').innerHTML = '<div class="result-quiz-name" style="font-weight:400;" >Нет результатов.</div>';
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    };
+    
+    const mergedOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+    
+    const response = await fetch(`/api/v1${url}`, mergedOptions);
+    
+    // Если токен недействителен, редиректим на авторизацию
+    if (response.status === 401) {
+        localStorage.removeItem('access_token');
+        window.location.href = 'auth.html';
+        return null;
+    }
+    
+    return response;
+}
+
+// Загрузка статистики квиза с сервера
+async function loadQuizStatistics() {
+    try {
+        const quizId = localStorage.getItem('currentQuizId');
+        
+        if (!quizId) {
+            showNotification('ID квиза не найден', 'error');
+            setTimeout(() => {
+                window.location.href = 'my_quizzes.html';
+            }, 2000);
+            return;
+        }
+
+        // Показываем индикатор загрузки
+        const container = document.getElementById('results-container');
+        const infoContainer = document.getElementById('statistics-info-container');
+        
+        if (container) container.innerHTML = '<div class="loading">Загрузка статистики...</div>';
+        if (infoContainer) infoContainer.innerHTML = '<div class="loading">Загрузка информации...</div>';
+
+        console.log('Запрашиваем статистику для квиза:', quizId);
+
+        // Загружаем данные с сервера
+        const response = await fetchWithAuth(`/quizzes/${quizId}/statistics`);
+        
+        if (!response || !response.ok) {
+            const errorText = await response.text();
+            console.error('Ошибка ответа сервера:', response.status, errorText);
+            throw new Error(`Ошибка сервера: ${response.status}`);
+        }
+        
+        quizStatistics = await response.json();
+        console.log('Получена статистика:', quizStatistics);
+        
+        // Отображаем данные
+        displayQuizStatistics();
+        
+    } catch (error) {
+        console.error('Ошибка загрузки статистики:', error);
+        showNotification('Не удалось загрузить статистику квиза', 'error');
+        
+        // Возвращаемся на страницу квизов через 3 секунды
+        setTimeout(() => {
+            window.location.href = 'my_quizzes.html';
+        }, 3000);
+    }
+}
+
+// Отображение статистики квиза
+function displayQuizStatistics() {
+    if (!quizStatistics) {
+        showNotification('Данные статистики не загружены', 'error');
+        return;
+    }
+
+    // Отображаем информацию о квизе
+    displayQuizInfo();
+    
+    // Отображаем участников
+    displayParticipants();
+    
+    // Обновляем пагинацию
     updatePagination();
-    return;
-  }
+}
 
-    const container_info = document.getElementById('statistics-info-container');
-  container_info.innerHTML = '';
-  container_info.innerHTML= 
-            ` <div class="row-container">
-                <div class="result-quiz-name" style="margin-bottom:0;">${quiz.title}</div>
-                <div>Код доступа: <span style="font-weight: 600;">${quiz.code}</span></div>
-              </div>
-              <div class="statistics-info-details" style="margin-bottom: 20px;">
-                    <div class="statistics-info-details-item">
-                        <p class="statistics-info-text">Дата создания: <span style="font-weight:500;">${formatDate(quiz.createdAt)}</span></p>
-                    </div>
-                    <div class="statistics-info-details-item">
-                        <p class="statistics-info-text">Количество вопросов: <span style="font-weight:500;">${quiz.stats.questionsCount}</span></p>
-                    </div>
+// Отображение информации о квизе
+function displayQuizInfo() {
+    const container = document.getElementById('statistics-info-container');
+    if (!container) return;
 
-              </div>
-              <div class="statistics-info-details">
-                    <div class="statistics-info-details-item">
-                        <div class="blue-border" style="padding: 10px 15px; color:rgb(51, 99, 220); font-size: 30px;">
-                            <p style="font-weight: 600;">${quiz.stats.participantsCount}</p>
-                            <p class="statistics-info-text">Всего участников</p>
-                         </div>
-                    </div>
-                    <div class="statistics-info-details-item">
-                        <div class="green-border" style="padding: 10px 15px; color:rgb(22, 163, 74); font-size: 30px;">
-                            <p style="font-weight: 600;">${quiz.stats.averageScore}%</p>
-                            <p class="statistics-info-text">Средний результат</p>
-                         </div>
-                    </div>
-
-              </div>
-            `
-
-    container_patricipants = document.getElementById('results-container');
-    container_patricipants.innerHTML='';
-
-    container_patricipants.innerHTML = paginatedResults.map(result => {
-
-    const percentage = Math.round((result.score / result.total) * 100);
-    const color = percentage >= 80 ? 'green' : 
-                  percentage >= 50 ? 'yellow' : 'red';
-
-    return `
-       <div class="statistics-participants-container">
-            <div class="statistic-participants-container-item" style="align-items: start; ">
-                    <div style="font-weight:500;">${result.name}</div>
-                    <div style="font-size: 14px; color: rgb(107, 114 ,128);">${result.email}</div>
+    container.innerHTML = `
+        <div class="row-container">
+            <div class="result-quiz-name" style="margin-bottom:0;">${quizStatistics.title}</div>
+            <div>Код доступа: <span style="font-weight: 600;">${quizStatistics.code}</span></div>
+        </div>
+        <div class="statistics-info-details" style="margin-bottom: 20px;">
+            <div class="statistics-info-details-item">
+                <p class="statistics-info-text">Дата создания: <span style="font-weight:500;">${formatDate(quizStatistics.createdAt)}</span></p>
             </div>
-            <div class="statistic-participants-container-item" >${formatDate(result.completionDate)}</div>
-            <div class="statistic-participants-container-item score-display" style="flex-direction: row; column-gap: 10px;">
-                 <span class="score-text" style="font-size: 14px;">${result.score}/${result.total}</span>
-                  <div class="progress-bar">
-                      <div class="progress-fill ${color}" style="width: ${percentage}%"></div>
-                  </div>
+            <div class="statistics-info-details-item">
+                <p class="statistics-info-text">Количество вопросов: <span style="font-weight:500;">${quizStatistics.stats.questionsCount}</span></p>
             </div>
-
+        </div>
+        <div class="statistics-info-details">
+            <div class="statistics-info-details-item">
+                <div class="blue-border" style="padding: 10px 15px; color:rgb(51, 99, 220); font-size: 30px;">
+                    <p style="font-weight: 600;">${quizStatistics.stats.participantsCount}</p>
+                    <p class="statistics-info-text">Всего участников</p>
+                </div>
+            </div>
+            <div class="statistics-info-details-item">
+                <div class="green-border" style="padding: 10px 15px; color:rgb(22, 163, 74); font-size: 30px;">
+                    <p style="font-weight: 600;">${quizStatistics.stats.averageScore}%</p>
+                    <p class="statistics-info-text">Средний результат</p>
+                </div>
+            </div>
         </div>
     `;
-  }).join('');
-
-    updatePagination();
 }
 
-function getQuizIndexById(quizId) {
-  return quizStat.findIndex(quiz => quiz.id === quizId);
+// Отображение участников
+function displayParticipants() {
+    const filteredResults = filterResultsBySearch();
+    const filteredScore = scoreFilter(filteredResults);
+    const sortedResults = sortResults(filteredScore);
+
+    const startIndex = (currentPage - 1) * resultsPerPage;
+    const paginatedResults = sortedResults.slice(startIndex, startIndex + resultsPerPage);
+
+    const container = document.getElementById('results-container');
+    if (!container) return;
+
+    if (paginatedResults.length === 0) {
+        container.innerHTML = '<div class="result-quiz-name" style="font-weight:400; padding: 20px;">Нет участников или результатов.</div>';
+        return;
+    }
+
+    container.innerHTML = paginatedResults.map(participant => {
+        const percentage = Math.round((participant.score / participant.total) * 100);
+        const color = percentage >= 80 ? 'green' : 
+                     percentage >= 50 ? 'yellow' : 'red';
+
+        return `
+            <div class="statistics-participants-container">
+                <div class="statistic-participants-container-item" style="align-items: start;">
+                    <div style="font-weight:500;">${participant.name}</div>
+                    <div style="font-size: 14px; color: rgb(107, 114 ,128);">${participant.email}</div>
+                </div>
+                <div class="statistic-participants-container-item">${formatDate(participant.completionDate)}</div>
+                <div class="statistic-participants-container-item score-display" style="flex-direction: row; column-gap: 10px;">
+                    <span class="score-text" style="font-size: 14px;">${participant.score}/${participant.total}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill ${color}" style="width: ${percentage}%"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 // Фильтрация по поиску
 function filterResultsBySearch() {
-  const quizId = localStorage.getItem('currentQuizId');
-  console.log(quizStat[getQuizIndexById(quizId)].participants)
+    if (!quizStatistics || !quizStatistics.participants) {
+        return [];
+    }
 
-  const searchTerm = document.getElementById('search-input').value.toLowerCase();
-  return quizStat[getQuizIndexById(quizId)].participants.filter(result => 
-    result.name.toLowerCase().includes(searchTerm)
-);
+    const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
+    return quizStatistics.participants.filter(participant => 
+        participant.name.toLowerCase().includes(searchTerm) ||
+        participant.email.toLowerCase().includes(searchTerm)
+    );
 }
 
-function scoreFilter(filtered=[]){
-  const filterSelect = document.getElementById('filter-select').value;
-  const quizId = localStorage.getItem('currentQuizId');
-  results = quizStat[getQuizIndexById(quizId)];
-  participants = filtered || [...results.participants];
+// Фильтрация по баллам
+function scoreFilter(filtered = []) {
+    const filterSelect = document.getElementById('filter-select');
+    if (!filterSelect) return filtered;
 
-  switch (filterSelect ) {
-    case 'high':
-      participants = participants.filter(p => (p.score / p.total) * 100 >= 80);
-      break;
-    case 'medium':
-      participants = participants.filter(p => (p.score / p.total) * 100 >= 50 && (p.score / p.total) * 100 < 80);
-      break;
-    case 'low':
-      participants = participants.filter(p => (p.score / p.total) * 100 < 50);
-      break;
-    case 'all':
-    default:
-      // Ничего не фильтруем
-      break;
-  }
+    const filterValue = filterSelect.value;
+    let participants = [...filtered];
 
-  return participants;
+    switch (filterValue) {
+        case 'high':
+            participants = participants.filter(p => (p.score / p.total) * 100 >= 80);
+            break;
+        case 'medium':
+            participants = participants.filter(p => {
+                const percentage = (p.score / p.total) * 100;
+                return percentage >= 50 && percentage < 80;
+            });
+            break;
+        case 'low':
+            participants = participants.filter(p => (p.score / p.total) * 100 < 50);
+            break;
+        case 'all':
+        default:
+            // Ничего не фильтруем
+            break;
+    }
+
+    return participants;
 }
 
 // Сортировка
-function sortResults(sorted=[]) {
-    const quizId = localStorage.getItem('currentQuizId');
+function sortResults(sorted = []) {
+    const sortSelect = document.getElementById('sort-select');
+    if (!sortSelect) return sorted;
 
-  results = sorted || quizStat[getQuizIndexById(quizId)].participants;
-  const sortBy = document.getElementById('sort-select').value;
-  sorted = [...results];
+    const sortBy = sortSelect.value;
+    let results = [...sorted];
 
-  switch (sortBy) {
-    case 'date-desc':
-      sorted.sort((a, b) => new Date(b.completionDate) - new Date(a.completionDate));
-      break;
-    case 'date-asc':
-      sorted.sort((a, b) => new Date(a.completionDate) - new Date(b.completionDate));
-      break;
-    case 'score-desc':
-      sorted.sort((a, b) => (b.score / b.total) - (a.score / a.total));
-      break;
-    case 'score-asc':
-      sorted.sort((a, b) => (a.score / a.total) - (b.score / b.total));
-      break;
-    case 'name-desc':
-      sorted.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    case 'name-asc':
-      sorted.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-  }
+    switch (sortBy) {
+        case 'date-desc':
+            results.sort((a, b) => new Date(b.completionDate) - new Date(a.completionDate));
+            break;
+        case 'date-asc':
+            results.sort((a, b) => new Date(a.completionDate) - new Date(b.completionDate));
+            break;
+        case 'score-desc':
+            results.sort((a, b) => (b.score / b.total) - (a.score / a.total));
+            break;
+        case 'score-asc':
+            results.sort((a, b) => (a.score / a.total) - (b.score / b.total));
+            break;
+        case 'name-desc':
+            results.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case 'name-asc':
+        default:
+            results.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+    }
 
-  return sorted;
+    return results;
 }
 
 // Пагинация
 function nextPage() {
-  const totalPages = Math.ceil(filterResultsBySearch().length / resultsPerPage);
-  if (currentPage < totalPages) {
-    currentPage++;
-    displayQuizStatistics();
-  }
+    const totalResults = filterResultsBySearch().length;
+    const totalPages = Math.ceil(totalResults / resultsPerPage);
+    
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayParticipants();
+        updatePagination();
+    }
 }
 
 function prevPage() {
-  if (currentPage > 1) {
-    currentPage--;
-    displayQuizStatistics();
-  }
+    if (currentPage > 1) {
+        currentPage--;
+        displayParticipants();
+        updatePagination();
+    }
 }
 
 function updatePagination() {
-  const totalResults = filterResultsBySearch().length;
-  const totalPages = Math.ceil(totalResults / resultsPerPage);
-  document.getElementById('page-info').textContent = `${currentPage} / ${totalPages}`;
-  
-  const prevButton = document.querySelector('.arrow-button:first-child');
-  const nextButton = document.querySelector('.arrow-button:last-child');
-  const pagination = document.getElementById('pagination');
+    const totalResults = filterResultsBySearch().length;
+    const totalPages = Math.ceil(totalResults / resultsPerPage);
+    
+    const pageInfo = document.getElementById('page-info');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const pagination = document.getElementById('pagination');
 
-  if (totalPages === 0) {
-    pagination.classList.add('hidden');
-  }
-  else{
-    pagination.classList.remove('hidden');
-    if (currentPage === 1) {
-      prevButton.classList.add('disabled');
-    } else {
-      prevButton.classList.remove('disabled');
+    if (pageInfo) {
+        pageInfo.textContent = `${currentPage} / ${Math.max(totalPages, 1)}`;
+    }
+
+    if (pagination) {
+        if (totalPages <= 1) {
+            pagination.classList.add('hidden');
+        } else {
+            pagination.classList.remove('hidden');
+            
+            if (prevButton) {
+                if (currentPage === 1) {
+                    prevButton.classList.add('disabled');
+                } else {
+                    prevButton.classList.remove('disabled');
+                }
+            }
+            
+            if (nextButton) {
+                if (currentPage >= totalPages) {
+                    nextButton.classList.add('disabled');
+                } else {
+                    nextButton.classList.remove('disabled');
+                }
+            }
+        }
+    }
+}
+
+// Форматирование даты
+function formatDate(dateString) {
+    const options = { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+    };
+    return new Date(dateString).toLocaleDateString('ru-RU', options);
+}
+
+// Функция для показа уведомлений
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    const backgroundColor = type === 'error' ? '#f8d7da' : 
+                           type === 'success' ? '#d4edda' : '#d1ecf1';
+    const borderColor = type === 'error' ? '#f5c6cb' : 
+                       type === 'success' ? '#c3e6cb' : '#bee5eb';
+    const textColor = type === 'error' ? '#721c24' : 
+                     type === 'success' ? '#155724' : '#0c5460';
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: ${backgroundColor};
+        border: 1px solid ${borderColor};
+        color: ${textColor};
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        max-width: 300px;
+        font-size: 14px;
+        cursor: pointer;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Убираем уведомление через 5 секунд
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+
+    // Добавляем возможность закрыть по клику
+    notification.addEventListener('click', () => {
+        notification.remove();
+    });
+}
+
+// Обработка поиска и фильтров
+function handleSearch() {
+    currentPage = 1;
+    displayParticipants();
+    updatePagination();
+}
+
+function handleFilterChange() {
+    currentPage = 1;
+    displayParticipants();
+    updatePagination();
+}
+
+// Глобальные функции для HTML
+window.nextPage = nextPage;
+window.prevPage = prevPage;
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', async () => {
+    // Проверяем авторизацию
+    if (!checkAuthAndRedirect()) {
+        return;
+    }
+
+    // Устанавливаем обработчики событий
+    const searchButton = document.getElementById('result-search-btn');
+    const searchInput = document.getElementById('search-input');
+    const filterSelect = document.getElementById('filter-select');
+    const sortSelect = document.getElementById('sort-select');
+
+    if (searchButton) {
+        searchButton.addEventListener('click', handleSearch);
     }
     
-    if (currentPage >= totalPages ) {
-      nextButton.classList.add('disabled');
-    } else {
-      nextButton.classList.remove('disabled');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
     }
-  }
-}
+    
+    if (filterSelect) {
+        filterSelect.addEventListener('change', handleFilterChange);
+    }
+    
+    if (sortSelect) {
+        sortSelect.addEventListener('change', handleFilterChange);
+    }
+    
+    // Загружаем статистику
+    await loadQuizStatistics();
+});
