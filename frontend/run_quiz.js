@@ -156,8 +156,6 @@ async function handleFindQuiz() {
     const quiz = await response.json();
     showError(""); // Очищаем ошибки
 
-    console.log('Загруженный квиз:', quiz); // Для отладки
-
     // Отображаем информацию о квизе
     document.getElementById('quiz-title').textContent = quiz.title || 'Без названия';
     document.getElementById('quiz-description').textContent = quiz.description || 'Без описания';
@@ -239,8 +237,6 @@ function formatTime(seconds) {
 
 // Функция для инициализации квиза
 function initializeQuiz(quiz) {
-  console.log('Инициализация квиза:', quiz); // Для отладки
-
   // Настройка общего состояния квиза
   const totalQuestions = quiz.questions ? quiz.questions.length : 0;
   document.getElementById('total-questions').textContent = totalQuestions;

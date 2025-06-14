@@ -2,7 +2,6 @@ console.log('🚀 index.js НАЧАЛ ЗАГРУЖАТЬСЯ');
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 DOM загружен из index.js');
     
-    // Элементы DOM
     const burgerMenu = document.querySelector('.burger-menu');
     const mobileMenu = document.querySelector('.mobile-menu');
     const overlay = document.querySelector('.mobile-menu-overlay');
@@ -36,18 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
         burgerMenu.addEventListener('click', function() {
             body.classList.toggle('menu-open');
         });
-        console.log('✅ Обработчик burgerMenu добавлен');
-    } else {
-        console.log('⚠️ burgerMenu не найден');
     }
 
     if (overlay) {
         overlay.addEventListener('click', function() {
             body.classList.remove('menu-open');
         });
-        console.log('✅ Обработчик overlay добавлен');
-    } else {
-        console.log('⚠️ overlay не найден');
     }
 
     // Закрытие меню при клике на ссылку
@@ -76,44 +69,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Основная функция инициализации
     async function initializePage() {
-        console.log('🚀 Инициализация страницы...');
-        
         const token = localStorage.getItem('access_token');
-        console.log('🔑 Токен в localStorage:', token ? 'найден' : 'не найден');
-        
+
         if (!token) {
-            console.log('❌ Токен отсутствует, показываем гостевой контент');
             showGuestContent();
             return;
         }
 
         try {
             // Проверяем валидность токена
-            console.log('🔍 Проверяем валидность токена...');
             if (!isTokenValid(token)) {
-                console.log('❌ Токен невалидный или истек');
                 localStorage.removeItem('access_token');
                 showGuestContent();
                 return;
             }
-            console.log('✅ Токен валидный');
 
             // Получаем данные пользователя
-            console.log('👤 Получаем данные пользователя...');
             const userData = await API.getCurrentUser();
-            console.log('✅ Данные пользователя получены:', userData);
-            
+
             // Показываем контент для авторизованных
             showUserContent(userData);
             
             // Загружаем статистику
-            console.log('📊 Загружаем статистику...');
             loadUserStats();
             
         } catch (error) {
-            console.error('❌ Ошибка при загрузке данных пользователя:', error);
-            // НЕ удаляем токен при ошибке API, показываем базовый авторизованный контент
-            
             // Пробуем показать авторизованный контент с базовыми данными
             try {
                 const tokenPayload = JSON.parse(atob(token.split('.')[1]));
@@ -122,9 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         username: tokenPayload.username || 'Пользователь'
                     }
                 });
-                console.log('✅ Показан авторизованный контент с данными из токена');
             } catch (tokenError) {
-                console.error('❌ Ошибка парсинга токена:', tokenError);
                 localStorage.removeItem('access_token');
                 showGuestContent();
             }
@@ -133,8 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Показать контент для неавторизованных пользователей
     function showGuestContent() {
-        console.log('👻 Показываем гостевой контент');
-        
         // Показываем гостевой контент
         if (guestContent) guestContent.classList.remove('hidden');
         if (guestButtons) guestButtons.classList.remove('hidden');
@@ -149,8 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Показать контент для авторизованных пользователей
     function showUserContent(userData) {
-        console.log('👤 Показываем пользовательский контент');
-        
         // Скрываем гостевой контент
         if (guestContent) guestContent.classList.add('hidden');
         if (guestButtons) guestButtons.classList.add('hidden');
@@ -167,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const username = userData.User.username;
             if (usernameDisplay) usernameDisplay.textContent = username;
             if (userWelcomeName) userWelcomeName.textContent = username;
-            console.log('✅ Имя пользователя обновлено:', username);
         }
     }
 
@@ -176,14 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const currentTime = Math.floor(Date.now() / 1000);
-            
-            console.log('🕐 Время токена:', new Date(payload.expire * 1000));
-            console.log('🕐 Текущее время:', new Date(currentTime * 1000));
-            console.log('⏰ Токен истекает через:', Math.floor((payload.expire - currentTime) / 60), 'минут');
-            
             return payload.expire > currentTime;
         } catch (error) {
-            console.error('❌ Ошибка проверки токена:', error);
             return false;
         }
     }
@@ -191,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Загрузка статистики пользователя
     async function loadUserStats() {
         try {
-            console.log('📊 Запрашиваем статистику...');
             const response = await fetch('/api/v1/users/me/stats', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
@@ -200,10 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (response.ok) {
                 const stats = await response.json();
-                console.log('✅ Статистика получена:', stats);
                 updateStatsDisplay(stats);
             } else {
-                console.log('⚠️ Статистика недоступна, статус:', response.status);
                 updateStatsDisplay({
                     countCreated: 0,
                     countCompleted: 0,
@@ -211,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         } catch (error) {
-            console.log('⚠️ Ошибка загрузки статистики:', error);
             // Показываем значения по умолчанию
             updateStatsDisplay({
                 countCreated: 0,
@@ -225,15 +188,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateStatsDisplay(stats) {
         if (createdCount) {
             createdCount.textContent = stats.countCreated || 0;
-            console.log('📊 Создано квизов:', stats.countCreated || 0);
         }
         if (completedCount) {
             completedCount.textContent = stats.countCompleted || 0;
-            console.log('📊 Пройдено квизов:', stats.countCompleted || 0);
         }
         if (averageScore) {
             averageScore.textContent = (stats.percentage || 0) + '%';
-            console.log('📊 Средний балл:', (stats.percentage || 0) + '%');
         }
     }
 
@@ -246,4 +206,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 });
-console.log('✅ index.js ЗАГРУЖЕН ПОЛНОСТЬЮ');

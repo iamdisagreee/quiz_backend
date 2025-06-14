@@ -1,4 +1,3 @@
-// Убираем моковые данные
 let quizResults = [];
 
 // Функции авторизации (если не подключен auth-check.js)
@@ -634,7 +633,6 @@ function showNotification(message, type = 'info') {
   });
 }
 
-// Функция выхода (если потребуется)
 function logout() {
   localStorage.removeItem('access_token');
   window.location.href = 'auth.html';
