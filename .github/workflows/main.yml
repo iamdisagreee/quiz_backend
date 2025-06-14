@@ -5,6 +5,7 @@ on:
 
 env:
   DB_POSTGRES: ${{ secrets.DB_POSTGRES }}
+  POSTGRES_DB: ${{ secrets.POSTGRES_DB}}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   DB_REDIS: ${{ secrets.DB_REDIS }}
