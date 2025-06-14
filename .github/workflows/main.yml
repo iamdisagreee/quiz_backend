@@ -2,17 +2,18 @@ name: Backend CI
 on: 
   push:
     branches: [ main ]
+
 env:
-  POSTGRES_DB: ${{ env.DB_POSTGRES }}
-  POSTGRES_USER: ${{ env.POSTGRES_USER }}
-  POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-  DB_REDIS: ${{ env.DB_REDIS }}
-  DB_PASSWORD: ${{ env.REDIS_PASSWORD }}
-  SECRET_KEY_JWT: ${{ env.SECRET_KEY_JWT}}
-  ALGORYTHM_JWT: ${{ env.ALGORYTHM_JWT }}
-  MAIL_USER: ${{ env.MAIL_USER }}
-  MAIL_PASSWORD: ${{ env.MAIL_PASSWORD }}
-  
+  POSTGRES_DB: ${{ secrets.DB_POSTGRES }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  DB_REDIS: ${{ secrets.DB_REDIS }}
+  DB_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+  SECRET_KEY_JWT: ${{ secrets.SECRET_KEY_JWT}}
+  ALGORYTHM_JWT: ${{ secrets.ALGORYTHM_JWT }}
+  MAIL_USER: ${{ secrets.MAIL_USER }}
+  MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+
 jobs:
   backend:
     runs-on: ubuntu-latest
