@@ -23,23 +23,3 @@ services:
     ports:
       - "6379:6379"
     restart: on-failure
-
-  nats:
-    image: nats:latest
-    container_name: nats
-    ports:
-      - "4222:4222"
-      - "8222:8222"
-    volumes:
-      - "./docker_info/nats/data:/data"
-    command: ["--jetstream", "--store_dir=/data"]
-
-  nats-nui:
-    image: ghcr.io/nats-nui/nui:latest
-    container_name: nats-nui
-    ports:
-      - "31311:31311"
-    volumes:
-      - "./docker_info/nui/db:/db"
-    depends_on:
-      - nats

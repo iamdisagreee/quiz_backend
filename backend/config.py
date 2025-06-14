@@ -7,8 +7,6 @@ from environs import Env
 class Site:
     postgres: str
     redis: str
-    nats: str
-
 
 @dataclass
 class JwtAuth:
@@ -34,7 +32,6 @@ def load_config():
         site=Site(
             postgres=env('DB_POSTGRES'),
             redis=env('DB_REDIS'),
-            nats=env('NATS_SERVER'),
         ),
         jwt_auth=JwtAuth(
             secret_key=env('SECRET_KEY_JWT'),
